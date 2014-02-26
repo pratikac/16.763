@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pdb, re
 from collections import Counter
+from scipy import optimize
 
 filename_dict = {'28L, 28R | 28L, 28R':'28l_28r_n_28l_28r',
 '28R | 1R':'28r_n_1r',
@@ -83,7 +84,7 @@ def plot_capacity(t1key, t1count, oper, config):
     fig = plt.figure(1)
     for i in xrange(len(t1)):
         plt.plot(t1[i,0], t1[i,1], 'o',
-                ms=4*t1count[i], markerfacecolor=None,
+                ms=5*t1count[i], markerfacecolor=None,
                 markeredgecolor='blue',
                 fillstyle='none',
                 markeredgewidth=1.5)
@@ -92,24 +93,67 @@ def plot_capacity(t1key, t1count, oper, config):
     plt.xlabel('departures')
     plt.ylabel('arrivals')
     plt.title('oper: ' + oper+' , config: ' + config)
+    plt.grid()
     #plt.show()
     
     plt.savefig(filename_dict[oper]+'_'+filename_dict[config]+'.png')
 
-def plot_data(data):
+def crunch_data(data):
     for oper in oper_dict.keys():
         for config in config_dict.keys():
-            print oper, config
-            if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
+            #print oper, config
+            if oper == 'IMC' and config == '28L, 28R | 28L, 28R':
                 t1 = filter_data(data, oper, config)
-                t1s = t1.tolist()
-                t1s = [tuple(i) for i in t1s]
-                t1dict = dict(Counter(t1s))
-                pdb.set_trace()
-                #plot_capacity(t1dict.keys(), t1dict.values(), oper, config)        
-                        
-if __name__=="__main__":
+                
+                if 1:
+                    least_squares_regression(20,t1)
+                else:
+                    t1s = t1.tolist()
+                    t1s = [tuple(i) for i in t1s]
+                    t1dict = dict(Counter(t1s))
+                    plot_capacity(t1dict.keys(), t1dict.values(), oper, config)        
+
+def least_squares_regression(m, points):
+    # m alpha, beta
+    pdb.set_trace()
+    def f(x):
+        dtilde = np.array([x[a] + x[m+a]*a for a in points[:,0]])
+        print 'dtilde: ', dtilde
+        #pdb.set_trace()
+        return np.linalg.norm(points[:,1] - dtilde)**2
+    def ieqcons(x):
+        ieqcons = []
+        # 1. slope constraint
+        for i in xrange(m-1):
+            ieqcons.append(x[m+i] - x[m+i+1])
+        # 2. -beta_1 >= 0
+        ieqcons.append(-x[m])
+        return np.array(ieqcons)
+    def eqcons(x):
+        eqcons = []
+        # 3. continuity
+        for i in xrange(m-1):
+            eqcons.append(x[i]+x[m+i]*i - x[i+1]-x[m+i+1]*i)
+        return np.array(eqcons)
+    
+    xmin = optimize.fmin_slsqp(f, np.random.random((2*m,1)),
+            f_eqcons = eqcons, f_ieqcons=ieqcons)
+    print xmin
+
+def test():
+    def f(x):
+        return np.sqrt((x[0]-3)**2 + (x[1]-2)**2)
+    def cons(x):
+        return np.atleast_1d(1.5 - np.sum(np.abs(x)))
+
+    xmin = optimize.fmin_slsqp(f, np.array([0,0]), ieqcons=[cons,])
+    print xmin
+
+def main():
     data = proc_data()
     arr = proc_arr()
     dep = proc_dep()
-    plot_data(data)
+    crunch_data(data)
+
+if __name__=="__main__":
+    main()
