@@ -4,7 +4,7 @@ import pandas as pd
 import pdb, re
 from collections import Counter
 from scipy import optimize
-plt.ion()
+#plt.ion()
 
 filename_dict = {'28L, 28R | 28L, 28R':'28l_28r_n_28l_28r',
 '28R | 1R':'28r_n_1r',
@@ -32,7 +32,6 @@ oper_dict = {'VMC':7,
 def proc_data():
     data = np.array(pd.read_csv('table1.csv'))
     data = data[:,2:]
-    #pdb.set_trace()
     for i in xrange(len(data)):
         data[i,1] = 4*data[i,0] + data[i,1]
         data[i,2] = oper_dict[data[i,2]]
@@ -79,20 +78,36 @@ def proc_dep():
 def correlate_data(arr, dep):
     arr, dep = arr.tolist(), dep.tolist()
     datadic = {}
+    contdic = {}
     for a in arr:
+        is_busy = a[2] > a[0]
+        if a[1] < 4:
+            is_busy = False
+        is_busy = int(is_busy)
         if not a[3] in datadic:
             datadic[a[3]] = [-1, -1, 1, 0]
+            contdic[a[3]] = [is_busy, 0]
         else:
             datadic[a[3]][2] += 1
+            contdic[a[3]][0] = contdic[a[3]][0] or is_busy
+
     for d in dep:
+        is_busy = d[2] > d[0]
+        if d[1] > 92:
+            is_busy = False
+        is_busy = int(is_busy)
         if not d[3] in datadic:
             datadic[d[3]] = [-1, -1, 0, 1]
+            contdic[d[3]] = [0, is_busy]
         else:
             datadic[d[3]][3] += 1
+            contdic[d[3]][1] = contdic[d[3]][1] or is_busy
+    
     data = []
     for k in datadic:
         data.append([k]+datadic[k])
     return np.array(data)
+
 
 '''
 todo:
@@ -105,56 +120,89 @@ def filter_data(data, oper, config):
     t2 = t2[:,3:5]
     return t2
 
-def plot_capacity(data, oper, config):
-    t1 = filter_data(data, oper, config)
-    if len(t1) == 0:
-        return
+def plot_capacity(t1, oper, config):
     t1c = list(t1.tolist())
     t1s = t1c
     t1s = [tuple(i) for i in t1s]
     t1dict = dict(Counter(t1s))
     t1keys, t1count = t1dict.keys(), t1dict.values()
     #pdb.set_trace()
+    plt.figure()
     for i in xrange(len(t1keys)):
-        plt.plot(t1keys[i][0], t1keys[i][1], 'o')
+        plt.plot(t1keys[i][0], t1keys[i][1], 'o', ms=8),
                 #ms=5*t1count[i], markerfacecolor=None,
                 #markeredgecolor='blue',
                 #fillstyle='none',
                 #markeredgewidth=1.5)
-    plt.xlim([0,20])
-    plt.ylim([0,20])
+    
+    plt.xlim([0,25])
+    plt.ylim([0,25])
     plt.xlabel('arrivals')
     plt.ylabel('departures')
-    plt.title('oper: ' + oper+' , config: ' + config)
     plt.grid()
+    plt.title('oper: ' + oper+' , config: ' + config)
     fname = filename_dict[oper]+'_'+filename_dict[config]+'.png'
     print 'Saving: ', fname
     plt.savefig(fname)
 
-def crunch_data(data, which, overall_flag=0):
-    t1 = []
-    if not overall_flag:
-        for oper in oper_dict.keys():
-            for config in config_dict.keys():
-                #print oper, config
-                #if oper == 'VMC' and config == '28L, 28R | 1L, 1R':
-                #if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
-                if (not overall) and oper == 'VMC' and config == '28R | 28L, 28R':
-                    t1 = filter_data(data, oper, config)
-                    if len(t1) == 0:
-                        return
-    else:
-        t1 = data[:,3:5]
+def plot_all(points, capacities, alg, labels):
+    colors = 'bgrcmykw'
+    plt.figure()
+    plt.plot(points[:,0], points[:,1], 'o', ms=7, label='', alpha=0.3)
+    for ci in xrange(len(capacities)):
+        c = capacities[ci]
+        plt.plot(c[:,0], c[:,1], '-o', lw=3, ms=3, markerfacecolor=plt.cm.jet(ci),
+                label=labels[ci])
+    
+    plt.xlim([0,25])
+    plt.ylim([0,25])
+    plt.xlabel('arrivals')
+    plt.ylabel('departures')
+    plt.grid()
+    plt.legend(prop={'size':12})
+    fname = alg+'.pdf'
+    print 'Saving: ', fname
+    plt.savefig(fname)
 
+def run_opt(t1, oper, config, which):
     if(which == 'lsq'):
-        least_squares_regression(t1)
+        return least_squares_regression(t1)
     elif(which == 'cvx'):
-        convex_hull(t1)
+        return convex_hull(t1)
     elif(which == 'cvx2'):
-        convex_hull2(t1)
+        return convex_hull2(t1)
     elif(which == 'plt'):
-        plot_capacity(data, oper, config)        
+        return plot_capacity(t1, oper, config)        
 
+def crunch_data(data, which_oper, which, overall_flag=0):
+    if overall_flag:
+        t1 = data[:,3:5]
+        run_opt(t1, _, _, which)
+    else:
+        '''
+        test_tuples = [
+                ('VMC', '28L, 28R | 1L, 1R'),
+                ('VMC', '28L, 28R | 28L, 28R'),
+                ('VMC', '28R | 1R'),
+                ('IMC', '28L, 28R | 1L, 1R'),
+                ('IMC', '28R | 1L, 1R'),
+                ('IMC', '28L | 1L, 1R')]
+        '''
+        test_tuples = [(which_oper, x) for x in config_dict]
+        capacities = []
+        labels = []
+        for test_tup in test_tuples:
+            oper, config = test_tup
+            #print oper, config
+            t1 = filter_data(data, oper, config)
+            if len(t1) == 0:
+                continue
+            c = run_opt(t1, oper, config, which)
+            capacities.append(c)
+            labels.append(oper+' '+config)
+
+        if not which == 'plt':
+            plot_all(data[:,3:5], capacities, which_oper+'_'+which, labels)
 
 def convex_hull(points):
     m = np.max(points[:,0])
@@ -196,22 +244,15 @@ def convex_hull(points):
     md = np.max(points[points[:,0]==m,1])
     toplot.append([m,md])
     toplot.append([m,0])
-    toplot = np.array(toplot)
-
-    plt.plot(points[:,0], points[:,1], 'o', label='points')
-    plt.plot(toplot[:,0], toplot[:,1], 'o-', label='convexhull')
-    plt.xlim([0,25])
-    plt.ylim([0,25])
+    return np.array(toplot)
 
 def convex_hull2(points):
     from scipy.spatial import ConvexHull
     hull = ConvexHull(points)
-    plt.plot(points[:,0], points[:,1], 'o')
     for simplex in hull.simplices:
-        plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
-    plt.xlim([0,25])
-    plt.ylim([0,25])
-
+        toplot.append([points[simplex, 0], points[simplex, 1]])
+    return np.array(toplot)
+    
 def least_squares_regression(points):
     m = np.max(points[:,0])+1
     # m alpha, beta
@@ -238,15 +279,9 @@ def least_squares_regression(points):
     xmin = optimize.fmin_slsqp(f, np.random.random((2*m,1)),
             f_eqcons = eqcons, f_ieqcons=ieqcons)
 
-    print xmin
     toplot = np.array([[i, xmin[max(0,i-1)] + xmin[max(m,m+i-1)]*i] for i in 
             np.arange(1,m)])
-    plt.plot(points[:,0], points[:,1], 'o', label='points')
-    plt.plot(toplot[:,0], toplot[:,1], 'o-', label='linear regression')
-    plt.xlim([0,25])
-    plt.ylim([0,25])
-    #print points[:,1].tolist()
-    #print xmin
+    return toplot
 
 def test():
     def f(x):
@@ -262,8 +297,10 @@ def main():
     arr = proc_arr()
     dep = proc_dep()
     new_data = correlate_data(arr, dep)
-    #crunch_data(data, 'cvx', 0)
-    crunch_data(new_data, 'lsq', 1)
+    for oper in ['VMC', 'IMC']:
+        for alg in ['lsq', 'cvx', 'cvx2']:
+            crunch_data(data, oper, alg, 0)
+    #crunch_data(new_data, 'cvx', 1)
 
 if __name__=="__main__":
     main()
