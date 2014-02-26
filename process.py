@@ -188,7 +188,9 @@ def crunch_data(data, which_oper, which, overall_flag=0):
                 ('IMC', '28R | 1L, 1R'),
                 ('IMC', '28L | 1L, 1R')]
         '''
-        test_tuples = [(which_oper, x) for x in config_dict]
+        test_tuples = [
+                ('VMC', '28L, 28R | 28L, 28R')]
+        #test_tuples = [(which_oper, x) for x in config_dict]
         capacities = []
         labels = []
         for test_tup in test_tuples:
@@ -249,10 +251,11 @@ def convex_hull(points):
 def convex_hull2(points):
     from scipy.spatial import ConvexHull
     hull = ConvexHull(points)
+    toplot = []
     for simplex in hull.simplices:
-        toplot.append([points[simplex, 0], points[simplex, 1]])
+        toplot.append([points[simplex,0], points[simplex,1]])
     return np.array(toplot)
-    
+
 def least_squares_regression(points):
     m = np.max(points[:,0])+1
     # m alpha, beta
@@ -297,9 +300,12 @@ def main():
     arr = proc_arr()
     dep = proc_dep()
     new_data = correlate_data(arr, dep)
+    '''
     for oper in ['VMC', 'IMC']:
-        for alg in ['lsq', 'cvx', 'cvx2']:
+        for alg in ['lsq', 'cvx']:
             crunch_data(data, oper, alg, 0)
+    '''
+    crunch_data(data, 'VMC', 'cvx2', 0)
     #crunch_data(new_data, 'cvx', 1)
 
 if __name__=="__main__":
