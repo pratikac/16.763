@@ -4,6 +4,7 @@ import pandas as pd
 import pdb, re
 from collections import Counter
 from scipy import optimize
+plt.ion()
 
 filename_dict = {'28L, 28R | 28L, 28R':'28l_28r_n_28l_28r',
 '28R | 1R':'28r_n_1r',
@@ -113,12 +114,13 @@ def crunch_data(data):
     for oper in oper_dict.keys():
         for config in config_dict.keys():
             #print oper, config
-            if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
-            #if oper == 'VMC' and config == '28R | 28L, 28R':
+            #if oper == 'VMC' and config == '28L, 28R | 1L, 1R':
+            #if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
+            if oper == 'VMC' and config == '28R | 28L, 28R':
                 t1 = filter_data(data, oper, config)
                 if len(t1) > 0:
-                    least_squares_regression(t1)
-                    #convex_hull(t1)
+                    #least_squares_regression(t1)
+                    convex_hull(t1)
                     #convex_hull2(t1)
                     #plot_capacity(data, oper, config)        
 
@@ -134,7 +136,7 @@ def convex_hull(points):
         for i in xrange(m-1):
             ieqcons.append(x[N+m+i] - x[N+m+i+1])
         # 2. -beta_1 >= 0
-        ieqcons.append(-x[N+m]-0.1)
+        ieqcons.append(-x[N+m])
         
         # 3. z_n > (d-dtilde)
         dtilde = np.array([x[max(0,N+a-1)] + x[max(N+m,N+m+a-1)]*a for a in points[:,0]])
@@ -154,11 +156,20 @@ def convex_hull(points):
         return np.array(eqcons)
     
     xmin = optimize.fmin_slsqp(f, np.zeros((N+2*m,1)),
-            f_eqcons = eqcons, f_ieqcons=ieqcons)
+            f_eqcons = eqcons, f_ieqcons=ieqcons, acc=1e-6)
     
     print xmin[N:]
-    #print [xmin[max(0,N+a-1)] + xmin[max(N+m,N+m+a-1)]*a for a in points[:,0]]
-    #print points[:,1].tolist()
+    toplot = [[i, xmin[max(0,N+i-1)] + xmin[max(N+m,N+m+i-1)]*i] for i in 
+            np.arange(1,m)]
+    md = np.max(points[points[:,0]==m,1])
+    toplot.append([m,md])
+    toplot.append([m,0])
+    toplot = np.array(toplot)
+
+    plt.plot(points[:,0], points[:,1], 'o', label='points')
+    plt.plot(toplot[:,0], toplot[:,1], 'o-', label='convexhull')
+    plt.xlim([0,25])
+    plt.ylim([0,25])
 
 def convex_hull2(points):
     from scipy.spatial import ConvexHull
@@ -166,11 +177,11 @@ def convex_hull2(points):
     plt.plot(points[:,0], points[:,1], 'o')
     for simplex in hull.simplices:
         plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
-    plt.xlim([0,15])
-    plt.ylim([0,15])
+    plt.xlim([0,25])
+    plt.ylim([0,25])
 
 def least_squares_regression(points):
-    m = np.max(points[:,0])
+    m = np.max(points[:,0])+1
     # m alpha, beta
     def f(x):
         #pdb.set_trace()
@@ -196,7 +207,12 @@ def least_squares_regression(points):
             f_eqcons = eqcons, f_ieqcons=ieqcons)
 
     print xmin
-    #print [xmin[max(0,a-1)] + xmin[max(m,m+a-1)]*a for a in points[:,0]]
+    toplot = np.array([[i, xmin[max(0,i-1)] + xmin[max(m,m+i-1)]*i] for i in 
+            np.arange(1,m)])
+    plt.plot(points[:,0], points[:,1], 'o', label='points')
+    plt.plot(toplot[:,0], toplot[:,1], 'o-', label='linear regression')
+    plt.xlim([0,25])
+    plt.ylim([0,25])
     #print points[:,1].tolist()
     #print xmin
 
