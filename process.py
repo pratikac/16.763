@@ -113,12 +113,12 @@ def crunch_data(data):
     for oper in oper_dict.keys():
         for config in config_dict.keys():
             #print oper, config
-            #if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
-            if oper == 'VMC' and config == '28R | 28L, 28R':
+            if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
+            #if oper == 'VMC' and config == '28R | 28L, 28R':
                 t1 = filter_data(data, oper, config)
                 if len(t1) > 0:
-                    #least_squares_regression(t1)
-                    convex_hull(t1)
+                    least_squares_regression(t1)
+                    #convex_hull(t1)
                     #convex_hull2(t1)
                     #plot_capacity(data, oper, config)        
 
@@ -134,7 +134,7 @@ def convex_hull(points):
         for i in xrange(m-1):
             ieqcons.append(x[N+m+i] - x[N+m+i+1])
         # 2. -beta_1 >= 0
-        ieqcons.append(-x[N+m])
+        ieqcons.append(-x[N+m]-0.1)
         
         # 3. z_n > (d-dtilde)
         dtilde = np.array([x[max(0,N+a-1)] + x[max(N+m,N+m+a-1)]*a for a in points[:,0]])
@@ -143,6 +143,7 @@ def convex_hull(points):
         # 4. z_n > 0
         for i in xrange(N):
             ieqcons.append(x[i])
+        
         return ieqcons
 
     def eqcons(x):
@@ -154,7 +155,10 @@ def convex_hull(points):
     
     xmin = optimize.fmin_slsqp(f, np.zeros((N+2*m,1)),
             f_eqcons = eqcons, f_ieqcons=ieqcons)
+    
     print xmin[N:]
+    #print [xmin[max(0,N+a-1)] + xmin[max(N+m,N+m+a-1)]*a for a in points[:,0]]
+    #print points[:,1].tolist()
 
 def convex_hull2(points):
     from scipy.spatial import ConvexHull
@@ -178,7 +182,7 @@ def least_squares_regression(points):
         for i in xrange(m-1):
             ieqcons.append(x[m+i] - x[m+i+1])
         # 2. -beta_1 >= 0
-        ieqcons.append(-x[m])
+        ieqcons.append(-x[m]-0.1)
         #print ieqcons
         return np.array(ieqcons)
     def eqcons(x):
@@ -186,14 +190,14 @@ def least_squares_regression(points):
         # 3. continuity
         for i in xrange(m-1):
             eqcons.append(x[i]+x[m+i]*i - x[i+1]-x[m+i+1]*i)
-        print eqcons
         return np.array(eqcons)
     
     xmin = optimize.fmin_slsqp(f, np.random.random((2*m,1)),
             f_eqcons = eqcons, f_ieqcons=ieqcons)
 
-    print [xmin[max(0,a-1)] + xmin[max(m,m+a-1)]*a for a in points[:,0]]
-    print points[:,1].tolist()
+    print xmin
+    #print [xmin[max(0,a-1)] + xmin[max(m,m+a-1)]*a for a in points[:,0]]
+    #print points[:,1].tolist()
     #print xmin
 
 def test():
