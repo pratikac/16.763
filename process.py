@@ -24,8 +24,8 @@ config_dict = {'28L, 28R | 28L, 28R':0,
 '28L | 1L, 1R':5,
 '28L | 28L':6
 }
-oper_dict = {'VMC':0,
-'IMC':1
+oper_dict = {'VMC':7,
+'IMC':8
 }
 
 def proc_data():
@@ -36,6 +36,9 @@ def proc_data():
         data[i,1] = 4*data[i,0] + data[i,1]
         data[i,2] = oper_dict[data[i,2]]
         data[i,3] = config_dict[data[i,3]]
+    t1 = data[:,4].copy()
+    data[:,4] = data[:,5].copy()
+    data[:,5] = t1
     return data[:,1:]
 
 def convert_to_quater(s):
@@ -74,52 +77,100 @@ todo:
     average by time of day
 '''
 def filter_data(data, oper, config):
-    t1 = data[data[:,1] == oper_dict[oper],:]
-    t1 = data[data[:,2] == config_dict[config],:]
-    t1 = t1[:,3:5]
-    return t1
+    #pdb.set_trace()
+    t1 = data[data[:,1] == oper_dict[oper]].copy()
+    t2 = t1[t1[:,2] == config_dict[config]]
+    t2 = t2[:,3:5]
+    return t2
 
-def plot_capacity(t1key, t1count, oper, config):
-    t1 = np.asarray(t1key)
-    fig = plt.figure(1)
-    for i in xrange(len(t1)):
-        plt.plot(t1[i,0], t1[i,1], 'o',
-                ms=5*t1count[i], markerfacecolor=None,
-                markeredgecolor='blue',
-                fillstyle='none',
-                markeredgewidth=1.5)
+def plot_capacity(data, oper, config):
+    t1 = filter_data(data, oper, config)
+    if len(t1) == 0:
+        return
+    t1c = list(t1.tolist())
+    t1s = t1c
+    t1s = [tuple(i) for i in t1s]
+    t1dict = dict(Counter(t1s))
+    t1keys, t1count = t1dict.keys(), t1dict.values()
+    #pdb.set_trace()
+    for i in xrange(len(t1keys)):
+        plt.plot(t1keys[i][0], t1keys[i][1], 'o')
+                #ms=5*t1count[i], markerfacecolor=None,
+                #markeredgecolor='blue',
+                #fillstyle='none',
+                #markeredgewidth=1.5)
     plt.xlim([0,20])
     plt.ylim([0,20])
-    plt.xlabel('departures')
-    plt.ylabel('arrivals')
+    plt.xlabel('arrivals')
+    plt.ylabel('departures')
     plt.title('oper: ' + oper+' , config: ' + config)
     plt.grid()
-    #plt.show()
-    
-    plt.savefig(filename_dict[oper]+'_'+filename_dict[config]+'.png')
+    fname = filename_dict[oper]+'_'+filename_dict[config]+'.png'
+    print 'Saving: ', fname
+    plt.savefig(fname)
 
 def crunch_data(data):
     for oper in oper_dict.keys():
         for config in config_dict.keys():
             #print oper, config
-            if oper == 'IMC' and config == '28L, 28R | 28L, 28R':
+            #if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
+            if oper == 'VMC' and config == '28R | 28L, 28R':
                 t1 = filter_data(data, oper, config)
-                
-                if 1:
-                    least_squares_regression(20,t1)
-                else:
-                    t1s = t1.tolist()
-                    t1s = [tuple(i) for i in t1s]
-                    t1dict = dict(Counter(t1s))
-                    plot_capacity(t1dict.keys(), t1dict.values(), oper, config)        
+                if len(t1) > 0:
+                    #least_squares_regression(t1)
+                    convex_hull(t1)
+                    #convex_hull2(t1)
+                    #plot_capacity(data, oper, config)        
 
-def least_squares_regression(m, points):
-    # m alpha, beta
-    pdb.set_trace()
+def convex_hull(points):
+    m = np.max(points[:,0])
+    N = len(points)
+    # N z and m: alpha, beta
     def f(x):
-        dtilde = np.array([x[a] + x[m+a]*a for a in points[:,0]])
-        print 'dtilde: ', dtilde
+        return np.sum(x[:N])
+    def ieqcons(x):
+        ieqcons = []
+        # 1. slope constraint
+        for i in xrange(m-1):
+            ieqcons.append(x[N+m+i] - x[N+m+i+1])
+        # 2. -beta_1 >= 0
+        ieqcons.append(-x[N+m])
+        
+        # 3. z_n > (d-dtilde)
+        dtilde = np.array([x[max(0,N+a-1)] + x[max(N+m,N+m+a-1)]*a for a in points[:,0]])
+        ieqcons = ieqcons + (x[:N] - (points[:,1] - dtilde)).tolist()
+        
+        # 4. z_n > 0
+        for i in xrange(N):
+            ieqcons.append(x[i])
+        return ieqcons
+
+    def eqcons(x):
+        eqcons = []
+        # 3. continuity
+        for i in xrange(m-1):
+            eqcons.append(x[N+i]+x[N+m+i]*i - x[N+i+1]-x[N+m+i+1]*i)
+        return np.array(eqcons)
+    
+    xmin = optimize.fmin_slsqp(f, np.zeros((N+2*m,1)),
+            f_eqcons = eqcons, f_ieqcons=ieqcons)
+    print xmin[N:]
+
+def convex_hull2(points):
+    from scipy.spatial import ConvexHull
+    hull = ConvexHull(points)
+    plt.plot(points[:,0], points[:,1], 'o')
+    for simplex in hull.simplices:
+        plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
+    plt.xlim([0,15])
+    plt.ylim([0,15])
+
+def least_squares_regression(points):
+    m = np.max(points[:,0])
+    # m alpha, beta
+    def f(x):
         #pdb.set_trace()
+        dtilde = np.array([x[max(0,a-1)] + x[max(m,m+a-1)]*a for a in points[:,0]])
         return np.linalg.norm(points[:,1] - dtilde)**2
     def ieqcons(x):
         ieqcons = []
@@ -128,25 +179,30 @@ def least_squares_regression(m, points):
             ieqcons.append(x[m+i] - x[m+i+1])
         # 2. -beta_1 >= 0
         ieqcons.append(-x[m])
+        #print ieqcons
         return np.array(ieqcons)
     def eqcons(x):
         eqcons = []
         # 3. continuity
         for i in xrange(m-1):
             eqcons.append(x[i]+x[m+i]*i - x[i+1]-x[m+i+1]*i)
+        print eqcons
         return np.array(eqcons)
     
     xmin = optimize.fmin_slsqp(f, np.random.random((2*m,1)),
             f_eqcons = eqcons, f_ieqcons=ieqcons)
-    print xmin
+
+    print [xmin[max(0,a-1)] + xmin[max(m,m+a-1)]*a for a in points[:,0]]
+    print points[:,1].tolist()
+    #print xmin
 
 def test():
     def f(x):
         return np.sqrt((x[0]-3)**2 + (x[1]-2)**2)
     def cons(x):
-        return np.atleast_1d(1.5 - np.sum(np.abs(x)))
+        return np.array([x[0] -2, x[1] - 3])
 
-    xmin = optimize.fmin_slsqp(f, np.array([0,0]), ieqcons=[cons,])
+    xmin = optimize.fmin_slsqp(f, np.array([0,0]), f_ieqcons=cons)
     print xmin
 
 def main():
