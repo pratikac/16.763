@@ -40,14 +40,16 @@ def proc_data():
     t1 = data[:,4].copy()
     data[:,4] = data[:,5].copy()
     data[:,5] = t1
-    return data[:,1:]
+    return data[:,1:-1]
 
 def convert_to_quater(s):
     s = re.split(' |:', s)
     hr, m = int(s[0]), int(s[1])
+    if hr == 12:
+        hr = 0
     if s[2] == 'PM':
         hr += 12
-    return ((hr*60+m), int((hr*60 + m)/15))
+    return ((hr*60+m), int((hr*60 + m)/15)+1)
 
 def proc_arr():
     arr = np.array(pd.read_csv('arrivals.csv'))
@@ -72,6 +74,25 @@ def proc_dep():
             dep2.append([sched_m, sched_q, actual_m, actual_q])
     #pdb.set_trace()
     return np.array(dep2)
+
+# create new dataset from arr, dep
+def correlate_data(arr, dep):
+    arr, dep = arr.tolist(), dep.tolist()
+    datadic = {}
+    for a in arr:
+        if not a[3] in datadic:
+            datadic[a[3]] = [-1, -1, 1, 0]
+        else:
+            datadic[a[3]][2] += 1
+    for d in dep:
+        if not d[3] in datadic:
+            datadic[d[3]] = [-1, -1, 0, 1]
+        else:
+            datadic[d[3]][3] += 1
+    data = []
+    for k in datadic:
+        data.append([k]+datadic[k])
+    return np.array(data)
 
 '''
 todo:
@@ -110,19 +131,30 @@ def plot_capacity(data, oper, config):
     print 'Saving: ', fname
     plt.savefig(fname)
 
-def crunch_data(data):
-    for oper in oper_dict.keys():
-        for config in config_dict.keys():
-            #print oper, config
-            #if oper == 'VMC' and config == '28L, 28R | 1L, 1R':
-            #if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
-            if oper == 'VMC' and config == '28R | 28L, 28R':
-                t1 = filter_data(data, oper, config)
-                if len(t1) > 0:
-                    #least_squares_regression(t1)
-                    convex_hull(t1)
-                    #convex_hull2(t1)
-                    #plot_capacity(data, oper, config)        
+def crunch_data(data, which, overall_flag=0):
+    t1 = []
+    if not overall_flag:
+        for oper in oper_dict.keys():
+            for config in config_dict.keys():
+                #print oper, config
+                #if oper == 'VMC' and config == '28L, 28R | 1L, 1R':
+                #if oper == 'VMC' and config == '28L, 28R | 28L, 28R':
+                if (not overall) and oper == 'VMC' and config == '28R | 28L, 28R':
+                    t1 = filter_data(data, oper, config)
+                    if len(t1) == 0:
+                        return
+    else:
+        t1 = data[:,3:5]
+
+    if(which == 'lsq'):
+        least_squares_regression(t1)
+    elif(which == 'cvx'):
+        convex_hull(t1)
+    elif(which == 'cvx2'):
+        convex_hull2(t1)
+    elif(which == 'plt'):
+        plot_capacity(data, oper, config)        
+
 
 def convex_hull(points):
     m = np.max(points[:,0])
@@ -229,7 +261,9 @@ def main():
     data = proc_data()
     arr = proc_arr()
     dep = proc_dep()
-    crunch_data(data)
+    new_data = correlate_data(arr, dep)
+    #crunch_data(data, 'cvx', 0)
+    crunch_data(new_data, 'lsq', 1)
 
 if __name__=="__main__":
     main()
