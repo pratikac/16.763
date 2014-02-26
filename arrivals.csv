@@ -1,0 +1,1223 @@
+,,,Arrival,,Term,,
+Origin,Flight,Airline,Sched,Actual,Gate,Status,Equip
+JFK New York,B6 649,JetBlue Airways,12:03 AM,11:39 PM,T-I,Landed,320
+,,,,,A11A,  On-time,
+ATL Atlanta,DL 1649,Delta Air Lines,12:07 AM,,T-1, Cancelled,757
+,,,,,45B,,
+SAL San Salvador,TA 560,TACA,12:12 AM,12:06 AM,T-I,Landed,320
+,,,,,,  On-time,
+EWR Newark,UA 1574,United Airlines,12:20 AM,12:08 AM,T-I,Landed,739
+,,,,,G98,  On-time,
+PHX Phoenix,US 417,US Airways,12:28 AM,12:47 AM,T-1,Landed,321
+,,,,,21,  19 min,
+LAX Los Angeles,UA 281,United Airlines,12:30 AM,12:16 AM,T-3,Landed,320
+,,,,,73A,  On-time,
+LAX Los Angeles,KE 214,Korean Air Lines,12:31 AM,12:31 AM ~,,Unknown,
+LAX Los Angeles,UA 6855,United Airlines,12:35 AM,12:42 AM,,Landed,
+,,,,,,  On-time,
+LAX Los Angeles,OZ 284,Asiana Airlines,12:40 AM,12:08 AM,,Landed,74Y
+,,,,,,  On-time,
+IAD Washington,UA 225,United Airlines,12:59 AM,12:53 AM,T-3,Landed,752
+,,,,,85,  On-time,
+LAX Los Angeles,KE 213,Korean Air Lines,1:20 AM,12:35 AM,,Landed,74N
+,,,,,,  86 min,
+KOA Kona,UA 1724,United Airlines,4:37 AM,4:43 AM,T-3,Landed,753
+,,,,,89,  On-time,
+MEM Memphis,FX 1545,FedEx,4:57 AM,4:58 AM,,Landed,
+,,,,,,  On-time,
+HNL Honolulu,UA 396,United Airlines,5:09 AM,5:43 AM,T-3,Landed,777
+,,,,,86,  34 min,
+OGG Kahului,UA 1741,United Airlines,5:20 AM,5:26 AM,T-3,Landed,753
+,,,,,90,  On-time,
+LAX Los Angeles,GB 1920,ABX Air,5:53 AM,5:42 AM,,Landed,
+,,,,,,  On-time,
+FAT Fresno,OO 6382,SkyWest Airlines,6:12 AM,6:14 AM,T-3,Landed,CR7
+,,,,,70,  On-time,
+MRY Monterey,OO 6346,SkyWest Airlines,6:13 AM,6:02 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+SMF Sacramento,OO 5445,SkyWest Airlines,6:16 AM,6:11 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+BOI Boise,OO 5484,SkyWest Airlines,6:21 AM,5:54 AM,T-1,Landed,CRJ
+,,,,,33,  On-time,
+ANC Anchorage,UA 1243,United Airlines,6:23 AM,6:10 AM,T-3,Landed,738
+,,,,,88,  On-time,
+CVG Cincinnati,5Y 805,Atlas Air,6:24 AM,7:11 AM,,Landed,
+,,,,,,  47 min,
+MFR Medford,OO 6403,SkyWest Airlines,6:30 AM,6:26 AM,T-1,Landed,CRJ
+,,,,,,  On-time,
+MOD Modesto,OO 5442,SkyWest Airlines,6:40 AM,6:35 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+RNO Reno,OO 5628,SkyWest Airlines,6:42 AM,6:32 AM,T-1,Landed,CRJ
+,,,,,34,  On-time,
+SLC Salt Lake City,OO 5612,SkyWest Airlines,6:56 AM,6:52 AM,T-3,Landed,CR7
+,,,,,77B,  On-time,
+LMT Klamath Falls,OO 5473,SkyWest Airlines,6:56 AM,6:43 AM,T-3,Landed,EM2
+,,,,,78,  On-time,
+CIC Chico,OO 5457,SkyWest Airlines,7:04 AM,7:09 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+SBP San Luis Obispo,OO 5458,SkyWest Airlines,7:07 AM,7:00 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+RDM Redmond,OO 5456,SkyWest Airlines,7:09 AM,6:49 AM,T-3,Landed,CRJ
+,,,,,79,  On-time,
+ONT Ontario,OO 5467,SkyWest Airlines,7:09 AM,6:57 AM,T-1,Landed,CRJ
+,,,,,35,  On-time,
+HNL Honolulu,UA 491,United Airlines,7:10 AM,7:10 AM,T-3,Landed,752
+,,,,,81,  On-time,
+AUS Austin,UA 1420,United Airlines,7:13 AM,7:18 AM,T-3,Landed,738
+,,,,,76B,  On-time,
+RDD Redding,OO 5460,SkyWest Airlines,7:19 AM,7:07 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+LAS Las Vegas,UA 728,United Airlines,7:19 AM,7:13 AM,T-3,Landed,752
+,,,,,83,  On-time,
+PHX Phoenix,UA 428,United Airlines,7:20 AM,6:55 AM,T-3,Landed,319
+,,,,,75,  On-time,
+LAX Los Angeles,WN 557,Southwest Airlines,7:20 AM,7:07 AM,T-1,Landed,73W
+,,,,,27,  On-time,
+LAX Los Angeles,UA 414,United Airlines,7:20 AM,7:08 AM,T-3,Landed,752
+,,,,,80,  On-time,
+EUG Eugene,OO 6401,SkyWest Airlines,7:20 AM,7:11 AM,T-3,Landed,CR7
+,,,,,70,  On-time,
+SBA Santa Barbara,OO 5632,SkyWest Airlines,7:24 AM,7:26 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+ACV Arcata,OO 5497,SkyWest Airlines,7:25 AM,7:29 AM,T-3,Landed,EM2
+,,,,,78,  On-time,
+LAX Los Angeles,KZ 109,NCA - Nippon Cargo Airlines,7:25 AM,5:53 AM,,Landed,74Y
+,,,,,,  On-time,
+ABQ Albuquerque,OO 5584,SkyWest Airlines,7:28 AM,10:09 AM,T-3,Landed,CR7
+,,,,,70,  161 min,
+SEA Seattle,UA 1688,United Airlines,7:30 AM,7:14 AM,T-3,Landed,739
+,,,,,89,  On-time,
+BFL Bakersfield,OO 5308,SkyWest Airlines,7:30 AM,7:32 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+PSC Pasco,OO 5435,SkyWest Airlines,7:32 AM,7:22 AM,T-1,Landed,CRJ
+,,,,,33,  On-time,
+OKC Oklahoma City,OO 6241,SkyWest Airlines,7:35 AM,7:32 AM,T-3,Landed,CR7
+,,,,,69,  On-time,
+DEN Denver,UA 256,United Airlines,7:43 AM,7:34 AM,T-3,Landed,320
+,,,,,73A,  On-time,
+LAX Los Angeles,OO 4602,SkyWest Airlines,7:47 AM,7:26 AM,T-1,Landed,CR9
+,,,,,44,  On-time,
+SAT San Antonio,OO 6261,SkyWest Airlines,7:49 AM,7:42 AM,T-3,Landed,CR7
+,,,,,77B,  On-time,
+LAS Las Vegas,WN 2690,Southwest Airlines,7:50 AM,7:46 AM,T-1,Landed,733
+,,,,,30,  On-time,
+DFW Dallas,OO 5509,SkyWest Airlines,7:50 AM,7:42 AM,T-1,Landed,CR7
+,,,,,34,  On-time,
+LAX Los Angeles,WN 264,Southwest Airlines,7:50 AM,7:48 AM,T-1,Landed,733
+,,,,,28,  On-time,
+PDX Portland,UA 1667,United Airlines,7:53 AM,7:29 AM,T-3,Landed,739
+,,,,,73,  On-time,
+SAN San Diego,UA 334,United Airlines,7:57 AM,7:44 AM,T-3,Landed,320
+,,,,,72,  On-time,
+TPE Taipei,CI 5178,China Airlines,8:00 AM,8:49 AM,,Landed,74Y
+,,,,,,  49 min,
+SAN San Diego,WN 1910,Southwest Airlines,8:05 AM,7:55 AM,T-1,Landed,73W
+,,,,,31,  On-time,
+LAX Los Angeles,VX 925,Virgin America,8:15 AM,8:29 AM,T-2,Landed,319
+,,,,,51B,  On-time,
+TUS Tucson,OO 6369,SkyWest Airlines,8:18 AM,8:15 AM,T-1,Landed,CRJ
+,,,,,35,  On-time,
+LAX Los Angeles,AA 1921,American Airlines,8:20 AM,8:23 AM,T-2,Landed,738
+,,,,,58A,  On-time,
+YVR Vancouver,UA 378,United Airlines,8:22 AM,8:08 AM,T-3,Landed,319
+,,,,,75,  On-time,
+LAX Los Angeles,UA 1100,United Airlines,8:23 AM,8:19 AM,T-3,Landed,738
+,,,,,87,  On-time,
+SNA Santa Ana,UA 322,United Airlines,8:23 AM,8:36 AM,T-3,Landed,752
+,,,,,85,  On-time,
+SEA Seattle,AS 308,Alaska Airlines,8:25 AM,8:05 AM,T-I,Landed,73H
+,,,,,A5,  On-time,
+PIT Pittsburgh,UA 237,United Airlines,8:26 AM,8:13 AM,T-3,Landed,320
+,,,,,70,  On-time,
+BUR Burbank,OO 6272,SkyWest Airlines,8:28 AM,9:06 AM,T-1,Landed,CRJ
+,,,,,,  38 min,
+COS Colorado Springs,OO 6464,SkyWest Airlines,8:29 AM,8:14 AM,T-1,Landed,CRJ
+,,,,,,  On-time,
+PSP Palm Springs,AS 311,Alaska Airlines,8:30 AM,8:36 AM,T-1,Landed,734
+,,,,,20,  On-time,
+SAN San Diego,VX 1951,Virgin America,8:35 AM,9:14 AM,T-2,Landed,320
+,,,,,54A,  39 min,
+PDX Portland,QX 2523,Horizon Air,8:37 AM,9:12 AM,T-1,Landed,DH4
+,,,,,22,  35 min,
+IAD Washington,UA 697,United Airlines,8:37 AM,9:07 AM,T-3,Landed,752
+,,,,,83,  30 min,
+LGB Long Beach,B6 1430,JetBlue Airways,8:37 AM,9:31 AM,T-I,Landed,320
+,,,,,A12,  54 min,
+ORD Chicago,UA 1041,United Airlines,8:37 AM,8:14 AM,T-3,Landed,738
+,,,,,88,  On-time,
+SEA Seattle,VX 751,Virgin America,8:40 AM,9:19 AM,T-2,Landed,320
+,,,,,51A,  39 min,
+PDX Portland,UA 1602,United Airlines,8:42 AM,9:04 AM,T-3,Landed,739
+,,,,,76B,  22 min,
+DFW Dallas,VX 713,Virgin America,8:45 AM,8:36 AM,T-2,Landed,319
+,,,,,53,  On-time,
+PVG Shanghai,UA 858,United Airlines,8:45 AM,8:40 AM,T-I,Landed,744
+,,,,,G95,  On-time,
+LAX Los Angeles,OO 4604,SkyWest Airlines,8:46 AM,9:38 AM,T-1,Landed,CR9
+,,,,,48,  52 min,
+SAN San Diego,UA 662,United Airlines,8:47 AM,8:43 AM,T-3,Landed,319
+,,,,,72,  On-time,
+YYJ Victoria,OO 6315,SkyWest Airlines,8:48 AM,8:25 AM,T-I,Landed,CRJ
+,,,,,,  On-time,
+RDU Raleigh/Durham,UA 1698,United Airlines,8:51 AM,8:52 AM,T-3,Landed,738
+,,,,,89,  On-time,
+SMF Sacramento,OO 5398,SkyWest Airlines,8:52 AM,8:45 AM,T-3,Landed,EM2
+,,,,,78,  On-time,
+FAT Fresno,OO 5574,SkyWest Airlines,8:54 AM,9:54 AM,T-1,Landed,EM2
+,,,,,,  60 min,
+PHL Philadelphia,UA 445,United Airlines,8:56 AM,8:47 AM,T-3,Landed,319
+,,,,,73A,  On-time,
+MCI Kansas City,OO 6196,SkyWest Airlines,8:59 AM,8:43 AM,T-3,Landed,CR7
+,,,,,79,  On-time,
+LAX Los Angeles,WN 133,Southwest Airlines,9:00 AM,,T-1, Cancelled,73W
+,,,,,27,,
+GDL Guadalajara,UA 1582,United Airlines,9:00 AM,8:59 AM,T-I,Landed,738
+,,,,,G98,  On-time,
+PEK Beijing,UA 888,United Airlines,9:00 AM,8:19 AM,T-I,Landed,744
+,,,,,G99,  On-time,
+MSP Minneapolis,SY 391,Sun Country Airlines,9:05 AM,8:50 AM,T-I,Landed,73G
+,,,,,,  On-time,
+LAS Las Vegas,WN 270,Southwest Airlines,9:05 AM,9:23 AM,T-1,Landed,733
+,,,,,28,  18 min,
+EWR Newark,UA 1556,United Airlines,9:08 AM,8:56 AM,T-3,Landed,738
+,,,,,77B,  On-time,
+HKG Hong Kong,UA 862,United Airlines,9:15 AM,8:20 AM,T-I,Landed,744
+,,,,,G96,  On-time,
+BOI Boise,OO 6396,SkyWest Airlines,9:20 AM,9:11 AM,T-3,Landed,CR7
+,,,,,69,  On-time,
+SEA Seattle,AS 224,Alaska Airlines,9:24 AM,10:14 AM,T-1,Landed,739
+,,,,,22,  50 min,
+JFK New York,UA 303,United Airlines,9:24 AM,10:05 AM,T-3,Landed,757
+,,,,,80,  41 min,
+SBA Santa Barbara,OO 6487,SkyWest Airlines,9:24 AM,11:36 AM,T-1,Landed,EM2
+,,,,,,  132 min,
+NRT Tokyo,UA 838,United Airlines,9:25 AM,9:15 AM,T-I,Landed,744
+,,,,,G97,  On-time,
+PHX Phoenix,WN 636,Southwest Airlines,9:25 AM,9:58 AM,T-1,Landed,73W
+,,,,,30,  33 min,
+PDX Portland,AS 246,Alaska Airlines,9:29 AM,10:50 AM,T-1,Landed,73G
+,,,,,20,  81 min,
+PVG Shanghai,MU 589,China Eastern Airlines,9:30 AM,8:46 AM,T-I,Landed,332
+,,,,,,  On-time,
+STP Saint Paul,EJM 123,Executive Jet Management,9:30 AM,9:15 AM,,Landed,
+,,,,,,  On-time,
+SNA Santa Ana,UA 273,United Airlines,9:30 AM,11:16 AM,T-3,Landed,320
+,,,,,81,  106 min,
+EUG Eugene,OO 6400,SkyWest Airlines,9:32 AM,11:09 AM,T-1,Landed,CRJ
+,,,,,34,  97 min,
+YYC Calgary,OO 6273,SkyWest Airlines,9:34 AM,11:07 AM,T-3,Landed,CR7
+,,,,,70,  93 min,
+DFW Dallas,AA 451,American Airlines,9:35 AM,10:37 AM,T-2,Landed,763
+,,,,,57,  62 min,
+NRT Tokyo,DL 208,Delta Air Lines,9:35 AM,9:24 AM,T-I,Landed,76W
+,,,,,A7,  On-time,
+MCO Orlando,UA 1143,United Airlines,9:35 AM,9:43 AM,T-3,Landed,753
+,,,,,85,  On-time,
+BWI Baltimore,UA 1002,United Airlines,9:38 AM,9:41 AM,T-3,Landed,738
+,,,,,73,  On-time,
+SEA Seattle,UA 1422,United Airlines,9:39 AM,9:29 AM,T-3,Landed,73G
+,,,,,90,  On-time,
+SMO Santa Monica,1I 820,Netjets Aviation,9:39 AM,11:05 AM,,Landed,
+,,,,,,  86 min,
+MEX Mexico City,UA 820,United Airlines,9:40 AM,9:34 AM,T-I,Landed,319
+,,,,,G94,  On-time,
+BOS Boston,UA 433,United Airlines,9:41 AM,9:24 AM,T-3,Landed,752
+,,,,,82,  On-time,
+AUS Austin,OO 6270,SkyWest Airlines,9:43 AM,9:47 AM,T-1,Landed,CR7
+,,,,,35,  On-time,
+IAH Houston,UA 1456,United Airlines,9:48 AM,9:57 AM,T-3,Landed,738
+,,,,,88,  On-time,
+YEG Edmonton,OO 6421,SkyWest Airlines,9:49 AM,9:32 AM,T-3,Landed,CR7
+,,,,,71,  On-time,
+LAS Las Vegas,UA 834,United Airlines,9:50 AM,10:01 AM,T-3,Landed,320
+,,,,,72,  On-time,
+IAD Washington,UA 1167,United Airlines,9:50 AM,9:52 AM,T-3,Landed,739
+,,,,,74,  On-time,
+CLT Charlotte,US 465,US Airways,9:50 AM,9:48 AM,T-1,Landed,321
+,,,,,23,  On-time,
+LAX Los Angeles,OO 4603,SkyWest Airlines,9:50 AM,10:55 AM,T-1,Landed,CR9
+,,,,,44,  65 min,
+SNA Santa Ana,WN 1201,Southwest Airlines,9:50 AM,10:01 AM,T-1,Landed,73W
+,,,,,31,  On-time,
+SLC Salt Lake City,OO 4656,SkyWest Airlines,9:51 AM,10:56 AM,T-1,Landed,CR9
+,,,,,48,  65 min,
+PHX Phoenix,US 403,US Airways,9:52 AM,11:15 AM,T-1,Landed,320
+,,,,,,  83 min,
+ORD Chicago,UA 267,United Airlines,9:52 AM,9:39 AM,T-3,Landed,752
+,,,,,84,  On-time,
+DEN Denver,F9 653,Frontier Airlines,9:53 AM,10:21 AM,T-1,Landed,319
+,,,,,43,  28 min,
+MRY Monterey,OO 5503,SkyWest Airlines,9:54 AM,11:27 AM,T-1,Landed,EM2
+,,,,,,  93 min,
+DEN Denver,UA 1256,United Airlines,9:54 AM,10:57 AM,T-3,Landed,738
+,,,,,73,  63 min,
+IAD Washington,VX 67,Virgin America,9:55 AM,9:49 AM,T-2,Landed,320
+,,,,,51B,  On-time,
+PSP Palm Springs,OO 5629,SkyWest Airlines,9:58 AM,11:19 AM,T-1,Landed,CRJ
+,,,,,34,  81 min,
+ORD Chicago,AA 1341,American Airlines,10:00 AM,9:33 AM,T-2,Landed,738
+,,,,,58A,  On-time,
+ACV Arcata,OO 6329,SkyWest Airlines,10:01 AM,11:27 AM,T-1,Landed,EM2
+,,,,,,  86 min,
+LAX Los Angeles,UA 271,United Airlines,10:05 AM,10:06 AM,T-3,Landed,752
+,,,,,87,  On-time,
+DEN Denver,WN 430,Southwest Airlines,10:10 AM,12:01 PM,T-1,Landed,73W
+,,,,,27,  111 min,
+AUS Austin,B6 1403,JetBlue Airways,10:11 AM,10:06 AM,T-I,Landed,320
+,,,,,A10,  On-time,
+ONT Ontario,OO 5374,SkyWest Airlines,10:15 AM,11:24 AM,T-1,Landed,CRJ
+,,,,,33,  69 min,
+LAX Los Angeles,VX 935,Virgin America,10:15 AM,11:44 AM,T-2,Landed,320
+,,,,,54B,  89 min,
+DEN Denver,UA 1058,United Airlines,10:19 AM,11:44 AM,T-3,Landed,738
+,,,,,82,  85 min,
+SAN San Diego,WN 497,Southwest Airlines,10:20 AM,10:36 AM,T-1,Landed,73W
+,,,,,28,  16 min,
+IAD Washington,UA 217,United Airlines,10:29 AM,10:32 AM,T-3,Landed,752
+,,,,,83,  On-time,
+ATL Atlanta,DL 2423,Delta Air Lines,10:30 AM,11:03 AM,T-1,Landed,757
+,,,,,42,  33 min,
+KIX Osaka,UA 886,United Airlines,10:30 AM,10:10 AM,T-I,Landed,744
+,,,,,G102,  On-time,
+YVR Vancouver,AC 560,Air Canada,10:31 AM,10:29 AM,T-I,Landed,E90
+,,,,,,  On-time,
+SBA Santa Barbara,OO 6286,SkyWest Airlines,10:31 AM,12:05 PM,T-1,Landed,EM2
+,,,,,,  94 min,
+JFK New York,DL 1865,Delta Air Lines,10:34 AM,10:19 AM,T-1,Landed,752
+,,,,,47,  On-time,
+LAS Las Vegas,OO 6231,SkyWest Airlines,10:35 AM,11:12 AM,T-3,Landed,CR7
+,,,,,71,  37 min,
+DFW Dallas,AA 2297,American Airlines,10:35 AM,10:28 AM,T-2,Landed,757
+,,,,,56B,  On-time,
+ORD Chicago,VX 201,Virgin America,10:35 AM,10:25 AM,T-2,Landed,320
+,,,,,50,  On-time,
+FAT Fresno,OO 6263,SkyWest Airlines,10:36 AM,11:43 AM,T-1,Landed,EM2
+,,,,,,  67 min,
+CEC Crescent City,OO 5335,SkyWest Airlines,10:38 AM,11:54 AM,T-1,Landed,EM2
+,,,,,,  76 min,
+PHL Philadelphia,US 657,US Airways,10:39 AM,10:52 AM,T-1,Landed,320
+,,,,,21,  On-time,
+BUR Burbank,OO 5655,SkyWest Airlines,10:40 AM,12:02 PM,T-1,Landed,CRJ
+,,,,,35,  82 min,
+EWR Newark,UA 1668,United Airlines,10:45 AM,10:29 AM,T-3,Landed,739
+,,,,,89,  On-time,
+NRT Tokyo,NH 8,ANA,10:45 AM,10:44 AM,T-I,Landed,77W
+,,,,,,  On-time,
+EWR Newark,VX 183,Virgin America,10:45 AM,10:16 AM,T-2,Landed,320
+,,,,,54A,  On-time,
+ICN Seoul,OZ 214,Asiana Airlines,10:45 AM,11:11 AM,T-I,Landed,77L
+,,,,,,  26 min,
+CLE Cleveland,UA 1655,United Airlines,10:54 AM,10:34 AM,T-3,Landed,739
+,,,,,76B,  On-time,
+DTW Detroit,DL 745,Delta Air Lines,10:54 AM,10:46 AM,T-1,Landed,763
+,,,,,40,  On-time,
+IAD Washington,1I 943,Netjets Aviation,10:54 AM,10:54 AM ~,,Unknown,
+MDW Chicago,WN 2675,Southwest Airlines,10:55 AM,11:12 AM,T-1,Landed,73W
+,,,,,30,  17 min,
+RNO Reno,OO 6484,SkyWest Airlines,10:55 AM,12:11 PM,T-1,Landed,CRJ
+,,,,,34,  76 min,
+JFK New York,VX 11,Virgin America,10:55 AM,10:57 AM,T-2,Landed,320
+,,,,,52,  On-time,
+SAN San Diego,VX 953,Virgin America,10:55 AM,12:19 PM,T-2,Landed,320
+,,,,,53,  84 min,
+SYD Sydney,UA 870,United Airlines,11:00 AM,11:02 AM,T-I,Landed,744
+,,,,,G98,  On-time,
+ORD Chicago,UA 800,United Airlines,11:01 AM,11:20 AM,T-3,Landed,319
+,,,,,72,  19 min,
+YYZ Toronto,AC 737,Air Canada,11:03 AM,10:45 AM,T-I,Landed,320
+,,,,,,  On-time,
+LAX Los Angeles,UA 239,United Airlines,11:04 AM,11:30 AM,T-3,Landed,320
+,,,,,75,  26 min,
+SNA Santa Ana,OO 6343,SkyWest Airlines,11:04 AM,1:09 PM,T-3,Landed,CR7
+,,,,,70,  125 min,
+LAS Las Vegas,UA 1225,United Airlines,11:05 AM,12:02 PM,T-3,Landed,738
+,,,,,76A,  57 min,
+MOD Modesto,OO 5452,SkyWest Airlines,11:05 AM,11:56 AM,T-1,Landed,EM2
+,,,,,,  51 min,
+PHX Phoenix,WN 3126,Southwest Airlines,11:05 AM,11:32 AM,T-1,Landed,73W
+,,,,,31,  27 min,
+RDD Redding,OO 5395,SkyWest Airlines,11:12 AM,11:12 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+NRT Tokyo,UA 852,United Airlines,11:15 AM,10:34 AM,T-I,Landed,777
+,,,,,G94,  On-time,
+DCA Washington,UA 103,United Airlines,11:15 AM,10:58 AM,T-3,Landed,73G
+,,,,,74,  On-time,
+ICN Seoul,UA 892,United Airlines,11:20 AM,1:17 PM,T-I,Landed,744
+,,,,,G98,  117 min,
+BOS Boston,B6 635,JetBlue Airways,11:23 AM,11:16 AM,T-I,Landed,320
+,,,,,A12,  On-time,
+CVG Cincinnati,DL 1679,Delta Air Lines,11:26 AM,11:10 AM,T-1,Landed,73H
+,,,,,45B,  On-time,
+IAD Washington,UA 647,United Airlines,11:28 AM,11:13 AM,T-3,Landed,319
+,,,,,73A,  On-time,
+MSP Minneapolis,DL 2305,Delta Air Lines,11:29 AM,11:08 AM,T-1,Landed,M90
+,,,,,46,  On-time,
+IAH Houston,UA 570,United Airlines,11:30 AM,11:29 AM,T-I,Landed,763
+,,,,,G91,  On-time,
+YUL Montreal,AC 761,Air Canada,11:30 AM,11:21 AM,T-I,Landed,319
+,,,,,,  On-time,
+AMS Amsterdam,KL 281,KLM,11:33 AM,11:41 AM,,Landed,
+,,,,,,  On-time,
+JFK New York,AA 59,American Airlines,11:35 AM,11:21 AM,T-2,Landed,762
+,,,,,56A,  On-time,
+MIA Miami,AA 431,American Airlines,11:35 AM,11:23 AM,T-2,Landed,763
+,,,,,58B,  On-time,
+SBA Santa Barbara,OO 5640,SkyWest Airlines,11:35 AM,1:10 PM,T-3,Landed,EM2
+,,,,,78,  95 min,
+JFK New York,UA 397,United Airlines,11:39 AM,11:32 AM,T-3,Landed,757
+,,,,,80,  On-time,
+HKG Hong Kong,CX 870,Cathay Pacific,11:40 AM,11:39 AM,T-I,Landed,744
+,,,,,,  On-time,
+IAD Washington,UA 1135,United Airlines,11:40 AM,11:20 AM,T-3,Landed,739
+,,,,,90,  On-time,
+BOS Boston,UA 1282,United Airlines,11:42 AM,11:36 AM,T-3,Landed,739
+,,,,,88,  On-time,
+EWR Newark,UA 421,United Airlines,11:44 AM,11:44 AM,T-3,Landed,752
+,,,,,87,  On-time,
+SAN San Diego,OO 5159,SkyWest Airlines,11:44 AM,12:24 PM,T-3,Landed,CR7
+,,,,,70,  40 min,
+ACV Arcata,OO 5654,SkyWest Airlines,11:44 AM,1:30 PM,T-1,Landed,EM2
+,,,,,,  106 min,
+ICN Seoul,KE 23,Korean Air Lines,11:45 AM,12:08 PM,T-I,Landed,772
+,,,,,,  23 min,
+LAX Los Angeles,AA 1361,American Airlines,11:45 AM,11:38 AM,T-2,Landed,738
+,,,,,58A,  On-time,
+AMS Amsterdam,KL 605,KLM,11:45 AM,11:51 AM,T-I,Landed,747
+,,,,,,  On-time,
+DEN Denver,UA 268,United Airlines,11:49 AM,11:48 AM,T-3,Landed,752
+,,,,,85,  On-time,
+PDX Portland,VX 817,Virgin America,11:50 AM,12:56 PM,T-2,Landed,320
+,,,,,51A,  66 min,
+SEA Seattle,UA 698,United Airlines,11:50 AM,12:45 PM,T-3,Landed,320
+,,,,,75,  55 min,
+LAX Los Angeles,UA 195,United Airlines,11:50 AM,12:46 PM,T-3,Landed,738
+,,,,,83,  56 min,
+SBP San Luis Obispo,OO 5441,SkyWest Airlines,11:51 AM,1:16 PM,T-1,Landed,EM2
+,,,,,,  85 min,
+SMF Sacramento,OO 5427,SkyWest Airlines,11:54 AM,11:45 AM,T-1,Landed,EM2
+,,,,,,  On-time,
+SEA Seattle,VX 753,Virgin America,11:55 AM,12:51 PM,T-2,Landed,320
+,,,,,51B,  56 min,
+CLT Charlotte,US 467,US Airways,11:55 AM,11:51 AM,T-1,Landed,321
+,,,,,23,  On-time,
+PHX Phoenix,OO 5603,SkyWest Airlines,12:00 PM,12:11 PM,T-3,Landed,CR7
+,,,,,79,  On-time,
+LAX Los Angeles,OO 4605,SkyWest Airlines,12:03 PM,12:34 PM,T-1,Landed,CR9
+,,,,,44,  31 min,
+PDX Portland,OO 6211,SkyWest Airlines,12:05 PM,12:52 PM,T-1,Landed,CRJ
+,,,,,35,  47 min,
+PDX Portland,QX 2635,Horizon Air,12:05 PM,12:50 PM,T-1,Landed,DH4
+,,,,,22,  45 min,
+MFR Medford,OO 5625,SkyWest Airlines,12:06 PM,1:12 PM,T-1,Landed,EM2
+,,,,,,  66 min,
+SEA Seattle,AS 312,Alaska Airlines,12:07 PM,12:36 PM,T-1,Landed,73H
+,,,,,20,  29 min,
+EUG Eugene,OO 6404,SkyWest Airlines,12:08 PM,1:00 PM,T-3,Landed,CR7
+,,,,,77B,  52 min,
+ATL Atlanta,DL 1899,Delta Air Lines,12:10 PM,12:05 PM,T-1,Landed,763
+,,,,,42,  On-time,
+DFW Dallas,AA 453,American Airlines,12:10 PM,12:28 PM,T-2,Landed,738
+,,,,,56B,  18 min,
+DFW Dallas,BR 695,EVA Air,12:10 PM,12:48 PM,,Landed,
+,,,,,,  38 min,
+BOI Boise,OO 5543,SkyWest Airlines,12:10 PM,12:54 PM,T-1,Landed,CRJ
+,,,,,34,  44 min,
+FAT Fresno,OO 6264,SkyWest Airlines,12:14 PM,1:11 PM,T-1,Landed,EM2
+,,,,,,  57 min,
+LAX Los Angeles,WN 528,Southwest Airlines,12:15 PM,1:42 PM,T-1,Landed,73W
+,,,,,27,  87 min,
+BUR Burbank,OO 6197,SkyWest Airlines,12:15 PM,1:23 PM,T-1,Landed,CRJ
+,,,,,35,  68 min,
+SLC Salt Lake City,DL 2375,Delta Air Lines,12:17 PM,12:15 PM,T-1,Landed,320
+,,,,,47,  On-time,
+FRA Frankfurt,LH 454,Lufthansa,12:20 PM,12:24 PM,T-I,Landed,388
+,,,,,,  On-time,
+PEK Beijing,CA 985,Air China Limited,12:20 PM,11:59 AM,T-I,Landed,747
+,,,,,,  On-time,
+LAX Los Angeles,VX 927,Virgin America,12:20 PM,1:08 PM,T-2,Landed,320
+,,,,,50,  48 min,
+LAS Las Vegas,1I 323,Netjets Aviation,12:21 PM,12:57 PM,,Landed,
+,,,,,,  36 min,
+SAN San Diego,UA 242,United Airlines,12:24 PM,1:19 PM,T-3,Landed,319
+,,,,,90,  55 min,
+BOS Boston,VX 351,Virgin America,12:25 PM,12:07 PM,T-2,Landed,320
+,,,,,55,  On-time,
+PHX Phoenix,US 400,US Airways,12:25 PM,12:48 PM,T-1,Landed,320
+,,,,,21,  23 min,
+BOS Boston,UA 551,United Airlines,12:27 PM,12:12 PM,T-3,Landed,752
+,,,,,84,  On-time,
+IAH Houston,UA 404,United Airlines,12:30 PM,12:40 PM,T-3,Landed,320
+,,,,,72,  On-time,
+SLC Salt Lake City,OO 5539,SkyWest Airlines,12:30 PM,12:33 PM,T-3,Landed,CR7
+,,,,,69,  On-time,
+AKL Auckland,NZ 8,Air New Zealand,12:30 PM,12:19 PM,T-I,Landed,772
+,,,,,,  On-time,
+FLL Fort Lauderdale,VX 345,Virgin America,12:35 PM,12:23 PM,T-2,Landed,320
+,,,,,54A,  On-time,
+MRY Monterey,OO 5487,SkyWest Airlines,12:37 PM,1:30 PM,T-1,Landed,EM2
+,,,,,,  53 min,
+JFK New York,B6 641,JetBlue Airways,12:39 PM,11:58 AM,T-I,Landed,320
+,,,,,A10,  On-time,
+LAS Las Vegas,VX 905,Virgin America,12:40 PM,1:10 PM,T-2,Landed,319
+,,,,,54B,  30 min,
+LAS Las Vegas,UA 1429,United Airlines,12:40 PM,12:45 PM,T-3,Landed,73G
+,,,,,81,  On-time,
+ATL Atlanta,FL 705,AirTran,12:40 PM,12:36 PM,T-1,Landed,73G
+,,,,,29,  On-time,
+ORD Chicago,UA 148,United Airlines,12:40 PM,12:42 PM,T-3,Landed,739
+,,,,,74,  On-time,
+IAD Washington,VX 69,Virgin America,12:45 PM,12:43 PM,T-2,Landed,319
+,,,,,52,  On-time,
+MKE Milwaukee,WN 112,Southwest Airlines,12:45 PM,12:19 PM,T-1,Landed,73W
+,,,,,28,  On-time,
+ICN Seoul,SQ 16,Singapore Airlines,12:45 PM,12:30 PM,T-I,Landed,77W
+,,,,,,  On-time,
+EWR Newark,UA 883,United Airlines,12:48 PM,12:24 PM,T-3,Landed,752
+,,,,,89,  On-time,
+CDG Paris,AF 84,Air France,12:50 PM,2:03 PM,T-I,Landed,77W
+,,,,,,  73 min,
+RNO Reno,OO 6336,SkyWest Airlines,12:53 PM,1:47 PM,T-3,Landed,CR7
+,,,,,71,  54 min,
+LAX Los Angeles,UA 1092,United Airlines,12:54 PM,12:58 PM,T-3,Landed,738
+,,,,,73,  On-time,
+JFK New York,AA 179,American Airlines,12:55 PM,12:31 PM,T-2,Landed,762
+,,,,,57,  On-time,
+SAN San Diego,WN 759,Southwest Airlines,12:55 PM,1:18 PM,T-1,Landed,73W
+,,,,,30,  23 min,
+DEN Denver,UA 1042,United Airlines,12:57 PM,12:56 PM,T-3,Landed,753
+,,,,,88,  On-time,
+CIC Chico,OO 5307,SkyWest Airlines,12:58 PM,2:09 PM,T-1,Landed,EM2
+,,,,,,  71 min,
+CDG Paris,UA 991,United Airlines,1:00 PM,12:37 PM,T-I,Landed,763
+,,,,,G99,  On-time,
+PDX Portland,OO 6313,SkyWest Airlines,1:03 PM,1:04 PM,T-1,Landed,CRJ
+,,,,,35,  On-time,
+ATL Atlanta,WN 675,Southwest Airlines,1:05 PM,12:55 PM,T-1,Landed,73W
+,,,,,31,  On-time,
+ORD Chicago,AA 1745,American Airlines,1:05 PM,12:42 PM,T-2,Landed,738
+,,,,,58A,  On-time,
+SMF Sacramento,OO 5454,SkyWest Airlines,1:07 PM,1:51 PM,T-1,Landed,EM2
+,,,,,,  44 min,
+YYC Calgary,WS 1508,WestJet,1:09 PM,1:24 PM,T-I,Landed,73W
+,,,,,,  15 min,
+LAS Las Vegas,WN 941,Southwest Airlines,1:10 PM,1:58 PM,T-1,Landed,73W
+,,,,,25,  48 min,
+DXB Dubai,EK 225,Emirates,1:10 PM,1:40 PM,T-I,Landed,77W
+,,,,,,  30 min,
+PHL Philadelphia,US 659,US Airways,1:12 PM,1:21 PM,T-1,Landed,320
+,,,,,26,  On-time,
+JFK New York,UA 642,United Airlines,1:14 PM,12:56 PM,T-3,Landed,757
+,,,,,82,  On-time,
+LHR London,UA 955,United Airlines,1:20 PM,1:43 PM,T-I,Landed,744
+,,,,,G100,  23 min,
+SEA Seattle,OO 6360,SkyWest Airlines,1:22 PM,1:05 PM,T-1,Landed,CRJ
+,,,,,33,  On-time,
+LAX Los Angeles,OO 4607,SkyWest Airlines,1:22 PM,1:31 PM,T-1,Landed,CR9
+,,,,,48,  On-time,
+ORD Chicago,UA 1172,United Airlines,1:25 PM,1:12 PM,T-3,Landed,739
+,,,,,87,  On-time,
+ACK Nantucket,LXJ 542,Bombardier Business Jet Solutions,1:28 PM,1:23 PM,,Landed,
+,,,,,,  On-time,
+JFK New York,DL 1765,Delta Air Lines,1:29 PM,1:02 PM,T-1,Landed,752
+,,,,,45A,  On-time,
+IAH Houston,UA 584,United Airlines,1:30 PM,1:49 PM,T-3,Landed,320
+,,,,,73A,  19 min,
+DEN Denver,WN 310,Southwest Airlines,1:30 PM,4:07 PM,T-1,Landed,73W
+,,,,,29,  157 min,
+OTH North Bend,OO 5309,SkyWest Airlines,1:35 PM,4:01 PM,T-1,Landed,CRJ
+,,,,,35,  146 min,
+DFW Dallas,AA 1045,American Airlines,1:35 PM,2:13 PM,T-2,Landed,738
+,,,,,56A,  38 min,
+LAX Los Angeles,AA 2005,American Airlines,1:40 PM,1:32 PM,T-2,Landed,738
+,,,,,56B,  On-time,
+LAX Los Angeles,WN 1293,Southwest Airlines,1:45 PM,1:51 PM,T-1,Landed,73W
+,,,,,28,  On-time,
+EWR Newark,VX 187,Virgin America,1:45 PM,1:30 PM,T-2,Landed,319
+,,,,,51A,  On-time,
+MSP Minneapolis,DL 2105,Delta Air Lines,1:48 PM,1:27 PM,T-1,Landed,73H
+,,,,,40,  On-time,
+EWR Newark,UA 1677,United Airlines,1:49 PM,1:39 PM,T-3,Landed,738
+,,,,,83,  On-time,
+FLL Fort Lauderdale,B6 577,JetBlue Airways,1:50 PM,1:25 PM,T-I,Landed,320
+,,,,,A12,  On-time,
+JFK New York,VX 23,Virgin America,1:50 PM,1:36 PM,T-2,Landed,320
+,,,,,59,  On-time,
+SEA Seattle,AS 310,Alaska Airlines,1:51 PM,1:45 PM,T-1,Landed,734
+,,,,,20,  On-time,
+SEA Seattle,UA 1744,United Airlines,1:52 PM,1:48 PM,T-3,Landed,738
+,,,,,76B,  On-time,
+DEN Denver,F9 659,Frontier Airlines,1:52 PM,1:37 PM,T-1,Landed,319
+,,,,,43,  On-time,
+PDX Portland,UA 367,United Airlines,1:55 PM,1:53 PM,T-3,Landed,320
+,,,,,75,  On-time,
+SAN San Diego,VX 961,Virgin America,1:55 PM,1:42 PM,T-2,Landed,320
+,,,,,52,  On-time,
+LAX Los Angeles,UA 447,United Airlines,1:55 PM,1:52 PM,T-3,Landed,320
+,,,,,72,  On-time,
+SNA Santa Ana,WN 804,Southwest Airlines,1:55 PM,,T-1, Cancelled,73W
+ORD Chicago,UA 264,United Airlines,1:56 PM,1:41 PM,T-3,Landed,752
+,,,,,84,  On-time,
+SBA Santa Barbara,OO 5646,SkyWest Airlines,2:00 PM,3:23 PM,T-1,Landed,EM2
+,,,,,,  83 min,
+LAX Los Angeles,UA 1841,United Airlines,2:00 PM,12:52 PM,,Landed,738
+,,,,,,  On-time,
+VNY Los Angeles,OPT 716,Flight Options,2:03 PM,2:45 PM,,Landed,
+,,,,,,  42 min,
+LAS Las Vegas,UA 304,United Airlines,2:05 PM,2:19 PM,T-3,Landed,752
+,,,,,81,  On-time,
+ACV Arcata,OO 6238,SkyWest Airlines,2:07 PM,2:45 PM,T-1,Landed,EM2
+,,,,,,  38 min,
+MRY Monterey,OO 6359,SkyWest Airlines,2:10 PM,3:32 PM,T-1,Landed,EM2
+,,,,,,  82 min,
+LAS Las Vegas,1I 224,Netjets Aviation,2:18 PM,3:02 PM,,Landed,
+,,,,,,  44 min,
+YYC Calgary,OO 6348,SkyWest Airlines,2:19 PM,4:22 PM,T-3,Landed,CR7
+,,,,,70,  123 min,
+BUR Burbank,OO 6304,SkyWest Airlines,2:20 PM,2:11 PM,T-3,Landed,CR7
+,,,,,79,  On-time,
+SNA Santa Ana,UA 1460,United Airlines,2:21 PM,2:27 PM,T-3,Landed,738
+,,,,,73,  On-time,
+EUG Eugene,OO 6406,SkyWest Airlines,2:24 PM,3:11 PM,T-1,Landed,CRJ
+,,,,,33,  47 min,
+LAX Los Angeles,VX 929,Virgin America,2:25 PM,2:14 PM,T-2,Landed,320
+,,,,,54B,  On-time,
+LAX Los Angeles,OO 4606,SkyWest Airlines,2:27 PM,2:38 PM,T-1,Landed,CR9
+,,,,,48,  On-time,
+HNL Honolulu,UA 72,United Airlines,2:28 PM,2:35 PM,T-3,Landed,764
+,,,,,86,  On-time,
+DTW Detroit,DL 705,Delta Air Lines,2:32 PM,2:40 PM,T-1,Landed,738
+,,,,,42,  On-time,
+DFW Dallas,AA 1441,American Airlines,2:35 PM,2:27 PM,T-2,Landed,738
+,,,,,58A,  On-time,
+LHR London,BA 285,British Airways,2:35 PM,2:31 PM,T-I,Landed,744
+,,,,,,  On-time,
+SAN San Diego,WN 577,Southwest Airlines,2:45 PM,2:55 PM,T-1,Landed,733
+,,,,,31,  On-time,
+CPH Copenhagen,SK 935,SAS,2:45 PM,3:13 PM,T-I,Landed,343
+,,,,,,  28 min,
+LAS Las Vegas,VX 251,Virgin America,2:50 PM,2:34 PM,T-2,Landed,320
+,,,,,50,  On-time,
+PHX Phoenix,WN 2324,Southwest Airlines,2:50 PM,2:54 PM,T-1,Landed,733
+,,,,,27,  On-time,
+BOS Boston,UA 497,United Airlines,2:51 PM,3:05 PM,T-3,Landed,752
+,,,,,88,  On-time,
+SBP San Luis Obispo,OO 5459,SkyWest Airlines,2:54 PM,2:38 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+EWR Newark,UA 1417,United Airlines,2:54 PM,2:47 PM,T-3,Landed,738
+,,,,,76A,  On-time,
+SAN San Diego,UA 573,United Airlines,3:01 PM,2:56 PM,T-3,Landed,319
+,,,,,90,  On-time,
+PDX Portland,UA 1185,United Airlines,3:03 PM,2:56 PM,T-3,Landed,738
+,,,,,83,  On-time,
+LGB Long Beach,B6 1432,JetBlue Airways,3:03 PM,2:56 PM,T-I,Landed,320
+,,,,,A10,  On-time,
+ORD Chicago,UA 1299,United Airlines,3:03 PM,2:38 PM,T-3,Landed,739
+,,,,,74,  On-time,
+BOI Boise,OO 6326,SkyWest Airlines,3:05 PM,4:24 PM,T-1,Landed,CRJ
+,,,,,34,  79 min,
+PDX Portland,AS 388,Alaska Airlines,3:07 PM,2:48 PM,T-1,Landed,73H
+,,,,,22,  On-time,
+JFK New York,UA 580,United Airlines,3:07 PM,3:03 PM,T-3,Landed,757
+,,,,,80,  On-time,
+YYZ Toronto,AC 755,Air Canada,3:08 PM,2:36 PM,T-I,Landed,320
+,,,,,,  On-time,
+LAX Los Angeles,UA 444,United Airlines,3:08 PM,3:09 PM,T-3,Landed,320
+,,,,,68,  On-time,
+IAD Washington,UA 1074,United Airlines,3:09 PM,3:00 PM,T-3,Landed,738
+,,,,,87,  On-time,
+PSC Pasco,OO 5401,SkyWest Airlines,3:10 PM,3:01 PM,T-1,Landed,CRJ
+,,,,,35,  On-time,
+IAH Houston,UA 258,United Airlines,3:12 PM,3:11 PM,T-3,Landed,752
+,,,,,82,  On-time,
+MDW Chicago,WN 994,Southwest Airlines,3:15 PM,2:55 PM,T-1,Landed,73W
+,,,,,28,  On-time,
+DFW Dallas,OO 5585,SkyWest Airlines,3:15 PM,3:43 PM,T-3,Landed,CR7
+,,,,,77B,  28 min,
+MFR Medford,OO 5504,SkyWest Airlines,3:15 PM,4:19 PM,T-1,Landed,EM2
+,,,,,,  64 min,
+YVR Vancouver,UA 1102,United Airlines,3:15 PM,3:02 PM,T-3,Landed,738
+,,,,,85,  On-time,
+AUS Austin,OO 6476,SkyWest Airlines,3:15 PM,3:48 PM,T-3,Landed,CR7
+,,,,,79,  33 min,
+YEG Edmonton,OO 5181,SkyWest Airlines,3:16 PM,3:09 PM,T-3,Landed,CR7
+,,,,,69,  On-time,
+DFW Dallas,VX 715,Virgin America,3:20 PM,3:27 PM,T-2,Landed,320
+,,,,,51A,  On-time,
+ONT Ontario,OO 5400,SkyWest Airlines,3:20 PM,3:03 PM,T-1,Landed,CRJ
+,,,,,34,  On-time,
+RDD Redding,OO 5426,SkyWest Airlines,3:22 PM,3:59 PM,T-3,Landed,EM2
+,,,,,78,  37 min,
+SMF Sacramento,OO 5463,SkyWest Airlines,3:24 PM,3:41 PM,T-1,Landed,EM2
+,,,,,,  17 min,
+RNO Reno,OO 6454,SkyWest Airlines,3:24 PM,3:43 PM,T-1,Landed,CRJ
+,,,,,,  19 min,
+PHL Philadelphia,1I 978,Netjets Aviation,3:24 PM,3:31 PM,,Landed,
+,,,,,,  On-time,
+SNA Santa Ana,UA 477,United Airlines,3:24 PM,3:20 PM,T-3,Landed,320
+,,,,,72,  On-time,
+LHR London,VS 19,Virgin Atlantic Airways,3:25 PM,2:54 PM,T-I,Landed,744
+,,,,,,  On-time,
+EUG Eugene,OO 6402,SkyWest Airlines,3:25 PM,3:10 PM,T-3,Landed,CR7
+,,,,,70,  On-time,
+CEC Crescent City,OO 5323,SkyWest Airlines,3:26 PM,4:59 PM,T-1,Landed,EM2
+,,,,,,  93 min,
+SBA Santa Barbara,OO 6287,SkyWest Airlines,3:30 PM,3:28 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+RDM Redmond,OO 5325,SkyWest Airlines,3:35 PM,3:17 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+LAS Las Vegas,WN 3672,Southwest Airlines,3:35 PM,3:42 PM,T-1,Landed,733
+,,,,,30,  On-time,
+PHX Phoenix,OO 5558,SkyWest Airlines,3:39 PM,3:24 PM,T-3,Landed,CRJ
+,,,,,71,  On-time,
+SEA Seattle,UA 1127,United Airlines,3:40 PM,3:35 PM,T-3,Landed,738
+,,,,,73,  On-time,
+EWR Newark,UA 1700,United Airlines,3:44 PM,3:31 PM,T-3,Landed,738
+,,,,,76B,  On-time,
+ACV Arcata,OO 6233,SkyWest Airlines,3:45 PM,4:41 PM,T-1,Landed,EM2
+,,,,,,  56 min,
+YYJ Victoria,OO 5656,SkyWest Airlines,3:58 PM,3:49 PM,T-I,Landed,CRJ
+,,,,,,  On-time,
+PHX Phoenix,US 407,US Airways,3:59 PM,3:55 PM,T-1,Landed,320
+,,,,,26,  On-time,
+TPE Taipei,BR 18,EVA Air,4:00 PM,4:20 PM,T-I,Landed,77W
+,,,,,,  20 min,
+SEA Seattle,VX 1757,Virgin America,4:05 PM,3:51 PM,T-2,Landed,320
+,,,,,54B,  On-time,
+LAX Los Angeles,WN 838,Southwest Airlines,4:05 PM,4:34 PM,T-1,Landed,73W
+,,,,,31,  29 min,
+BUR Burbank,1I 384,Netjets Aviation,4:06 PM,5:29 PM,,Landed,
+,,,,,,  83 min,
+SLC Salt Lake City,OO 4599,SkyWest Airlines,4:07 PM,4:09 PM,T-1,Landed,CR7
+,,,,,44,  On-time,
+SNA Santa Ana,WN 1723,Southwest Airlines,4:10 PM,4:25 PM,T-1,Landed,73W
+,,,,,27,  15 min,
+ATL Atlanta,DL 2349,Delta Air Lines,4:11 PM,3:51 PM,T-1,Landed,757
+,,,,,47,  On-time,
+ABQ Albuquerque,OO 6234,SkyWest Airlines,4:13 PM,4:03 PM,T-3,Landed,CR7
+,,,,,69,  On-time,
+FRA Frankfurt,UA 902,United Airlines,4:15 PM,4:15 PM,T-I,Landed,744
+,,,,,G99,  On-time,
+DFW Dallas,AA 1491,American Airlines,4:15 PM,4:46 PM,T-2,Landed,738
+,,,,,57,  31 min,
+ZRH Zurich,LX 38,SWISS,4:15 PM,4:14 PM,T-I,Landed,343
+,,,,,,  On-time,
+LVK Livermore,1I 940,Netjets Aviation,4:18 PM,4:06 PM,,Landed,
+,,,,,,  On-time,
+SEA Seattle,AS 318,Alaska Airlines,4:20 PM,4:11 PM,T-1,Landed,73H
+,,,,,20,  On-time,
+DEN Denver,UA 1474,United Airlines,4:21 PM,4:00 PM,T-3,Landed,738
+,,,,,83,  On-time,
+LAX Los Angeles,OO 4608,SkyWest Airlines,4:22 PM,4:27 PM,T-1,Landed,CR9
+,,,,,48,  On-time,
+DFW Dallas,OO 5618,SkyWest Airlines,4:24 PM,4:28 PM,T-3,Landed,CR7
+,,,,,77B,  On-time,
+LIM Lima,LP 2610,Lan Peru,4:25 PM,4:25 PM,T-I,Landed,763
+,,,,,,  On-time,
+LAX Los Angeles,UA 703,United Airlines,4:28 PM,4:46 PM,T-3,Landed,319
+,,,,,75,  18 min,
+AUS Austin,UA 681,United Airlines,4:30 PM,4:51 PM,T-3,Landed,752
+,,,,,81,  21 min,
+LAS Las Vegas,UA 1479,United Airlines,4:32 PM,4:31 PM,T-3,Landed,739
+,,,,,76A,  On-time,
+LAX Los Angeles,AA 1967,American Airlines,4:40 PM,4:38 PM,T-2,Landed,738
+,,,,,56A,  On-time,
+YVR Vancouver,AC 566,Air Canada,4:41 PM,4:51 PM,T-I,Landed,E90
+,,,,,,  On-time,
+MSP Minneapolis,DL 2153,Delta Air Lines,4:42 PM,4:15 PM,T-1,Landed,757
+,,,,,42,  On-time,
+EWR Newark,UA 1293,United Airlines,4:45 PM,4:19 PM,T-3,Landed,739
+,,,,,87,  On-time,
+IAH Houston,UA 321,United Airlines,4:50 PM,5:51 PM,T-3,Landed,320
+,,,,,68,  61 min,
+LHR London,BA 287,British Airways,4:50 PM,4:59 PM,T-I,Landed,744
+,,,,,,  On-time,
+CHO Charlottesville,XOJ 756,XOJET,4:51 PM,5:59 PM,,Diverted,
+MSP Minneapolis,SY 395,Sun Country Airlines,4:55 PM,4:19 PM,T-I,Landed,738
+,,,,,,  On-time,
+SAN San Diego,WN 3399,Southwest Airlines,4:55 PM,4:36 PM,T-1,Landed,73W
+,,,,,28,  On-time,
+LAX Los Angeles,VX 933,Virgin America,4:55 PM,5:07 PM,T-2,Landed,320
+,,,,,52,  On-time,
+LAS Las Vegas,WN 2525,Southwest Airlines,5:00 PM,5:10 PM,T-1,Landed,733
+,,,,,30,  On-time,
+SAN San Diego,OO 6219,SkyWest Airlines,5:07 PM,5:44 PM,T-3,Landed,CR7
+,,,,,79,  37 min,
+LHR London,UA 931,United Airlines,5:10 PM,4:43 PM,T-I,Landed,777
+,,,,,G102,  On-time,
+ORD Chicago,AA 1693,American Airlines,5:10 PM,4:40 PM,T-2,Landed,738
+,,,,,58A,  On-time,
+ORD Chicago,VX 205,Virgin America,5:10 PM,4:50 PM,T-2,Landed,320
+,,,,,50,  On-time,
+MOD Modesto,OO 5453,SkyWest Airlines,5:11 PM,5:23 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+OTH North Bend,OO 5342,SkyWest Airlines,5:13 PM,6:13 PM,T-1,Landed,EM2
+,,,,,,  60 min,
+SAT San Antonio,OO 6412,SkyWest Airlines,5:15 PM,5:35 PM,T-3,Landed,CR7
+,,,,,77B,  20 min,
+LAS Las Vegas,VX 909,Virgin America,5:20 PM,5:07 PM,T-2,Landed,319
+,,,,,54A,  On-time,
+HND Tokyo,JL 2,JAL,5:20 PM,5:30 PM,T-I,Landed,777
+,,,,,,  On-time,
+ORD Chicago,UA 499,United Airlines,5:26 PM,7:19 PM,T-3,Landed,752
+,,,,,86,  113 min,
+DEN Denver,UA 568,United Airlines,5:27 PM,5:07 PM,T-3,Landed,752
+,,,,,80,  On-time,
+JFK New York,DL 1565,Delta Air Lines,5:30 PM,5:03 PM,T-1,Landed,752
+,,,,,40,  On-time,
+MEX Mexico City,UA 718,United Airlines,5:32 PM,5:28 PM,T-I,Landed,319
+,,,,,G94,  On-time,
+LAX Los Angeles,OO 4609,SkyWest Airlines,5:32 PM,5:18 PM,T-1,Landed,CR9
+,,,,,44,  On-time,
+PDX Portland,QX 2517,Horizon Air,5:33 PM,5:48 PM,T-1,Landed,DH4
+,,,,,22,  15 min,
+SJD San Jose Cabo,UA 868,United Airlines,5:34 PM,5:15 PM,T-I,Landed,320
+,,,,,G92,  On-time,
+DFW Dallas,AA 399,American Airlines,5:35 PM,5:22 PM,T-2,Landed,738
+,,,,,56B,  On-time,
+ACV Arcata,OO 6212,SkyWest Airlines,5:39 PM,6:33 PM,T-1,Landed,EM2
+,,,,,,  54 min,
+LAX Los Angeles,WN 104,Southwest Airlines,5:40 PM,,T-1, Cancelled,73W
+ORD Chicago,UA 1442,United Airlines,5:40 PM,5:29 PM,T-3,Landed,739
+,,,,,73,  On-time,
+YVR Vancouver,UA 306,United Airlines,5:41 PM,5:16 PM,T-3,Landed,319
+,,,,,72,  On-time,
+EWR Newark,UA 1558,United Airlines,5:42 PM,5:13 PM,T-3,Landed,738
+,,,,,89,  On-time,
+MRY Monterey,OO 6232,SkyWest Airlines,5:48 PM,6:57 PM,T-1,Landed,EM2
+,,,,,,  69 min,
+TTN Trenton,1I 305,Netjets Aviation,5:54 PM,6:19 PM,,Diverted,
+SMF Sacramento,OO 5470,SkyWest Airlines,5:54 PM,5:52 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+IAH Houston,UA 1174,United Airlines,5:54 PM,6:30 PM,T-3,Landed,738
+,,,,,76B,  36 min,
+DEN Denver,WN 996,Southwest Airlines,5:55 PM,5:31 PM,T-1,Landed,73W
+,,,,,27,  On-time,
+SBA Santa Barbara,OO 5645,SkyWest Airlines,5:58 PM,6:01 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+SLC Salt Lake City,OO 4657,SkyWest Airlines,6:01 PM,5:46 PM,T-1,Landed,CR9
+,,,,,48,  On-time,
+DTW Detroit,DL 1145,Delta Air Lines,6:04 PM,5:37 PM,T-1,Landed,73H
+,,,,,46,  On-time,
+MFR Medford,OO 5636,SkyWest Airlines,6:05 PM,6:07 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+SAN San Diego,UA 595,United Airlines,6:05 PM,6:03 PM,T-3,Landed,319
+,,,,,75,  On-time,
+OLM Olympia,1I 820,Netjets Aviation,6:06 PM,6:25 PM,,Diverted,
+LAX Los Angeles,UA 460,United Airlines,6:08 PM,6:11 PM,T-3,Landed,320
+,,,,,74,  On-time,
+SBP San Luis Obispo,OO 5418,SkyWest Airlines,6:12 PM,6:10 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+PDX Portland,OO 6409,SkyWest Airlines,6:13 PM,7:15 PM,T-1,Landed,CRJ
+,,,,,35,  62 min,
+YVR Vancouver,OO 5185,SkyWest Airlines,6:19 PM,6:24 PM,T-3,Landed,CR7
+,,,,,71,  On-time,
+LAX Los Angeles,WN 1731,Southwest Airlines,6:20 PM,6:18 PM,T-1,Landed,73W
+,,,,,28,  On-time,
+SLC Salt Lake City,OO 6441,SkyWest Airlines,6:20 PM,6:24 PM,T-1,Landed,CRJ
+,,,,,33,  On-time,
+MCI Kansas City,OO 5481,SkyWest Airlines,6:24 PM,6:15 PM,T-3,Landed,CR7
+,,,,,69,  On-time,
+LAS Las Vegas,VX 919,Virgin America,6:25 PM,6:31 PM,T-2,Landed,320
+,,,,,,  On-time,
+BOI Boise,OO 6352,SkyWest Airlines,6:25 PM,6:09 PM,T-1,Landed,CRJ
+,,,,,35,  On-time,
+IAD Washington,UA 1026,United Airlines,6:25 PM,6:12 PM,T-3,Landed,738
+,,,,,83,  On-time,
+DEN Denver,F9 665,Frontier Airlines,6:26 PM,6:02 PM,T-1,Landed,319
+,,,,,43,  On-time,
+SNA Santa Ana,UA 301,United Airlines,6:26 PM,,T-3, Cancelled,319
+,,,,,73A,,
+MHR Sacramento,SNC 1027,Air Cargo Carriers,6:28 PM,6:34 PM,,Landed,
+,,,,,,  On-time,
+PHX Phoenix,OO 6206,SkyWest Airlines,6:29 PM,6:30 PM,T-3,Landed,CR7
+,,,,,79,  On-time,
+EUG Eugene,OO 6408,SkyWest Airlines,6:29 PM,6:13 PM,T-3,Landed,CR7
+,,,,,77B,  On-time,
+PHX Phoenix,WN 208,Southwest Airlines,6:30 PM,6:36 PM,T-1,Landed,73W
+,,,,,30,  On-time,
+PSP Palm Springs,AS 309,Alaska Airlines,6:31 PM,6:23 PM,T-1,Landed,734
+,,,,,20,  On-time,
+RNO Reno,AMF 1150,Ameriflight,6:31 PM,6:31 PM,,Landed,
+,,,,,,  On-time,
+RNO Reno,OO 5528,SkyWest Airlines,6:33 PM,7:29 PM,T-1,Landed,CRJ
+,,,,,34,  56 min,
+BOS Boston,UA 587,United Airlines,6:34 PM,6:18 PM,T-3,Landed,752
+,,,,,87,  On-time,
+CDG Paris,AF 80,Air France,6:35 PM,6:13 PM,T-I,Landed,772
+,,,,,,  On-time,
+ORD Chicago,UA 627,United Airlines,6:35 PM,6:08 PM,T-3,Landed,320
+,,,,,73A,  On-time,
+SNA Santa Ana,WN 413,Southwest Airlines,6:35 PM,7:24 PM,T-1,Landed,73W
+,,,,,27,  49 min,
+SAN San Diego,WN 812,Southwest Airlines,6:40 PM,6:35 PM,T-1,Landed,733
+,,,,,31,  On-time,
+LAS Las Vegas,UA 1208,United Airlines,6:45 PM,6:22 PM,T-3,Landed,739
+,,,,,82,  On-time,
+SJD San Jose Cabo,VX 279,Virgin America,6:45 PM,6:36 PM,T-I,Landed,320
+,,,,,A1,  On-time,
+FAT Fresno,OO 6268,SkyWest Airlines,6:45 PM,7:10 PM,T-1,Landed,EM2
+,,,,,,  25 min,
+PHX Phoenix,US 409,US Airways,6:47 PM,6:36 PM,T-1,Landed,320
+,,,,,26,  On-time,
+ATL Atlanta,DL 241,Delta Air Lines,6:49 PM,6:10 PM,T-1,Landed,757
+,,,,,45A,  On-time,
+DFW Dallas,AA 1477,American Airlines,6:50 PM,6:46 PM,T-2,Landed,738
+,,,,,56A,  On-time,
+LGB Long Beach,B6 1436,JetBlue Airways,6:55 PM,10:33 PM,T-I,Landed,320
+,,,,,A12,  218 min,
+EWR Newark,UA 1436,United Airlines,6:56 PM,6:27 PM,T-3,Landed,739
+,,,,,76A,  On-time,
+LAX Los Angeles,OO 4610,SkyWest Airlines,6:59 PM,6:49 PM,T-1,Landed,CR9
+,,,,,48,  On-time,
+MUC Munich,LH 458,Lufthansa,7:00 PM,6:56 PM,T-I,Landed,346
+,,,,,,  On-time,
+AUS Austin,VX 221,Virgin America,7:00 PM,6:48 PM,T-2,Landed,320
+,,,,,,  On-time,
+LAX Los Angeles,AA 1559,American Airlines,7:00 PM,6:44 PM,T-2,Landed,738
+,,,,,58A,  On-time,
+JFK New York,UA 257,United Airlines,7:01 PM,8:54 PM,T-3,Landed,757
+,,,,,82,  113 min,
+PHL Philadelphia,US 711,US Airways,7:04 PM,6:32 PM,T-1,Landed,321
+,,,,,21,  On-time,
+CLT Charlotte,US 469,US Airways,7:04 PM,7:33 PM,T-1,Landed,321
+,,,,,23,  29 min,
+PVR Puerto Vallarta,AS 229,Alaska Airlines,7:05 PM,7:21 PM,T-I,Landed,739
+,,,,,A10,  16 min,
+JFK New York,AA 85,American Airlines,7:05 PM,6:26 PM,T-2,Landed,763
+,,,,,58B,  On-time,
+SAN San Diego,VX 963,Virgin America,7:05 PM,6:55 PM,T-2,Landed,320
+,,,,,53,  On-time,
+YVR Vancouver,AC 562,Air Canada,7:06 PM,8:56 PM,T-I,Landed,E90
+,,,,,,  110 min,
+ORD Chicago,AA 1661,American Airlines,7:10 PM,6:40 PM,T-2,Landed,738
+,,,,,57,  On-time,
+RDM Redmond,OO 5448,SkyWest Airlines,7:15 PM,7:00 PM,T-1,Landed,CRJ
+,,,,,33,  On-time,
+DEN Denver,UA 737,United Airlines,7:16 PM,6:51 PM,T-3,Landed,320
+,,,,,81,  On-time,
+EWR Newark,UA 996,United Airlines,7:18 PM,7:28 PM,T-3,Landed,752
+,,,,,80,  On-time,
+SNA Santa Ana,OO 6432,SkyWest Airlines,7:19 PM,7:16 PM,T-3,Landed,CR7
+,,,,,70,  On-time,
+SNA Santa Ana,FL 28,AirTran,7:20 PM,7:14 PM,T-1,Landed,73G
+,,,,,25,  On-time,
+ORD Chicago,UA 346,United Airlines,7:23 PM,7:03 PM,T-3,Landed,320
+,,,,,90,  On-time,
+PHL Philadelphia,UA 368,United Airlines,7:23 PM,7:04 PM,T-3,Landed,319
+,,,,,72,  On-time,
+BUR Burbank,OO 6410,SkyWest Airlines,7:24 PM,7:12 PM,T-3,Landed,CR7
+,,,,,69,  On-time,
+LAX Los Angeles,VX 941,Virgin America,7:25 PM,7:33 PM,T-2,Landed,320
+,,,,,54A,  On-time,
+SEA Seattle,VX 755,Virgin America,7:25 PM,7:03 PM,T-2,Landed,320
+,,,,,52,  On-time,
+SBA Santa Barbara,OO 5638,SkyWest Airlines,7:26 PM,7:51 PM,T-1,Landed,EM2
+,,,,,,  25 min,
+SJD San Jose Cabo,AS 235,Alaska Airlines,7:27 PM,7:06 PM,T-I,Landed,73G
+,,,,,A2,  On-time,
+IAD Washington,UA 644,United Airlines,7:28 PM,8:36 PM,T-3,Landed,752
+,,,,,89,  68 min,
+MSP Minneapolis,DL 1505,Delta Air Lines,7:35 PM,7:10 PM,T-1,Landed,M90
+,,,,,44,  On-time,
+FRA Frankfurt,UA 927,United Airlines,7:40 PM,7:26 PM,T-I,Landed,744
+,,,,,G102,  On-time,
+TPE Taipei,CI 4,China Airlines,7:40 PM,8:26 PM,T-I,Landed,744
+,,,,,,  46 min,
+MFR Medford,OO 6390,SkyWest Airlines,7:43 PM,7:30 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+SEA Seattle,OO 6267,SkyWest Airlines,7:48 PM,7:56 PM,T-1,Landed,CRJ
+,,,,,34,  On-time,
+ORD Chicago,UA 1740,United Airlines,7:50 PM,8:01 PM,T-3,Landed,739
+,,,,,74,  On-time,
+ANC Anchorage,UA 1624,United Airlines,7:51 PM,7:32 PM,T-3,Landed,738
+,,,,,88,  On-time,
+JFK New York,DL 2065,Delta Air Lines,7:51 PM,7:35 PM,T-1,Landed,752
+,,,,,40,  On-time,
+IAH Houston,UA 340,United Airlines,7:56 PM,8:25 PM,T-3,Landed,320
+,,,,,69,  29 min,
+JFK New York,VX 27,Virgin America,7:59 PM,7:56 PM,T-2,Landed,320
+,,,,,55,  On-time,
+MNL Manila,PR 104,Philippine Airlines,8:00 PM,8:14 PM,T-I,Landed,744
+,,,,,,  On-time,
+MIA Miami,AA 889,American Airlines,8:00 PM,8:00 PM,T-2,Landed,757
+,,,,,56B,  On-time,
+BOS Boston,B6 633,JetBlue Airways,8:01 PM,7:43 PM,T-I,Landed,320
+,,,,,A11A,  On-time,
+EWR Newark,UA 1284,United Airlines,8:01 PM,7:26 PM,T-3,Landed,739
+,,,,,85,  On-time,
+CIC Chico,OO 5359,SkyWest Airlines,8:03 PM,8:35 PM,T-1,Landed,EM2
+,,,,,,  32 min,
+DCA Washington,VX 2,Virgin America,8:05 PM,7:39 PM,T-2,Landed,319
+,,,,,51A,  On-time,
+OGG Kahului,UA 1275,United Airlines,8:08 PM,8:30 PM,T-I,Landed,753
+,,,,,G98,  22 min,
+BOS Boston,UA 1699,United Airlines,8:08 PM,8:16 PM,T-3,Landed,738
+,,,,,73,  On-time,
+BOS Boston,VX 353,Virgin America,8:10 PM,8:11 PM,T-2,Landed,320
+,,,,,51B,  On-time,
+EWR Newark,UA 6141,United Airlines,8:10 PM,8:23 PM ~,,Unknown,
+DEN Denver,UA 1521,United Airlines,8:14 PM,7:56 PM,T-3,Landed,739
+,,,,,76B,  On-time,
+CLE Cleveland,UA 664,United Airlines,8:15 PM,8:18 PM,T-3,Landed,320
+,,,,,75,  On-time,
+SNA Santa Ana,WN 151,Southwest Airlines,8:15 PM,,T-1, Cancelled,73W
+,,,,,27,,
+ATL Atlanta,DL 1849,Delta Air Lines,8:16 PM,7:42 PM,T-1,Landed,757
+,,,,,45B,  On-time,
+LAS Las Vegas,WN 567,Southwest Airlines,8:20 PM,8:08 PM,T-1,Landed,73W
+,,,,,30,  On-time,
+IAD Washington,UA 1061,United Airlines,8:20 PM,8:42 PM,T-3,Landed,753
+,,,,,83,  22 min,
+HNL Honolulu,UA 724,United Airlines,8:20 PM,8:28 PM,T-3,Landed,777
+,,,,,86,  On-time,
+LAX Los Angeles,WN 644,Southwest Airlines,8:20 PM,8:14 PM,T-1,Landed,73W
+,,,,,28,  On-time,
+YYC Calgary,OO 6269,SkyWest Airlines,8:21 PM,8:25 PM,T-3,Landed,CR7
+,,,,,79,  On-time,
+RNO Reno,AMF 1091,Ameriflight,8:25 PM,8:02 PM,,Landed,
+,,,,,,  On-time,
+FLL Fort Lauderdale,UA 1645,United Airlines,8:29 PM,8:45 PM,T-I,Landed,738
+,,,,,G94,  16 min,
+MSP Minneapolis,UA 519,United Airlines,8:32 PM,8:21 PM,T-3,Landed,319
+,,,,,68,  On-time,
+LAX Los Angeles,OO 4611,SkyWest Airlines,8:32 PM,8:17 PM,T-1,Landed,CR9
+,,,,,48,  On-time,
+PDX Portland,UA 995,United Airlines,8:33 PM,8:56 PM,T-3,Landed,320
+,,,,,87,  23 min,
+CLT Charlotte,US 705,US Airways,8:34 PM,9:19 PM,T-1,Landed,321
+,,,,,26,  45 min,
+LAS Las Vegas,VX 913,Virgin America,8:35 PM,8:13 PM,T-2,Landed,320
+,,,,,50,  On-time,
+AUS Austin,OO 6347,SkyWest Airlines,8:35 PM,8:36 PM,T-3,Landed,CR7
+,,,,,77B,  On-time,
+HKG Hong Kong,SQ 2,Singapore Airlines,8:40 PM,8:15 PM,T-I,Landed,77W
+,,,,,,  On-time,
+DFW Dallas,VX 717,Virgin America,8:40 PM,8:38 PM,T-2,Landed,320
+,,,,,53,  On-time,
+JFK New York,UA 512,United Airlines,8:40 PM,8:31 PM,T-3,Landed,757
+,,,,,80,  On-time,
+SEA Seattle,AS 302,Alaska Airlines,8:43 PM,8:24 PM,T-1,Landed,734
+,,,,,22,  On-time,
+SEA Seattle,UA 508,United Airlines,8:45 PM,8:27 PM,T-3,Landed,320
+,,,,,84,  On-time,
+PHL Philadelphia,US 1489,US Airways,8:46 PM,9:36 PM,T-1,Landed,321
+,,,,,23,  50 min,
+IAH Houston,UA 1106,United Airlines,8:48 PM,10:48 PM,T-3,Landed,753
+,,,,,80,  120 min,
+DFW Dallas,OO 6220,SkyWest Airlines,8:50 PM,8:46 PM,T-3,Landed,CR7
+,,,,,71,  On-time,
+DFW Dallas,AA 1355,American Airlines,8:50 PM,9:29 PM,T-2,Landed,738
+,,,,,56A,  39 min,
+SBA Santa Barbara,OO 5615,SkyWest Airlines,8:50 PM,8:30 PM,T-3,Landed,EM2
+,,,,,78,  On-time,
+ORD Chicago,UA 1414,United Airlines,8:50 PM,8:48 PM,T-3,Landed,739
+,,,,,81,  On-time,
+EWR Newark,VX 193,Virgin America,8:55 PM,8:30 PM,T-2,Landed,320
+,,,,,59,  On-time,
+LAX Los Angeles,UA 841,United Airlines,8:57 PM,8:38 PM,T-3,Landed,319
+,,,,,72,  On-time,
+LAS Las Vegas,OO 6215,SkyWest Airlines,8:58 PM,8:58 PM,T-3,Landed,CRJ
+,,,,,70,  On-time,
+EWR Newark,UA 1141,United Airlines,8:59 PM,8:31 PM,T-3,Landed,738
+,,,,,76A,  On-time,
+SAN San Diego,UA 384,United Airlines,8:59 PM,9:33 PM,T-3,Landed,320
+,,,,,74,  34 min,
+SNA Santa Ana,UA 679,United Airlines,8:59 PM,8:44 PM,T-3,Landed,319
+,,,,,75,  On-time,
+SAN San Diego,WN 235,Southwest Airlines,9:00 PM,8:52 PM,T-1,Landed,73W
+,,,,,31,  On-time,
+ORD Chicago,AA 1399,American Airlines,9:00 PM,8:20 PM,T-2,Landed,738
+,,,,,58B,  On-time,
+SMF Sacramento,OO 5402,SkyWest Airlines,9:03 PM,8:56 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+LAX Los Angeles,VX 945,Virgin America,9:05 PM,9:00 PM,T-2,Landed,320
+,,,,,52,  On-time,
+MCO Orlando,UA 510,United Airlines,9:10 PM,8:48 PM,T-I,Landed,320
+,,,,,G97,  On-time,
+SBP San Luis Obispo,OO 5451,SkyWest Airlines,9:13 PM,9:09 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+BFL Bakersfield,OO 5303,SkyWest Airlines,9:13 PM,8:59 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+DEN Denver,UA 669,United Airlines,9:13 PM,9:03 PM,T-3,Landed,320
+,,,,,73A,  On-time,
+JFK New York,B6 647,JetBlue Airways,9:14 PM,8:53 PM,T-I,Landed,320
+,,,,,A11B,  On-time,
+IAD Washington,VX 77,Virgin America,9:15 PM,9:13 PM,T-2,Landed,319
+,,,,,54A,  On-time,
+INT Winston-Salem,XOJ 794,XOJET,9:16 PM,10:29 PM,,Landed,
+,,,,,,  73 min,
+EUG Eugene,OO 6252,SkyWest Airlines,9:17 PM,8:59 PM,T-1,Landed,CRJ
+,,,,,,  On-time,
+JFK New York,DL 31,Delta Air Lines,9:19 PM,9:34 PM,T-1,Landed,752
+,,,,,47,  15 min,
+PDX Portland,AS 386,Alaska Airlines,9:22 PM,10:13 PM,T-1,Landed,73H
+,,,,,20,  51 min,
+ATL Atlanta,DL 1749,Delta Air Lines,9:23 PM,9:06 PM,T-1,Landed,757
+,,,,,42,  On-time,
+PDX Portland,UA 1623,United Airlines,9:25 PM,9:12 PM,T-3,Landed,738
+,,,,,88,  On-time,
+LAX Los Angeles,WN 556,Southwest Airlines,9:25 PM,9:54 PM,T-1,Landed,733
+,,,,,27,  29 min,
+LIH Kauai Island,UA 362,United Airlines,9:25 PM,9:50 PM,T-3,Landed,752
+,,,,,86,  25 min,
+ORD Chicago,VX 211,Virgin America,9:25 PM,9:56 PM,T-2,Landed,320
+,,,,,59,  31 min,
+AUS Austin,OO 6508,SkyWest Airlines,9:27 PM,10:00 PM,T-3,Landed,CR7
+,,,,,79,  33 min,
+KOA Kona,UA 1722,United Airlines,9:30 PM,9:40 PM,T-3,Landed,739
+,,,,,85,  On-time,
+MKE Milwaukee,WN 624,Southwest Airlines,9:30 PM,9:12 PM,T-1,Landed,73W
+,,,,,30,  On-time,
+ACV Arcata,OO 6293,SkyWest Airlines,9:30 PM,10:03 PM,T-1,Landed,EM2
+,,,,,,  33 min,
+YYZ Toronto,AC 739,Air Canada,9:33 PM,9:29 PM,T-I,Landed,320
+,,,,,,  On-time,
+SEA Seattle,VX 759,Virgin America,9:35 PM,9:12 PM,T-2,Landed,320
+,,,,,55,  On-time,
+SAN San Diego,VX 969,Virgin America,9:35 PM,9:16 PM,T-2,Landed,320
+,,,,,51A,  On-time,
+LAS Las Vegas,UA 454,United Airlines,9:37 PM,9:19 PM,T-3,Landed,320
+,,,,,90,  On-time,
+IAD Washington,UA 1182,United Airlines,9:40 PM,9:38 PM,T-3,Landed,738
+,,,,,73,  On-time,
+HNL Honolulu,UA 746,United Airlines,9:40 PM,9:49 PM,T-I,Landed,752
+,,,,,G100,  On-time,
+JFK New York,AA 177,American Airlines,9:40 PM,9:06 PM,T-2,Landed,762
+,,,,,57,  On-time,
+LAX Los Angeles,AA 1283,American Airlines,9:40 PM,9:29 PM,T-2,Landed,738
+,,,,,58A,  On-time,
+YVR Vancouver,WS 1776,WestJet,9:41 PM,9:48 PM,T-I,Landed,73W
+,,,,,A2,  On-time,
+EWR Newark,UA 212,United Airlines,9:43 PM,9:59 PM,T-3,Landed,752
+,,,,,84,  16 min,
+YVR Vancouver,UA 498,United Airlines,9:43 PM,9:16 PM,T-3,Landed,319
+,,,,,69,  On-time,
+STL Saint Louis,UA 1742,United Airlines,9:45 PM,10:14 PM,T-3,Landed,739
+,,,,,77B,  29 min,
+RNO Reno,OO 6354,SkyWest Airlines,9:45 PM,9:28 PM,T-1,Landed,CRJ
+,,,,,33,  On-time,
+MFR Medford,OO 6294,SkyWest Airlines,9:48 PM,10:04 PM,T-1,Landed,EM2
+,,,,,,  16 min,
+ONT Ontario,OO 5416,SkyWest Airlines,9:48 PM,9:51 PM,T-1,Landed,CRJ
+,,,,,35,  On-time,
+LAX Los Angeles,UA 731,United Airlines,9:49 PM,9:37 PM,T-3,Landed,320
+,,,,,75,  On-time,
+PHL Philadelphia,VX 143,Virgin America,9:50 PM,10:11 PM,T-2,Landed,320
+,,,,,,  21 min,
+SAN San Diego,OO 5553,SkyWest Airlines,9:51 PM,9:47 PM,T-3,Landed,CR7
+,,,,,71,  On-time,
+MSY New Orleans,UA 305,United Airlines,9:53 PM,11:38 PM,T-3,Landed,319
+,,,,,73A,  105 min,
+RDD Redding,OO 5444,SkyWest Airlines,9:55 PM,9:51 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+LAS Las Vegas,VX 917,Virgin America,9:55 PM,9:50 PM,T-2,Landed,320
+,,,,,53,  On-time,
+JFK New York,UA 389,United Airlines,9:55 PM,10:07 PM,T-I,Landed,757
+,,,,,G94,  On-time,
+DTW Detroit,DL 1988,Delta Air Lines,9:59 PM,9:21 PM,T-1,Landed,757
+,,,,,40,  On-time,
+MRY Monterey,OO 5609,SkyWest Airlines,10:00 PM,9:57 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+BUR Burbank,OO 5600,SkyWest Airlines,10:00 PM,10:55 PM,T-1,Landed,CRJ
+,,,,,34,  55 min,
+PHL Philadelphia,UA 543,United Airlines,10:01 PM,10:38 PM,T-I,Landed,319
+,,,,,G92,  37 min,
+SBA Santa Barbara,OO 5610,SkyWest Airlines,10:04 PM,9:45 PM,T-1,Landed,EM2
+,,,,,,  On-time,
+SNA Santa Ana,WN 538,Southwest Airlines,10:05 PM,10:25 PM,T-1,Landed,73W
+,,,,,30,  20 min,
+LAX Los Angeles,VX 947,Virgin America,10:10 PM,10:03 PM,T-2,Landed,320
+,,,,,54A,  On-time,
+HKG Hong Kong,CX 872,Cathay Pacific,10:10 PM,10:02 PM,T-I,Landed,77W
+,,,,,,  On-time,
+DFW Dallas,AA 881,American Airlines,10:15 PM,10:35 PM,T-2,Landed,738
+,,,,,56B,  20 min,
+JFK New York,VX 29,Virgin America,10:15 PM,10:20 PM,T-2,Landed,320
+,,,,,52,  On-time,
+SAN San Diego,WN 3042,Southwest Airlines,10:15 PM,10:08 PM,T-1,Landed,73W
+,,,,,29,  On-time,
+PHX Phoenix,US 415,US Airways,10:17 PM,10:12 PM,T-1,Landed,321
+,,,,,23,  On-time,
+ORD Chicago,UA 1492,United Airlines,10:17 PM,10:20 PM,T-3,Landed,739
+,,,,,87,  On-time,
+SEA Seattle,OO 6426,SkyWest Airlines,10:20 PM,10:45 PM,T-1,Landed,CRJ
+,,,,,34,  25 min,
+BWI Baltimore,UA 522,United Airlines,10:28 PM,10:10 PM,T-3,Landed,319
+,,,,,70,  On-time,
+FLL Fort Lauderdale,B6 277,JetBlue Airways,10:29 PM,10:22 PM,T-I,Landed,320
+,,,,,A11A,  On-time,
+MDW Chicago,WN 1167,Southwest Airlines,10:30 PM,10:43 PM,T-1,Landed,73W
+,,,,,28,  On-time,
+DEN Denver,F9 667,Frontier Airlines,10:34 PM,10:27 PM,T-1,Landed,319
+,,,,,43,  On-time,
+BOS Boston,UA 1123,United Airlines,10:35 PM,10:39 PM,T-3,Landed,738
+,,,,,74,  On-time,
+PHX Phoenix,WN 3856,Southwest Airlines,10:35 PM,10:38 PM,T-1,Landed,73W
+,,,,,31,  On-time,
+HNL Honolulu,HA 12,Hawaiian Airlines,10:35 PM,10:46 PM,T-I,Landed,332
+,,,,,A8,  On-time,
+CLT Charlotte,US 463,US Airways,10:35 PM,10:35 PM,T-1,Landed,321
+,,,,,26,  On-time,
+LAX Los Angeles,UA 434,United Airlines,10:38 PM,10:18 PM,T-3,Landed,320
+,,,,,72,  On-time,
+ORD Chicago,UA 1408,United Airlines,10:41 PM,10:38 PM,T-3,Landed,739
+,,,,,81,  On-time,
+BOS Boston,UA 112,United Airlines,10:42 PM,10:26 PM,T-3,Landed,738
+,,,,,76A,  On-time,
+LAX Los Angeles,WN 102,Southwest Airlines,10:45 PM,10:31 PM,T-1,Landed,73W
+,,,,,32A,  On-time,
+BOS Boston,VX 357,Virgin America,10:45 PM,10:48 PM,T-2,Landed,320
+,,,,,55,  On-time,
+LAX Los Angeles,OO 4811,SkyWest Airlines,10:47 PM,10:27 PM,T-1,Landed,CR9
+,,,,,48,  On-time,
+SAN San Diego,WN 4997,Southwest Airlines,10:50 PM,10:51 PM,T-1,Landed,73W
+,,,,,27,  On-time,
+ORD Chicago,AA 2078,American Airlines,10:50 PM,10:37 PM,T-2,Landed,738
+,,,,,58B,  On-time,
+BOS Boston,B6 637,JetBlue Airways,10:51 PM,10:35 PM,T-I,Landed,320
+,,,,,A11B,  On-time,
+JFK New York,DL 1465,Delta Air Lines,10:51 PM,11:07 PM,T-1,Landed,752
+,,,,,42,  16 min,
+YVR Vancouver,AC 564,Air Canada,10:51 PM,10:30 PM,T-I,Landed,E90
+,,,,,,  On-time,
+SEA Seattle,AS 300,Alaska Airlines,10:56 PM,10:54 PM,T-1,Landed,739
+,,,,,22,  On-time,
+SLC Salt Lake City,OO 4766,SkyWest Airlines,10:58 PM,11:05 PM,T-1,Landed,CR9
+,,,,,46,  On-time,
+YYZ Toronto,AC 759,Air Canada,10:58 PM,10:45 PM,T-I,Landed,320
+,,,,,,  On-time,
+CLE Cleveland,UA 342,United Airlines,11:02 PM,11:01 PM,T-3,Landed,320
+,,,,,68,  On-time,
+IAH Houston,UA 1178,United Airlines,11:04 PM,11:59 PM,T-I,Landed,738
+,,,,,G98,  55 min,
+ATL Atlanta,FL 709,AirTran,11:05 PM,11:02 PM,T-1,Landed,73G
+,,,,,25,  On-time,
+DFW Dallas,AA 427,American Airlines,11:16 PM,,,Unknown,
+EWR Newark,UA 1666,United Airlines,11:18 PM,10:55 PM,T-3,Landed,739
+,,,,,89,  On-time,
+BWI Baltimore,UA 1893,United Airlines,11:20 PM,12:25 AM,T-3,Landed,
+,,,,,84,  65 min,
+DFW Dallas,AA 1427,American Airlines,11:20 PM,11:29 PM,T-2,Landed,738
+,,,,,56A,  On-time,
+IAD Washington,UA 1674,United Airlines,11:24 PM,11:25 PM,T-3,Landed,739
+,,,,,90,  On-time,
+MEX Mexico City,AM 664,Aeromexico,11:25 PM,11:18 PM,T-I,Landed,738
+,,,,,,  20 min,
+PHL Philadelphia,US 667,US Airways,11:31 PM,11:54 PM,T-1,Landed,320
+,,,,,21,  23 min,
+DEN Denver,WN 473,Southwest Airlines,11:35 PM,11:22 PM,T-1,Landed,73W
+,,,,,32A,  On-time,
+MIA Miami,AA 1783,American Airlines,11:35 PM,11:53 PM,T-2,Landed,757
+,,,,,57,  18 min,
+MSP Minneapolis,DL 2209,Delta Air Lines,11:38 PM,11:27 PM,T-1,Landed,738
+,,,,,40,  On-time,
+DEN Denver,UA 423,United Airlines,11:40 PM,11:08 PM,T-I,Landed,320
+,,,,,G96,  On-time,
+AUS Austin,B6 1513,JetBlue Airways,11:45 PM,11:24 PM,T-I,Landed,320
+,,,,,A11A,  On-time,
+LAS Las Vegas,WN 48,Southwest Airlines,11:55 PM,12:14 AM,T-1,Landed,73W
+,,,,,25,  19 min,
+LAX Los Angeles,UA 705,United Airlines,11:58 PM,12:15 AM,T-3,Landed,752
+,,,,,85,  17 min,
+EWR Newark,UA 1532,United Airlines,11:59 PM,11:39 PM,T-I,Landed,738
+,,,,,G94,  On-time,

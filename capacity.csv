@@ -1,0 +1,19 @@
+AAR,,,,,,
+Arrival,Departure,VMC,LOW VMC,IMC,LOW IMC,Notes
+28L|28R SIDEBY,01L|01R,54,45,30,27,Minimum Ceiling for VAPS 3000 - 3500
+28L|28R STAGGERBY,28L|28R,45,45,30,27,
+28L,28L,27,27,25,,
+28R,28R,27,27,25,25,
+PRM 28R|28L,01L|01R,36,36,,,SOIA Rate for Ry 28R/28L/minimum ceiling 1600/vis 4
+19L|19R STAGGERBY,19L|19R,35,25,25,,
+19L,19L,25,25,25,,
+19R,19R,25,25,25,,
+19L|19R SIDEBY,10L|10R,40,28,28,,Minimum Ceiling for VAPS 4000-4500
+01R,01L,30,25,,,
+10L|10R,10L|10R,33,27,27,,
+10L,10L,27,27,25,,
+10R,10R,27,27,25,,
+,,,,,,
+,,,,,,
+The data depicted in these tables are for estimating purposes only and do not necessarily reflect the current operational plan or current traffic balancing activities. All data is for informational purposes only.,,,,,,
+http://www.fly.faa.gov/Information/west/zoa/sfo/sfo_aar.htm,,,,,,
