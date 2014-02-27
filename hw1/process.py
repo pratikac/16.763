@@ -137,8 +137,8 @@ def plot_capacity(t1, oper, config):
     
     plt.xlim([0,25])
     plt.ylim([0,25])
-    plt.xlabel('arrivals')
-    plt.ylabel('departures')
+    plt.xlabel('arrivals (/15 min)')
+    plt.ylabel('departures (/15 min)')
     plt.grid()
     plt.title('oper: ' + oper+' , config: ' + config)
     fname = filename_dict[oper]+'_'+filename_dict[config]+'.png'
@@ -156,8 +156,8 @@ def plot_all(points, capacities, alg, labels):
     
     plt.xlim([0,25])
     plt.ylim([0,25])
-    plt.xlabel('arrivals')
-    plt.ylabel('departures')
+    plt.xlabel('arrivals (/15min)')
+    plt.ylabel('departures (/15min)')
     plt.grid()
     plt.legend(prop={'size':12})
     fname = alg+'.pdf'
@@ -188,9 +188,9 @@ def crunch_data(data, which_oper, which, overall_flag=0):
                 ('IMC', '28R | 1L, 1R'),
                 ('IMC', '28L | 1L, 1R')]
         '''
-        test_tuples = [
-                ('VMC', '28L, 28R | 28L, 28R')]
-        #test_tuples = [(which_oper, x) for x in config_dict]
+        #test_tuples = [
+        #        ('VMC', '28L, 28R | 28L, 28R')]
+        test_tuples = [(which_oper, x) for x in config_dict]
         capacities = []
         labels = []
         for test_tup in test_tuples:
@@ -300,12 +300,12 @@ def main():
     arr = proc_arr()
     dep = proc_dep()
     new_data = correlate_data(arr, dep)
-    '''
+    
     for oper in ['VMC', 'IMC']:
         for alg in ['lsq', 'cvx']:
             crunch_data(data, oper, alg, 0)
-    '''
-    crunch_data(data, 'VMC', 'cvx2', 0)
+    
+    #crunch_data(data, 'VMC', 'cvx2', 0)
     #crunch_data(new_data, 'cvx', 1)
 
 if __name__=="__main__":
