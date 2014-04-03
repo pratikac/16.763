@@ -1,8 +1,3 @@
-,,,,,
-Minimum Turn Time =,,30.00,,,
-,,,,,
-,,,,,
-Route Number,Flight ID,Origin Airport,Destination Airport,Scheduled Departure Time,Scheduled Arrival Time
 1,AM 000315,MEX,ACA,360,415
 1,AM 000304,ACA,MEX,455,520
 1,AM 000922,MEX,MTY,600,680
