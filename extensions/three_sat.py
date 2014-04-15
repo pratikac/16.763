@@ -1,3 +1,4 @@
+import cvxpy
 from cvxpy import *
 from mixed_integer import *
 import random 
@@ -41,6 +42,8 @@ for clause_vars,negated in clauses:
             terms.append( (1-vars[index]) )
         else:
             terms.append(vars[index])
+    
+    import pdb; pdb.set_trace()
     constraints.append(sum(terms) >= 1)
 
 best_values = VARIABLES*[0]

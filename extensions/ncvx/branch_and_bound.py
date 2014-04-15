@@ -4,7 +4,7 @@ import cvxpy.settings as s
 from boolean import Boolean
 
 def branch(booleans):
-    bool_vals = (vi for b in booleans for vi in b if not vi.fix_values)
+    bool_vals = (vi for b in booleans for vi in b if not vi.fix_values())
     # pick *a* boolean variable to branch on
     # choose the most ambivalent one (smallest distance to 0.5)
     # NOTE: if there are no boolean variables, will never branch
@@ -12,7 +12,8 @@ def branch(booleans):
 
 def bound(prob, booleans):
     # relax boolean constraints
-    for bool_var in booleans: bool_var.relax()
+    for bool_var in booleans:
+        bool_var.relax()
     # solves relaxation
     lower_bound = prob._solve()
     if isinstance(lower_bound, str):

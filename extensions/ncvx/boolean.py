@@ -1,6 +1,5 @@
-from cvxpy.expressions.variables import Variable, IndexVariable
+from cvxpy.expressions.variables import Variable
 from cvxpy.expressions.constants import Parameter
-import cvxpy.constraints.affine as aff
 import cvxopt
 
 class Boolean(Variable):
@@ -12,9 +11,11 @@ class Boolean(Variable):
         self._fix_values = cvxopt.matrix(False,(rows, cols))
         super(Boolean, self).__init__(rows, cols, *args, **kwargs)
 
+    '''
     # return a scalar view into a matrix of boolean variables
     def index_object(self, key):
         return IndexBoolean(self, key)
+    '''
 
     def round(self):
         self.LB = cvxopt.matrix(self._rounded, self.size)
@@ -66,6 +67,7 @@ class Boolean(Variable):
     def fix_values(self, value):
         self._fix_values = value
 
+'''
 class IndexBoolean(IndexVariable, Boolean):
     def __init__(self, parent, key):
         super(IndexBoolean, self).__init__(parent, key)
@@ -100,3 +102,4 @@ class IndexBoolean(IndexVariable, Boolean):
     @fix_values.setter
     def fix_values(self, value):
         self.parent._fix_values[self.key] = value
+'''

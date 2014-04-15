@@ -42,7 +42,7 @@ def admm(self, rho=0.5, iterations=5, solver=cp.ECOS):
     #                                      new_constr_map)
     
     noncvx_vars = [obj for obj in var_offsets.keys() if isinstance(obj, NonCvxVariable)]
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
 
     # Form ADMM problem.
     obj = self.objective._expr
