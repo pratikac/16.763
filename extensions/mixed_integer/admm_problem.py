@@ -20,16 +20,32 @@ along with CVXPY.  If not, see <http://www.gnu.org/licenses/>.
 from noncvx_variable import NonCvxVariable
 import cvxpy as cp
 from cvxpy import settings as s
+from collections import OrderedDict
 
 # Use ADMM to attempt non-convex problem.
 def admm(self, rho=0.5, iterations=5, solver=cp.ECOS):
     objective,constr_map,dims = self.canonicalize()
+    
+    new_constr_map = constr_map[s.EQ]
+    for c in constr_map[s.INEQ]:
+        new_constr_map.add(c)
+    vars_ = objective.variables()
+    for constr in new_constr_map:
+        vars_ += constr.variables()
+    var_offsets = OrderedDict()
+    vert_offset = 0
+    for var in set(vars_):
+        var_offsets[var] = vert_offset
+        vert_offset += var.size[0]*var.size[1]
 
-    var_offsets,x_length = self.variables(objective, 
-                                          constr_map[s.EQ] + constr_map[s.INEQ])
+    #var_offsets,x_length = self.variables(objective, 
+    #                                      new_constr_map)
+    
     noncvx_vars = [obj for obj in var_offsets.keys() if isinstance(obj, NonCvxVariable)]
+    import pdb; pdb.set_trace()
+
     # Form ADMM problem.
-    obj = self.objective.expr
+    obj = self.objective._expr
     for var in noncvx_vars:
         obj = obj + (rho/2)*sum(cp.square(var - var.z + var.u))
     p = cp.Problem(cp.Minimize(obj), self.constraints)
