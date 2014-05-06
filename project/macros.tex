@@ -1,0 +1,68 @@
+% packages
+\usepackage{amsmath, amsfonts, amssymb, bm, enumerate, url} %, flushend}
+\usepackage[boxruled, vlined, linesnumbered]{algorithm2e}
+\usepackage[usenames, dvipsnames]{color}
+\usepackage[pdftex, xetex]{graphicx}
+\usepackage[font={small}]{caption}
+\usepackage{float, colortbl, tabularx, multirow, subcaption, environ, wrapfig}
+\usepackage{pgf, tikz}
+\usetikzlibrary{arrows,automata}
+\usepackage[normalem]{ulem}
+
+\usepackage[bookmarks=true]{hyperref}
+%\usepackage[hyperpageref]{backref}
+\hypersetup{
+colorlinks=true, linkcolor=red, citecolor=blue, filecolor=magenta, urlcolor=blue
+%linkcolor=black, citecolor=black, filecolor=black, urlcolor=black
+}
+
+\usepackage{url, cite}
+
+% macros
+\definecolor{darkgreen}{rgb}{0,0.6,0} \newcommand{\dg}{\color{darkgreen}}
+\definecolor{fullred}{rgb}{0.85,.0,.1} \newcommand{\fr}{\color{fullred}}
+\definecolor{brown}{rgb}{0.65,0.16,0.16} \newcommand{\br}{\color{brown}}
+\definecolor{orange}{rgb}{1,0.5,0} \newcommand{\oran}{\color{orange}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pcmargin}[2]{{\dg #1}\marginpar{\tiny\noindent{\raggedright{\oran[PC]}\bl{ #2} \par}}}
+\newcommand{\pc}[2]{\pcmargin{#1}{#2}}
+
+
+%\newcommand{\myclearpage}{\clearpage}
+\newcommand{\myclearpage}{}
+
+% math macros
+\newcommand{\abs}[1]{\ensuremath \left| #1 \right|}
+\newcommand{\norm}[1]{\ensuremath \lVert#1\rVert}
+\newcommand{\given}{\, \vert \,}
+\renewcommand{\cal}[1]{\ensuremath \mathcal{#1}}
+\newcommand{\qed}{\hfill \mbox{\raggedright \rule{0.1in}{0.1in} } }
+
+\newcommand{\aeq}[1]{\begin{align} #1 \end{align}}
+\newcommand{\aeqs}[1]{\begin{align*} #1 \end{align*}}
+\newcommand{\beq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\beqs}[1]{\begin{equation*}#1\end{equation*}}
+\newcommand{\trm}[1]{\ensuremath \textrm{#1}}
+\newcommand{\enum}[2]{\begin{enumerate}[#1]{#2}\end{enumerate}}
+\newcommand{\ilist}[1]{\begin{itemize}{#1}\end{itemize}}
+\newcommand{\ag}[1]{\ensuremath \left\langle#1\right\rangle}
+\newcommand{\bee}{\begin{enumerate}}
+\newcommand{\eee}{\end{enumerate}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\mpage}[2]{\begin{minipage}{#1}#2\end{minipage}}
+\newcommand{\la}{\leftarrow}
+\newcommand{\ra}{\rightarrow}
+
+\usepackage{theorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{problem}[theorem]{Problem}
+%\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{note}[theorem]{Note}
+\newtheorem{remark}[theorem]{Remark}
+%\theoremstyle{plain}
+\newtheorem{assumption}[theorem]{Assumption}

@@ -1,0 +1,34 @@
+\documentclass[10pt]{article}
+\input{../macros.tex}
+
+\usepackage[osf]{mathpazo}
+\usepackage{fullpage}
+\linespread{1.0}
+\setlength{\parskip}{0.2em}
+
+\newcommand{\bibname}{References}
+
+\begin{document}
+\begin{center}
+{\Large {\bf Column Generation Techniques in Air Transportation}}\\[0.2in]
+{\large Pratik Chaudhari\\[0.2in]
+\emph{16.763 Project Proposal}}
+\end{center}
+\vspace{0.1in}
+
+Typically in air transportation problems such as crew scheduling and fleet assignment, there are constraints on sequences of flights using a resource, e.g., an aircraft or a crew member. Although the number of constraints is huge, the problem can be made tractable by enumerating all possible sequences and assigning decision variables to each one of them. Column generation~\cite{desrosiers2005primer} then is a formalization of the simple idea that constraints on these sequences can be eliminated by only considering sequences that satisfy these constraints.
+
+More formally, if the entire set of variables (columns) is unnecessary for the solution, the basis variables (cf.\@ simplex algorithm) can be generated as needed. This is akin to solving a \emph{restricted master problem} in conjunction with smaller sub-problems, also known as \emph{pricing problems}. This sub-problem, roughly speaking, finds the new basis variable by minimizing the reduced cost of each new variable using the dual variables in the restricted problem. We iterate to construct a new master problem by adding this new variable to the optimization. The efficacy of column generation (also known as \emph{branch-and-price}~\cite{barnhart1998branch} for integer programs) hinges on an efficient solution to the pricing problem. For example, in fleet assignment, maintenance routing and crew scheduling, the master problem is a \emph{set-cover problem} while the pricing problem is form of \emph{shortest path problem} which can be easily solved using dynamic programming. Various similar problems like constrained or multi-label shortest path problems are viable candidates for sub-problems in branch-and-price methods. After giving a brief overview of the algorithm, we will demonstrate an implementation of column generation techniques on canonical problems such as \emph{resource-constrained shortest path} and \emph{cutting-stock problem}. The key idea here is to express, e.g., the shortest path problem, not as a combination of individual arcs, but instead as a decision variable for whether a particular sub-path is included in the shortest path or not.
+
+Now consider the problem of \emph{aircraft scheduling}, which we define to be the combination of four sub-problems, viz., \emph{schedule design, fleet assignment, maintenance routing} and \emph{crew scheduling}. The sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling, even for a small airline. Practically, there are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we will focus on integrating aircraft maintenance and crew scheduling. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous different routings, which is crucial for a quick solution to the problem. We will present results of computational experiments using column generation on formulations that integrate the two problems. These formulations typically involve solving an integer linear program using branch-and-bound techniques, while the LP relaxation is solved using column generation; the pricing problem in this case will be a multi-label shortest path problem.
+%In a related context, we will also explore robust formulations of the crew pairing problem that can be solved using column generation techniques.
+
+%On the other hand, distributed optimization is a relatively unexplored area in air transportation. Techniques such as \emph{alternating direction method of multipliers} (ADMM)~\cite{boyd2011distributed} have been extremely successful in solving large problems in the statistics and machine learning literature. These are
+\vspace{-0.05in}
+{
+\small
+\bibliography{../writeup}
+\bibliographystyle{apalike}
+}
+
+\end{document}

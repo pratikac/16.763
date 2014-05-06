@@ -72,7 +72,7 @@ def solve_column_generation(s,B):
         relax.optimize()
         pi = [c.Pi for c in relax.getConstrs()] # keep dual variables
 
-        knapsack = Model("KP")   # knapsack sub-problem
+        knapsack = Model('kp')   # knapsack sub-problem
         knapsack.ModelSense=-1   # maximize
         y = {}
         for i in range(m):
@@ -219,6 +219,7 @@ def create_example(eg=1, random=False, n=100):
                 s.append(w[j])
         return s,B
     else:
+        np.random.seed(3)
         B = 100
         s = [0]*n 
         for i in xrange(n):
@@ -226,7 +227,7 @@ def create_example(eg=1, random=False, n=100):
         return s,B
 
 if __name__ == "__main__":
-    s,B = create_example(random=True, n=100)
+    s,B = create_example(random=True, n=200)
     #s,B = create_example(eg=1)
 
     
