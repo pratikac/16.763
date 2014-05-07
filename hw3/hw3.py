@@ -53,7 +53,7 @@ def solve_setcover(flights, strings):
     F = len(flights)
     S = len(strings)
     tc = 700
-    
+
     def get_ground_arcs():
         ground_arcs = []
         for s in strings:
@@ -104,7 +104,7 @@ def solve_setcover(flights, strings):
 
         yiam[i] = get_num_ac_on_ground_at_time(flights[i][-1]-1)
         yiap[i] = get_num_ac_on_ground_at_time(flights[i][-1]+1)
-    
+
     # r_s
     r = np.zeros((S,))
     for ro in strings:
@@ -122,7 +122,7 @@ def solve_setcover(flights, strings):
     # finally, set up the problem!
     x = cp.Variable(S)
     y = cp.Variable(G)
-    
+
     # objective
     f = 0*x[0]
     for s in xrange(S):
@@ -149,15 +149,15 @@ def solve_setcover(flights, strings):
     c4 = [sum([r[s]*x[s] for s in xrange(S)]) + sum([p[g]*y[g] for g in xrange(G)]) <= N]
 
     c5 = [0 <= y, x <= 1, 0 <= x]
-    
+
     c6 = [x[0] + x[4] + x[10] + x[11] + x[21] <= 4]
 
     cons = c1+c2+c3+c4+c5+c6
     #pdb.set_trace()
 
     prob = cp.Problem(cp.Minimize(f), cons)
-    #res = prob.solve(solver=cp.CVXOPT) 
-    res = prob.solve() 
+    #res = prob.solve(solver=cp.CVXOPT)
+    res = prob.solve()
     print res
     print cp.get_status(res)
 
