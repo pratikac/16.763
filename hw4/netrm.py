@@ -12,6 +12,7 @@ def read_data():
     global od, classes
 
     rmdata = np.array(pd.read_csv('denhub.csv'))
+    #rmdata = np.array(pd.read_csv('denhublcc.csv'))
 
     for r in rmdata:
         t1 = (r[1],r[2],r[3])
@@ -49,10 +50,18 @@ def solve_netrm():
     # print sol
     #pdb.set_trace()
     if m.status == GRB.status.OPTIMAL:
-        #pdb.set_trace()
         #sol = m.getAttr('x',x)
         for i,j,k in odif.keys():
-            print('%s,%s,%s -> %s, ub: %s') %(i,j,k,x[i,j,k].x,demand[i,j,k])
+            print('%s & %s & %s & %s & %s') %(i,j,k,x[i,j,k].x,demand[i,j,k])
+
+        #pdb.set_trace()
+        #  get dual variables
+        relax = m.relax()
+        relax.optimize()
+        pi = [c.Pi for c in relax.getConstrs()]
+        print pi
+        #for i,d in enumerate(pi):
+        #    print
 
 read_data()
 solve_netrm()
