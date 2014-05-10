@@ -1,4 +1,4 @@
-\usepackage{amsmath, amsthm, amssymb, bm, enumerate, url, setspace}
+\usepackage{amssymb, bm, enumerate, url, setspace}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage[pdftex, xetex]{graphicx}
 \usepackage[font={small}]{caption}
@@ -21,6 +21,8 @@ colorlinks=true, linkcolor=blue, citecolor=ForestGreen, filecolor=magenta, urlco
 \newcommand{\myclearpage}{}
 
 % math macros
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\integers}{\mathbb{Z}}
 \newcommand{\abs}[1]{\ensuremath \left| #1 \right|}
 \newcommand{\norm}[1]{\ensuremath \lVert#1\rVert}
 \newcommand{\given}{\, \vert \,}
@@ -36,7 +38,7 @@ colorlinks=true, linkcolor=blue, citecolor=ForestGreen, filecolor=magenta, urlco
 \newcommand{\beq}[1]{\begin{equation}#1\end{equation}}
 \newcommand{\beqs}[1]{\begin{equation*}#1\end{equation*}}
 \newcommand{\trm}[1]{\ensuremath \textrm{#1}}
-\newcommand{\enum}[2]{\begin{enumerate}[#1]{#2}\end{enumerate}}
+\newcommand{\enum}[2][1.]{\begin{enumerate}[#1]{#2}\end{enumerate}}
 \newcommand{\clist}[1]{\begin{itemize}\setlength{\itemsep}{0pt}
 \setlength{\parsep}{0pt}
 {#1}\end{itemize}}
@@ -84,3 +86,5 @@ colorlinks=true, linkcolor=blue, citecolor=ForestGreen, filecolor=magenta, urlco
 \newcommand{\z}{\zeta}
 \renewcommand{\L}{\Lambda}
 \renewcommand{\l}{\lambda}
+
+\renewcommand{\bar}{\overline}

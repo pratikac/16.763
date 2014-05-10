@@ -1,18 +1,18 @@
- \documentclass[letterpaper, 10pt, reqno]{amsart}
+ \documentclass[letterpaper, 10pt, twocolumn, reqno]{amsart}
 
 \usepackage{mathpazo}
 \include{./macros}
 \usepackage[margin=1in]{geometry}
-\linespread{1.1}
+\linespread{1.05}
 
-% \newcommand{\algsize}{\footnotesize}
-% \setlength{\floatsep}{0.0in}
-% \setlength{\textfloatsep}{0.0in}
-% \setlength{\intextsep}{0.0in}
-% \setlength{\belowcaptionskip}{0.05in}
-% \setlength{\abovecaptionskip}{0.1in}
-% \setlength{\abovedisplayskip}{0.05in}
-% \setlength{\belowdisplayskip}{0.05in}
+\newcommand{\algsize}{\footnotesize}
+\setlength{\floatsep}{0.0in}
+\setlength{\textfloatsep}{0.0in}
+\setlength{\intextsep}{0.0in}
+\setlength{\belowcaptionskip}{0.05in}
+\setlength{\abovecaptionskip}{0.1in}
+\setlength{\abovedisplayskip}{0.05in}
+\setlength{\belowdisplayskip}{0.05in}
 
 \graphicspath{{./fig/}}
 
@@ -34,16 +34,103 @@ This project
 \section{Column Generation}
 \label{sec:column_generation}
 
+This section introduces column generation for solving large linear programs using the cutting-stock problem and resource-constrainted shortest path as examples. To introduce some notation and terminology, we first describe the simplex algorithm and the dual problems briefly.
+
+\subsection{Linear program: standard form}
+\label{ssec:lp_standard}
+
+We will assume that the linear program is given to us in the standard form as follows:
+\aeq{
+    \trm{minimize}\ &c' x \notag \\
+    \trm{subject to}\ & Ax = b \notag \\
+    & x \geq 0
+    \label{eqn:lp_standard_form}
+}
+where $c \in \reals^n$ is the cost-vector, $A = [a_{ij}] \in \reals^{m \times n}$ is the constraint matrix with $m$ constraints and $b \in \reals^m$. The columns of $A$, which we denote by $A_1, \ldots, A_n$ are also known as the resource vectors while $b$ is the target vector; motivated from
+$$\sum_{i=1}^n A_i x_i =b.$$
+So in the standard form, we wish to synthesize $b$ using a non-negative amount, $x_i$, of each resource $A_i$. Note that a different form of linear program, e.g., with inequality constraints can be easily converted to the standard form as follows,
+\clist{
+    \item if $x_i$ is unrestricted, write it as $x_i = x_i^+ - x_i^-$ where both $x_i^+, x_i^- \geq 0$;
+    \item construct slack variables for inequality constraints, i.e., if $\sum_{j=1}^n a_{ij} x_j \leq b_i$, we use
+    $$\sum_{j=1}^n a_{ij} x_j + s_i = b_i, \quad s_i \geq 0;$$
+    \item finally, note that a maximization is just another minimization problem with a negative cost vector $c$.
+}
+Let $P = \cbrac{x \given Ax \geq b, -Ax \geq -b, x \geq 0}$ be a polyhedron, note that $P$ is the space of feasible candidates for Prob.~\eqref{eqn:lp_standard_form}.
+
 \subsection{Simplex algorithm}
 \label{ssec:simplex}
+The simplex algorithm is based upon the observation that the optimal solution always lies on the corners of $P$. Note that since $b \in \reals^m$, if the feasible solution $x$ were of length $m$, we can just invert the corresponding rows and obtain $x$. To that end, if $x$ is a \emph{basic feasible solution}, let $B_I = \cbrac{B_1, \ldots, B_m}$ be the indices of the basic variables, i.e, $x_j = 0$ for all other indices. Let $B = \bmat{A_{B_1}, \ldots, A_{B_m}}$ be the corresponding basis matrix. we thus have,
+$$
+x_B = B^{-1} b
+$$
+where $x_B = \bmat{x_{B_1}, \ldots, x_{B_m}}$.
+Let us consider moving away from $x$ to a new vector $x + \th d$ by selecting some new variable $x_j$ and making it non-zero, i.e, $d_j = 1$ for some $j \notin B_I$. Since $A(x+\th d) = b$, we need $A d = 0$ which implies
+$$
+0 = A d = \sum_{i=1}^n A_i d_i = \sum_{i=1}^m A_{B_i} d_{B_i} + A_j = B d_B + A_j.
+$$
+Since $B$ is invertible, we get $d_B = -B^{-1} A_j$. Note that for a small $\th$, the feasiblity is still maintained as we move away from $x_B$ towards $x_B + \th d$. Also, the rate of cost change by this move is
+$$\bar{c}_j = c_j + c_B' d_B = c_j - c_B' B^{-1} A_j$$
+which is known as the ``reduced cost'' of variable $x_j$. In other words, $\bar{c}_j$ is the change in cost incurred after a unit increase in the variable $x_j$. Of course, if this is positive for all variables in the problem, we know that we have found the solution.
+
+The simplex algorithm then starts with a basic feasible solution and iteravtively adds new variables to this set. While doing so, we would like to pick a $\th$ s.t. $x+\th d$ is a large step, i.e.,
+$$
+\th^* = \max \cbrac{\th \given x + \th d \in P}.
+$$
+It can be shown that $\th^*$ has a simple formula
+$$
+\th^* = \min_{i \in [m],\ d_{B_i} < 0}\ \rbrac{- \f{x_{B_i}}{d_{B_i}}}.
+$$
+Thus the iteration of the simplex algorithm are simple.
+\enum{
+    \item Start with $A_B$ and  current basic solution $x$, compute the reduced costs $\bar{c}_j = c_j - c_B' B^{-1} A_j$ for all non-basic variables $x_j$; if all
+    $\bar{c}_j \geq 0$, $x$ is optimal solution, else pick some $j$ with $\bar{c}_j < 0$.
+    \item Calculate $\th^* = \min_{i \in [m],\ d_{B_i} < 0}\ \rbrac{- \f{x_{B_i}}{d_{B_i}} }.$ If no $d_{B_i} < 0$ exists, the optimal cost is $-\infty$.
+    \item Let $l$ be the minimizing index in step 2., form a new basis by replacing $A_{B_l}$ with $A_j$ and set $x_j \la \th^*$ and $x_{B_i} \la x_{B_i} - \th^* d_{B_i}$.
+ }
+The above algorithm can be made much more efficient by passing information about dual variables in consecutive steps.
+
+\subsection{Dual problem}
+\label{ssec:dual}
+
+
+\subsection{Cutting-stock problem}
+\label{ssec:cutting_stock}
+
+Consider a paper mill with a number of rolls of paper of fixed width available to it. Different customers want different numbers of rolls of various-sized widths. The problem is to them efficiently cut ``patterns'' in each roll of paper so as to avoid waste. To get an idea of the magnitude of the problem, note that European paper mills produced a total turnover of almost $\$ 75$ million in 2012 and hence saving even 1\% of this is a significant advantage.
+
+Let the width of each roll be $W$ and $m$ customers want $n_i$ rolls each of width $w_i$. If $K$ is the number of rolls available, let $y_k = 1$ if a roll $k \in [K]$ is cut and zero otherwise. Let $x_i^k$ be the number of times item $i$ is cut on roll $k$. We then have the following formulation.
+\aeq{
+    (P_1) \quad \min &\sum_{k \in [K]} y_k \notag \\
+    \trm{s.t.}\ & \sum_{k \in [K]} x_i^k \geq n_i \quad \forall\ i \in [m] \qquad \trm{(demand)}\notag\\
+    & \sum_{i=1}^n w_i x_i^k \leq W y_k \quad \forall k \in [K]\quad \trm{(width of roll)} \notag\\
+    &x_i^k \in \integers_+, y_k \in \cbrac{0,1}.
+    \label{eqn:cutting_stock_ip}
+}
+Note that the above problem has $Kn + K$ variables and $(n+K)$ constraints and since it is an integer program, solving it for even small values of $K, n$ is expensive. The real reason for this is that the LP relaxation of this problem is bad. Note that
+$$
+\sum_k y_k \geq \f{1}{W} \sum_k \sum_i w_i x_i^k \geq \f{1}{W} \sum_i n_i w_i
+$$
+which is a naive bound and says that the number of rolls needed is simply the sum of all demands divided by $W$. Let use pose the problem in a different way as follows.
+
+We call the set of distinct cuts of a roll as a pattern, i.e., if $W=100$, and we make 4 cuts of $w_1 = 25$ each, we generate a patterm $\{ w_1 w_1 w_1 w_1 \}$. If on the other hand, we make one cut of $w_1 =25$ and two of $w_2 = 35$, we generate a pattern $\{ w_1 w_2 w_2 \}$. Let $x_j$ be the number of times a pattern $j$ is used. Let $a_{ij}$ be the number of times item $i$ is cut in pattern $j$. Consider then, the new problem --
+\aeq{
+    (P_2) \quad \min &\sum_{j=1}^n x_j \notag \\
+    \trm{s.t.}\ & \sum_{j=1}^n a_{ij} x_j \geq n_i \quad \forall\ i \in [m] \qquad \trm{(demand)}\notag\\
+    &x_j \in \integers_+, j \in [n].
+    \label{eqn:cutting_stock_pattern_ip}
+}
+where $n$ is the number of valid patterns, i.e., ones that satisfy $\sum_{i=1}^m w_i a_{ij} \leq W$. Note that the new problem is also an IP and moreover, it contains a huge number of variables, almost $m \choose k$ where $k$ is the average number of items in a pattern. However, let's look at its LP relaxation. We replace the integrality constraints with
+$$
+x_j \in \reals_+, j \in [n].
+$$
+We call the new problem, the ``LP-Master''; the solution to this could very well be non-integral, since we have $\geq$ in the constraints we can generate a feasible, integral solution by rounding up. It has a large number of variables ($n$) but only $m$ constraints. Use now use the simplex algorithm from Sec.~\ref{ssec:simplex} to solve this LP.
+
+The main idea of column-generation is that most of variables are zero, i.e., they do not form the basis (since the basis has only as many variables as constraints). Hence, we only need a small subset of all the variables to form the solution. How do we leverage this observation? Let us consider the dual of $(P_2)$.
 
 
 
-\section{Cutting-stock problem}
-\label{sec:cutting_stock}
-
-\section{Integrated aircraft planning}
-
+\subsection{Resource-constrained shortest path}
+\label{ssec:shortest_path}
 
 
 \section{Summary}
@@ -53,7 +140,7 @@ This project
 {
 \small
 \bibliography{../writeup}
-\bibliographystyle{abbrv}
+\bibliographystyle{apa}
 }
 \end{document}
 
