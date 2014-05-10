@@ -1,0 +1,64 @@
+ \documentclass[letterpaper, 10pt, reqno]{amsart}
+
+\usepackage{mathpazo}
+\include{./macros}
+\usepackage[margin=1in]{geometry}
+\linespread{1.1}
+
+% \newcommand{\algsize}{\footnotesize}
+% \setlength{\floatsep}{0.0in}
+% \setlength{\textfloatsep}{0.0in}
+% \setlength{\intextsep}{0.0in}
+% \setlength{\belowcaptionskip}{0.05in}
+% \setlength{\abovecaptionskip}{0.1in}
+% \setlength{\abovedisplayskip}{0.05in}
+% \setlength{\belowdisplayskip}{0.05in}
+
+\graphicspath{{./fig/}}
+
+\title{Column Generation Techniques in Air Transportation}
+\author{Pratik Chaudhari$^*$}
+\thanks{$^*$ Laboratory of Information and Decision Systems, MIT.\newline
+Email: \href{pratik.ac@gmail.com}{pratik.ac@gmail.com}}
+\date{May 10, 2014}
+
+\begin{document}
+\begin{abstract}
+This project
+\end{abstract}
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+
+\section{Column Generation}
+\label{sec:column_generation}
+
+\subsection{Simplex algorithm}
+\label{ssec:simplex}
+
+
+
+\section{Cutting-stock problem}
+\label{sec:cutting_stock}
+
+\section{Integrated aircraft planning}
+
+
+
+\section{Summary}
+\label{sec:summary}
+
+
+{
+\small
+\bibliography{../writeup}
+\bibliographystyle{abbrv}
+}
+\end{document}
+
+Typically in air transportation problems such as crew scheduling and fleet assignment, there are constraints on sequences of flights using a resource, e.g., an aircraft or a crew member. Although the number of constraints is huge, the problem can be made tractable by enumerating all possible sequences and assigning decision variables to each one of them. Column generation~\cite{desrosiers2005primer} then is a formalization of the simple idea that constraints on these sequences can be eliminated by only considering sequences that satisfy these constraints.
+
+More formally, if the entire set of variables (columns) is unnecessary for the solution, the basis variables (cf.\@ simplex algorithm) can be generated as needed. This is akin to solving a \emph{restricted master problem} in conjunction with smaller sub-problems, also known as \emph{pricing problems}. This sub-problem, roughly speaking, finds the new basis variable by minimizing the reduced cost of each new variable using the dual variables in the restricted problem. We iterate to construct a new master problem by adding this new variable to the optimization. The efficacy of column generation (also known as \emph{branch-and-price}~\cite{barnhart1998branch} for integer programs) hinges on an efficient solution to the pricing problem. For example, in fleet assignment, maintenance routing and crew scheduling, the master problem is a \emph{set-cover problem} while the pricing problem is form of \emph{shortest path problem} which can be easily solved using dynamic programming. Various similar problems like constrained or multi-label shortest path problems are viable candidates for sub-problems in branch-and-price methods. After giving a brief overview of the algorithm, we will demonstrate an implementation of column generation techniques on canonical problems such as \emph{resource-constrained shortest path} and \emph{cutting-stock problem}. The key idea here is to express, e.g., the shortest path problem, not as a combination of individual arcs, but instead as a decision variable for whether a particular sub-path is included in the shortest path or not.
+
+Now consider the problem of \emph{aircraft scheduling}, which we define to be the combination of four sub-problems, viz., \emph{schedule design, fleet assignment, maintenance routing} and \emph{crew scheduling}. The sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling, even for a small airline. Practically, there are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we will focus on integrating aircraft maintenance and crew scheduling. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous different routings, which is crucial for a quick solution to the problem. We will present results of computational experiments using column generation on formulations that integrate the two problems. These formulations typically involve solving an integer linear program using branch-and-bound techniques, while the LP relaxation is solved using column generation; the pricing problem in this case will be a multi-label shortest path problem.

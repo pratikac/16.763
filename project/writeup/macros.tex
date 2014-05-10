@@ -1,0 +1,86 @@
+\usepackage{amsmath, amsthm, amssymb, bm, enumerate, url, setspace}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[pdftex, xetex]{graphicx}
+\usepackage[font={small}]{caption}
+\usepackage{float, colortbl, tabularx, multirow, subcaption, environ, wrapfig, textcomp}
+\usepackage[normalem]{ulem}
+
+\usepackage{blindtext}
+
+\usepackage[bookmarks=true]{hyperref}
+%\usepackage[hyperpageref]{backref}
+\hypersetup{
+colorlinks=true, linkcolor=blue, citecolor=ForestGreen, filecolor=magenta, urlcolor=blue,
+}
+\usepackage{url, natbib}
+
+\newcommand{\pc}[2]{{\color{blue} #1}\marginpar{\tiny\noindent{\raggedright{\color{ForestGreen}[PC]}\color{brown}{ #2} \par}}}
+\newcommand{\todo}[1]{{\color{gray}#1}\marginpar{\tiny\noindent{\raggedright{\color{ForestGreen}[MILD TODO]}}}}
+
+%\newcommand{\myclearpage}{\clearpage}
+\newcommand{\myclearpage}{}
+
+% math macros
+\newcommand{\abs}[1]{\ensuremath \left| #1 \right|}
+\newcommand{\norm}[1]{\ensuremath \lVert#1\rVert}
+\newcommand{\given}{\, \vert \,}
+\providecommand{\cal}[1]{\ensuremath \mathcal{#1}}
+\newcommand{\ag}[1]{\ensuremath \left\langle#1\right\rangle}
+\providecommand\bigo{O}
+\providecommand\smallo{o}
+\providecommand\bigth{\ensuremath \Theta}
+
+% shorcuts
+\newcommand{\aeq}[1]{\begin{align} #1 \end{align}}
+\newcommand{\aeqs}[1]{\begin{align*} #1 \end{align*}}
+\newcommand{\beq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\beqs}[1]{\begin{equation*}#1\end{equation*}}
+\newcommand{\trm}[1]{\ensuremath \textrm{#1}}
+\newcommand{\enum}[2]{\begin{enumerate}[#1]{#2}\end{enumerate}}
+\newcommand{\clist}[1]{\begin{itemize}\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+{#1}\end{itemize}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\mpage}[2]{\begin{center}
+\begin{minipage}{#1}#2\end{minipage}\end{center}}
+\newcommand{\la}{\leftarrow}
+\newcommand{\ra}{\rightarrow}
+\providecommand\f[2]{\ensuremath \frac{#1}{#2}}
+\providecommand\rbrac[1]{\ensuremath \left(#1\right)}
+\providecommand\sqbrac[1]{\ensuremath \left[#1\right]}
+\providecommand\cbrac[1]{\ensuremath \left\{#1\right\}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{problem}[theorem]{Problem}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{note}[theorem]{Note}
+\newtheorem{remark}[theorem]{Remark}
+
+\newtheorem{assumption}[theorem]{Assumption}
+\providecommand{\qed}{\hfill \mbox{\raggedright \rule{0.1in}{0.1in} } }
+
+% gray proof
+% \let\myoldproof=\proof
+% \let\myoldendproof=\endproof
+% \renewenvironment{proof}
+% {\myoldproof\color{gray}}
+% {\myoldendproof}
+
+\providecommand\s{\sigma}
+\renewcommand{\t}{\tau}
+\renewcommand{\th}{\theta}
+\renewcommand{\a}{\alpha}
+\newcommand{\e}{\epsilon}
+\renewcommand{\b}{\beta}
+\newcommand{\g}{\gamma}
+\renewcommand{\d}{\delta}
+\newcommand{\D}{\Delta}
+\newcommand{\z}{\zeta}
+\renewcommand{\L}{\Lambda}
+\renewcommand{\l}{\lambda}
