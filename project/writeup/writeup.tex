@@ -34,12 +34,12 @@ This project
 \section{Column Generation}
 \label{sec:column_generation}
 
-This section introduces column generation for solving large linear programs using the cutting-stock problem and resource-constrainted shortest path as examples. To introduce some notation and terminology, we first describe the simplex algorithm and the dual problems briefly.
+This section introduces column generation for solving large linear programs using the cutting-stock problem and resource-constrainted shortest path as examples. We also describe the simplex algorithm and the dual problem formulation, this will be help us to motivate as well as introduce notation for column generation.
 
-\subsection{Linear program: standard form}
+\subsection{Linear programs: Standard form}
 \label{ssec:lp_standard}
 
-We will assume that the linear program is given to us in the standard form as follows:
+The material here is presented from~\cite{bertsimas1997introduction}. We will assume that the linear program is given to us in the standard form as follows:
 \aeq{
     \trm{minimize}\ &c' x \notag \\
     \trm{subject to}\ & Ax = b \notag \\
@@ -84,17 +84,45 @@ Thus the iteration of the simplex algorithm are simple.
 \enum{
     \item Start with $A_B$ and  current basic solution $x$, compute the reduced costs $\bar{c}_j = c_j - c_B' B^{-1} A_j$ for all non-basic variables $x_j$; if all
     $\bar{c}_j \geq 0$, $x$ is optimal solution, else pick some $j$ with $\bar{c}_j < 0$.
-    \item Calculate $\th^* = \min_{i \in [m],\ d_{B_i} < 0}\ \rbrac{- \f{x_{B_i}}{d_{B_i}} }.$ If no $d_{B_i} < 0$ exists, the optimal cost is $-\infty$.
-    \item Let $l$ be the minimizing index in step 2., form a new basis by replacing $A_{B_l}$ with $A_j$ and set $x_j \la \th^*$ and $x_{B_i} \la x_{B_i} - \th^* d_{B_i}$.
+    \item Calculate $\th^* = \min_{i \in [m],\ d_{B_i} < 0}\ \rbrac{- \f{x_{B_i}}{d_{B_i}} }$. If there is no $i$ s.t. $d_{B_i} < 0$, the optimal cost is $-\infty$.
+    \item Let $l$ be the minimizing index in step 2., form a new basis by replacing $A_{B_l}$ with $A_j$ and set ${x_j \la \th^*}$ and $x_{B_i} \la x_{B_i} - \th^* d_{B_i}$.
  }
 The above algorithm can be made much more efficient by passing information about dual variables in consecutive steps.
 
 \subsection{Dual problem}
 \label{ssec:dual}
 
+We can write the Prob.~\eqref{eqn:lp_standard_form} as
+\aeqs{
+    \trm{minimize}\ & c'x + p'(b - Ax) \\
+    \trm{subject to}\ & x \geq 0.
+}
+where $p \in \reals^m$ is the Lagrange multiplier. This new problem has fewer constraints and hence by definition,
+\aeqs{
+g(p) = \min_{x \geq 0} \sqbrac{c'x + p'(b-Ax)} &\leq c'x^* + p'(b-Ax^*) \\
+&=c' x^*.
+}
+Here $x^*$ is the optimal solution of Prob.~\eqref{eqn:lp_standard_form} (also known as the ``primal'') and the last equality is true because $p$ at optimality is such that all constraints are satisfied. The new problem,
+\aeqs{
+    \trm{maximize}\ &g(p) \\
+    \trm{subject to}\ &\trm{no constraints}
+}
+thus searches for the best lower bound of the primal. Note that
+\aeqs{
+g(p) = \begin{cases}
+p' b \quad & \trm{if}\ c' \geq p'A\\
+-\infty, \quad & \trm{otherwise}.
+\end{cases}
+}
+Thus, the ``dual'' problem of Prob.~\eqref{eqn:lp_standard_form} is
+\aeq{
+    \trm{maximize}\ \quad& p' b \notag\\
+    \trm{subject to}\ \quad& p'A \leq c'.
+}
+Dual problems are important for many reasons, viz., (i) the dual of a dual is the primal, (ii) dual solution is a lower bound for the primal's cost and finally, (iii) if the primal has a solution, so does the dual, and moreover, their costs are the same.
 
 \subsection{Cutting-stock problem}
-\label{ssec:cutting_stock}
+\label{ssec:col_gen_cutting_stock}
 
 Consider a paper mill with a number of rolls of paper of fixed width available to it. Different customers want different numbers of rolls of various-sized widths. The problem is to them efficiently cut ``patterns'' in each roll of paper so as to avoid waste. To get an idea of the magnitude of the problem, note that European paper mills produced a total turnover of almost $\$ 75$ million in 2012 and hence saving even 1\% of this is a significant advantage.
 
@@ -108,29 +136,80 @@ Let the width of each roll be $W$ and $m$ customers want $n_i$ rolls each of wid
 }
 Note that the above problem has $Kn + K$ variables and $(n+K)$ constraints and since it is an integer program, solving it for even small values of $K, n$ is expensive. The real reason for this is that the LP relaxation of this problem is bad. Note that
 $$
-\sum_k y_k \geq \f{1}{W} \sum_k \sum_i w_i x_i^k \geq \f{1}{W} \sum_i n_i w_i
+\sum_k y_k \geq \f{1}{W} \sum_k \sum_i w_i\ x_i^k \geq \f{1}{W} \sum_i n_i\ w_i
 $$
 which is a naive bound and says that the number of rolls needed is simply the sum of all demands divided by $W$. Let use pose the problem in a different way as follows.
 
-We call the set of distinct cuts of a roll as a pattern, i.e., if $W=100$, and we make 4 cuts of $w_1 = 25$ each, we generate a patterm $\{ w_1 w_1 w_1 w_1 \}$. If on the other hand, we make one cut of $w_1 =25$ and two of $w_2 = 35$, we generate a pattern $\{ w_1 w_2 w_2 \}$. Let $x_j$ be the number of times a pattern $j$ is used. Let $a_{ij}$ be the number of times item $i$ is cut in pattern $j$. Consider then, the new problem --
+We call the set of distinct cuts of a roll as a pattern, i.e., if $W=100$, and we make 4 cuts of $w_1 = 25$ each, we generate a patterm $\{ w_1, w_1, w_1, w_1 \}$. If on the other hand, we make one cut of $w_1 =25$ and two of $w_2 = 35$, we generate a pattern $\{ w_1, w_2, w_2 \}$. Let $x_j$ be the number of times a pattern $j$ is used. Let $a_{ij}$ be the number of times item $i$ is cut in pattern $j$. Consider then, the new problem --
 \aeq{
     (P_2) \quad \min &\sum_{j=1}^n x_j \notag \\
     \trm{s.t.}\ & \sum_{j=1}^n a_{ij} x_j \geq n_i \quad \forall\ i \in [m] \qquad \trm{(demand)}\notag\\
     &x_j \in \integers_+, j \in [n].
     \label{eqn:cutting_stock_pattern_ip}
 }
-where $n$ is the number of valid patterns, i.e., ones that satisfy $\sum_{i=1}^m w_i a_{ij} \leq W$. Note that the new problem is also an IP and moreover, it contains a huge number of variables, almost $m \choose k$ where $k$ is the average number of items in a pattern. However, let's look at its LP relaxation. We replace the integrality constraints with
+where $n$ is the number of valid patterns, i.e., ones that satisfy $\sum_{i=1}^m w_i a_{ij} \leq W$. Note that the new problem is also an IP and moreover, it contains a huge number of variables, almost $m \choose k$, where $k$ is the average number of items in a pattern. However, let's look at its LP relaxation. We replace the integrality constraints with
 $$
-x_j \in \reals_+, j \in [n].
+x_j \in \reals_+,\quad j \in [n].
 $$
-We call the new problem, the ``LP-Master''; the solution to this could very well be non-integral, since we have $\geq$ in the constraints we can generate a feasible, integral solution by rounding up. It has a large number of variables ($n$) but only $m$ constraints. Use now use the simplex algorithm from Sec.~\ref{ssec:simplex} to solve this LP.
+We call the new problem, the ``Linear Programming Master (LPM)''; the solution to this could very well be non-integral, since we have $\geq$ in the constraints we can generate a feasible, integral solution by rounding up. It has a large number of variables but only $m$ constraints. Use now use the simplex algorithm from Sec.~\ref{ssec:simplex} to solve this LP.
 
-The main idea of column-generation is that most of variables are zero, i.e., they do not form the basis (since the basis has only as many variables as constraints). Hence, we only need a small subset of all the variables to form the solution. How do we leverage this observation? Let us consider the dual of $(P_2)$.
+The main idea of column-generation is that most of variables are zero, i.e., they do not form the basis (since the basis has only as many variables as constraints). Hence, we only need a small subset of all the variables to form the solution. How do we leverage this observation? Let us start with a subset $\cP \subset [n]$ of columns of LPM and call it the ``Restricted Linear Programming Master (RLPM)''and now look at its dual problem.
+\aeq{
+    \trm{maximize}\ &\sum_{i=1}^m n_i \pi_i \notag \\
+    \trm{subject to}\ & \sum_{i=1}^m \a_{ij} \pi_i \leq 1, \quad j \in \cP \notag\\
+    &\pi \geq 0, \quad i \in [m].
+    \label{eqn:cutting_stock_dual_rlpm}
+}
+Let $\hat{\pi}$ be the optimal solution to the dual problem. The reduced cost of column $j$ in that case is given by simply
+$$
+1  - \sum_{i=1}^m a_{ij}\ \hat{\pi}_i.
+$$
+The variable with the best reduced cost, i.e., which we absolutely must include in the primal is to find
+$$
+\min \cbrac{1  - \sum_{i=1}^m a_{ij}\ \hat{\pi}_i \given j \in [n] \setminus \cP}
+$$
+which is still expensive to do since we need to enumerate all the possible patterns. However, it is another optimization problem, and a very famous at that. This problem, which we will call as the ``sub-problem'' (or the ``pricing problem'') is a Knapsack problem, i.e.,
+\aeq{
+    \max \quad &\sum_{i=1}^m \hat{\pi}_i y_i \notag \\
+    \trm{s.t.}\ \quad & \sum_{i=1}^m w_i y_i \leq W, \notag\\
+    & y_i \in \integers_+, i \in [m].
+    \label{eqn:cutting_stock_sub_problem}
+}
+This problem is one of the ``easy'' NP-hard problems and can be solved in $\bigo(mW)$ time by dynamic programming. We thus have a strategy for solving the cutting-stock problem as follows.
+\enum{
+    \item Start with some initial columns of LPM, e.g., use a simple pattern to cut rolls into $\ceil{W/w_i}$ pieces of $w_i$, $A = [a_{ij}]$ in Prob.~\eqref{eqn:cutting_stock_pattern_ip} is thus diagonal.
+    \item repeat until all reduced costs are non-negative
+        \enum{
+            \item Solve RLPM and let $\hat{\pi}$ be the dual variables
+            \item Find a new column as the solution of knapsack pricing problem with the most negative reduced cost
+            \item Add new column to RLPM
+        }
+}
+
+Note that this procedure only yields a solution to LPM, i.e., the relaxed problem of Prob.~\eqref{eqn:cutting_stock_pattern_ip}. In order to get an integer solution, observe that
+$$
+\sum_{j=1}^n a_{ij} \ceil{x_j} \geq \sum_{j=1}^n a_{ij} x_j \geq n_i
+$$
+which means that the rounded-up solution is also a feasible solution for Prob.~\eqref{eqn:cutting_stock_pattern_ip}. But of course, this rounded-up solution is not optimal, to obtain the optimal solution to the original IP, we have to take recourse to ``branch and bound'', which is a technique for solving general integer linear programs. In the next section, we discuss this procedure and motivate the ``branch and price'' framework which uses column generation in addition to branch and bound.
+
+\section{Branch and Price}
+\label{sec:branch_and_price}
+
+\subsection{Airline Crew Scheduling}
+\label{ssec:crew_scheduling}
+
+\section{Maintenance routing and crew scheduling together}
+\label{sec:integrated}
 
 
+\section{Examples}
+\label{sec:examples}
+
+\subsection{Cutting-stock problem}
+\label{ssec:eg_cutting_stock}
 
 \subsection{Resource-constrained shortest path}
-\label{ssec:shortest_path}
+\label{ssec:eg_shortest_path}
 
 
 \section{Summary}
@@ -140,7 +219,7 @@ The main idea of column-generation is that most of variables are zero, i.e., the
 {
 \small
 \bibliography{../writeup}
-\bibliographystyle{apa}
+\bibliographystyle{alpha}
 }
 \end{document}
 

@@ -1,6 +1,6 @@
 import numpy as np
 from gurobipy import *
-import pandas as pd
+#import pandas as pd
 import pdb
 
 cap = [150, 125, 150, 125]
@@ -11,7 +11,8 @@ def read_data():
     global demand, fares, legs
     global od, classes
 
-    rmdata = np.array(pd.read_csv('denhub.csv'))
+    rmdata = np.loadtxt('denhub.csv')
+    #rmdata = np.array(pd.read_csv('denhub.csv'))
     #rmdata = np.array(pd.read_csv('denhublcc.csv'))
 
     for r in rmdata:
