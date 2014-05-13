@@ -1,5 +1,5 @@
 \documentclass[letterpaper, 10pt, twocolumn, reqno]{amsart}
-%\documentclass[letterpaper, 11pt, reqno]{amsart}
+%\documentclass[letterpaper, 10pt, reqno]{amsart}
 
 \usepackage[margin=1in]{geometry}
 \usepackage{mathpazo}
@@ -8,16 +8,16 @@
 \usepackage[marginal]{showlabels}
 \renewcommand{\showlabelfont}{\footnotesize\slshape\color{brown}}
 
-\linespread{1.05}
+\linespread{1.02}
 
-% \newcommand{\algsize}{\footnotesize}
-% \setlength{\floatsep}{0.0in}
-% \setlength{\textfloatsep}{0.0in}
-% \setlength{\intextsep}{0.0in}
-% \setlength{\belowcaptionskip}{0.05in}
-% \setlength{\abovecaptionskip}{0.1in}
-% \setlength{\abovedisplayskip}{0.05in}
-% \setlength{\belowdisplayskip}{0.05in}
+\newcommand{\algsize}{\footnotesize}
+\setlength{\floatsep}{0.0in}
+\setlength{\textfloatsep}{0.0in}
+\setlength{\intextsep}{0.0in}
+\setlength{\belowcaptionskip}{0.05in}
+\setlength{\abovecaptionskip}{0.05in}
+\setlength{\abovedisplayskip}{0.05in}
+\setlength{\belowdisplayskip}{0.05in}
 
 \graphicspath{{../fig/}}
 
@@ -28,19 +28,30 @@ Email: \href{pratik.ac@gmail.com}{pratik.ac@gmail.com}}
 \date{May 10, 2014}
 
 \begin{document}
-\begin{abstract}
-This project
-\end{abstract}
 \maketitle
+
+{
+\small
+\textbf{\emph{Abstract:}}
+This project discusses column generation techniques for problems in airline scheduling. It presents a branch and price based algorithm that uses column generation for solving the integrated crew pairing and maintenance routing problems. Along the way, we also discuss column generation for canonical problems such as the cutting stock problem and resource constrainted shortest path. We also present results of an implementation on randomized instances of these problems.
+}
+%\vspace*{-0.1in}
 
 \section{Introduction}
 \label{sec:intro}
 
-Typically in air transportation problems such as crew scheduling and fleet assignment, there are constraints on sequences of flights using a resource, e.g., an aircraft or a crew member. Although the number of constraints is huge, the problem can be made tractable by enumerating all possible sequences and assigning decision variables to each one of them. Column generation~\cite{desrosiers2005primer} then is a formalization of the simple idea that constraints on these sequences can be eliminated by only considering sequences that satisfy these constraints.
+
+Modern day problems in operations research such as multi-commodity flow problems, crew pairing and fleet assignment in airline operations, graph partiting for VLSI circuits, maximum satisfiability problems, etc. are enormously large. Most of them are in fact mixed integer programs (MIPs) with millions of variables and contraints that often require good linear programming (LP) relaxations. In such situations, we cannot even solve the LP relaxations in reasonable time, e.g., a naive formulation of resource constrained shortest path on a network of less than 100 nodes can easily take a few weeks of CPU time.
+
+A defining characteristic of most of the examples is however that only few variables take part in the optimal solution. In such cases, approaches that incrementally add new variables (columns) to the solution without considering them all at once stand a chance to perform efficiently. A number of different approaches such as branch and cut, branch and price etc. exist to tackle these issues. We will focus here on a technique known as column generation.
+
+For example, consider the crew pairing or fleet assignment problems in airline scheduling. They are typically formulated as constraints on sequences of flights using a resource, e.g, crew or aircrafts. Although the number of constraints is huge, the problem can be made tracktable if we automagically generate all feasible sequences of flights. In this context, column generation~\cite{desrosiers2005primer} then is a formalization of the simple idea that constraints on these sequences can be eliminated by only considering sequences that satisfy these constraints. Let us note that the fundamental idea of generating columns as needed while solving a linear program was first proposed by~\cite{dantzig1960decomposition} almost five decades ago. The cutting stock problem, which we will explore in detail in this paper was one of the first problems where column generation was demonstrated~\cite{gilmore1961linear,gilmore1963linear}.
 
 More formally, if the entire set of variables (columns) is unnecessary for the solution, the basis variables (cf.\@ simplex algorithm) can be generated as needed. This is akin to solving a \emph{restricted master problem} in conjunction with smaller sub-problems, also known as \emph{pricing problems}. This sub-problem, roughly speaking, finds the new basis variable by minimizing the reduced cost of each new variable using the dual variables in the restricted problem. We iterate to construct a new master problem by adding this new variable to the optimization. The efficacy of column generation (also known as \emph{branch-and-price}~\cite{barnhart1998branch} for integer programs) hinges on an efficient solution to the pricing problem. For example, in fleet assignment, maintenance routing and crew scheduling, the master problem is a \emph{set-cover problem} while the pricing problem is form of \emph{shortest path problem} which can be easily solved using dynamic programming. Various similar problems like constrained or multi-label shortest path problems are viable candidates for sub-problems in branch-and-price methods. After giving a brief overview of the algorithm, we will demonstrate an implementation of column generation techniques on canonical problems such as \emph{resource-constrained shortest path} and \emph{cutting-stock problem}. The key idea here is to express, e.g., the shortest path problem, not as a combination of individual arcs, but instead as a decision variable for whether a particular sub-path is included in the shortest path or not.
 
-Now consider the problem of \emph{aircraft scheduling}, which we define to be the combination of four sub-problems, viz., \emph{schedule design, fleet assignment, maintenance routing} and \emph{crew scheduling}. The sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling, even for a small airline. Practically, there are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we will focus on integrating aircraft maintenance and crew scheduling. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous different routings, which is crucial for a quick solution to the problem. We will present results of computational experiments using column generation on formulations that integrate the two problems. These formulations typically involve solving an integer linear program using branch-and-bound techniques, while the LP relaxation is solved using column generation; the pricing problem in this case will be a multi-label shortest path problem.
+Now consider the problem of aircraft scheduling, which we define to be the combination of four sub-problems, viz., schedule design, fleet assignment, maintenance routing and crew pairing. The sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling, even for a small airline. Practically however, there are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we will focus on integrating aircraft maintenance and crew pairing. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous different routings, which is crucial for a quick solution to the problem. We will present the integrated formulation, formulate column generation procedures for the problem and motivate a branch and price based algorithm for solving both maintenance routing and crew pairing together.
+
+The organization of this paper is as follows --- In Sec.~\ref{sec:column_generation}, we introduce two canonical problems, the cutting stock problem and the resource constrained shortest path problem and formulate column generation procedures for these. Sec.~\ref{sec:branch_and_price} discusses the branch and price framework and introduces the crew pairing and maintenance routing problems along with their solution procedures. Sec.~\ref{sec:integrated_model} describes the integrated problem of crew pairing and maintenance routing. We discuss a branch and price based algorithm for solving the integrated problem. Sec.~\ref{sec:examples} shows results of example implementations of column generation on a few simple problems while we conclude in Sec.~\ref{sec:summary}.
 
 \section{Column Generation}
 \label{sec:column_generation}
@@ -86,22 +97,22 @@ Since $B$ is invertible, we get $d_B = -B^{-1} A_j$. Note that for a small $\th$
 }
 which is known as the ``reduced cost'' of variable $x_j$. In other words, $\bar{c}_j$ is the change in cost incurred after a unit increase in the variable $x_j$. Of course, if this is positive for all variables in the problem, we know that we have found the solution.
 
-The simplex algorithm then starts with a basic feasible solution and iteravtively adds new variables to this set. While doing so, we would like to pick a $\th$ s.t. $x+\th d$ is a large step, i.e.,
-$$
-\th^* = \max \cbrac{\th \given x + \th d \in P}.
-$$
-It can be shown that $\th^*$ has a simple formula
-$$
-\th^* = \min_{i \in [m],\ d_{B_i} < 0}\ \rbrac{- \f{x_{B_i}}{d_{B_i}}}.
-$$
-Thus the iteration of the simplex algorithm are simple.
-\enum{
-    \item Start with $A_B$ and  current basic solution $x$, compute the reduced costs $\bar{c}_j = c_j - c_B' B^{-1} A_j$ for all non-basic variables $x_j$; if all
-    $\bar{c}_j \geq 0$, $x$ is optimal solution, else pick some $j$ with $\bar{c}_j < 0$.
-    \item Calculate $\th^* = \min_{i \in [m],\ d_{B_i} < 0}\ \rbrac{- \f{x_{B_i}}{d_{B_i}} }$. If there is no $i$ s.t. $d_{B_i} < 0$, the optimal cost is $-\infty$.
-    \item Let $l$ be the minimizing index in step 2., form a new basis by replacing $A_{B_l}$ with $A_j$ and set ${x_j \la \th^*}$ and $x_{B_i} \la x_{B_i} - \th^* d_{B_i}$.
- }
-The above algorithm can be made much more efficient by passing information about dual variables in consecutive steps.
+% The simplex algorithm then starts with a basic feasible solution and iteravtively adds new variables to this set. While doing so, we would like to pick a $\th$ s.t. $x+\th d$ is a large step, i.e.,
+% $$
+% \th^* = \max \cbrac{\th \given x + \th d \in P}.
+% $$
+% It can be shown that $\th^*$ has a simple formula
+% $$
+% \th^* = \min_{i \in [m],\ d_{B_i} < 0}\ \rbrac{- \f{x_{B_i}}{d_{B_i}}}.
+% $$
+% Thus the iteration of the simplex algorithm are simple.
+% \enum{
+%     \item Start with $A_B$ and  current basic solution $x$, compute the reduced costs $\bar{c}_j = c_j - c_B' B^{-1} A_j$ for all non-basic variables $x_j$; if all
+%     $\bar{c}_j \geq 0$, $x$ is optimal solution, else pick some $j$ with $\bar{c}_j < 0$.
+%     \item Calculate $\th^* = \min_{i \in [m],\ d_{B_i} < 0}\ \rbrac{- \f{x_{B_i}}{d_{B_i}} }$. If there is no $i$ s.t. $d_{B_i} < 0$, the optimal cost is $-\infty$.
+%     \item Let $l$ be the minimizing index in step 2., form a new basis by replacing $A_{B_l}$ with $A_j$ and set ${x_j \la \th^*}$ and $x_{B_i} \la x_{B_i} - \th^* d_{B_i}$.
+%  }
+% The above algorithm can be made much more efficient by passing information about dual variables in consecutive steps.
 
 \subsection{Dual problem}
 \label{ssec:dual}

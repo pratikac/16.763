@@ -8,9 +8,9 @@ Given packing patterns t_1, ...,t_k,...t_K where t_k is a vector of
 the numbers of items cut from a roll, the problem is reduced to the
 following LP:
     
-    minimize   sum_{k} x_k
-    subject to sum_{k} t_k(i) x_k >= q_i    for all i
-	       x_k >=0			    for all k.
+    minimize    sum_{k} x_k
+    subject to  sum_{k} t_k(i) x_k >= q_i    for all i
+	            x_k >=0			    for all k.
 
 We apply a column generation approch in
 which we generate cutting patterns by solving a
