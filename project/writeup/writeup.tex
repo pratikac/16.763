@@ -1,4 +1,5 @@
- \documentclass[letterpaper, 10pt, twocolumn, reqno]{amsart}
+\documentclass[letterpaper, 10pt, twocolumn, reqno]{amsart}
+%\documentclass[letterpaper, 11pt, reqno]{amsart}
 
 \usepackage{mathpazo}
 \include{./macros}
@@ -14,7 +15,7 @@
 \setlength{\abovedisplayskip}{0.05in}
 \setlength{\belowdisplayskip}{0.05in}
 
-\graphicspath{{./fig/}}
+\graphicspath{{../fig/}}
 
 \title{Column Generation Techniques in Air Transportation}
 \author{Pratik Chaudhari$^*$}
@@ -69,7 +70,10 @@ $$
 0 = A d = \sum_{i=1}^n A_i d_i = \sum_{i=1}^m A_{B_i} d_{B_i} + A_j = B d_B + A_j.
 $$
 Since $B$ is invertible, we get $d_B = -B^{-1} A_j$. Note that for a small $\th$, the feasiblity is still maintained as we move away from $x_B$ towards $x_B + \th d$. Also, the rate of cost change by this move is
-$$\bar{c}_j = c_j + c_B' d_B = c_j - c_B' B^{-1} A_j$$
+\beq{
+\bar{c}_j = c_j + c_B' d_B = c_j - c_B' B^{-1} A_j
+\label{eqn:reduced_cost}
+}
 which is known as the ``reduced cost'' of variable $x_j$. In other words, $\bar{c}_j$ is the change in cost incurred after a unit increase in the variable $x_j$. Of course, if this is positive for all variables in the problem, we know that we have found the solution.
 
 The simplex algorithm then starts with a basic feasible solution and iteravtively adds new variables to this set. While doing so, we would like to pick a $\th$ s.t. $x+\th d$ is a large step, i.e.,
@@ -175,9 +179,9 @@ which is still expensive to do since we need to enumerate all the possible patte
     & y_i \in \integers_+, i \in [m].
     \label{eqn:cutting_stock_sub_problem}
 }
-This problem is one of the ``easy'' NP-hard problems and can be solved in $\bigo(mW)$ time by dynamic programming. We thus have a strategy for solving the cutting-stock problem as follows.
+Knapsack is one of the ``easy'' NP-hard problems and can be solved in $\bigo(mW)$ time by dynamic programming. We thus have a strategy for solving the cutting-stock problem as follows.
 \enum{
-    \item Start with some initial columns of LPM, e.g., use a simple pattern to cut rolls into $\ceil{W/w_i}$ pieces of $w_i$, $A = [a_{ij}]$ in Prob.~\eqref{eqn:cutting_stock_pattern_ip} is thus diagonal.
+    \item Start with some initial columns of LPM, e.g., use a simple pattern to cut rolls into $\ceil{W/w_i}$ pieces of $w_i$. $A = [a_{ij}]$ in Prob.~\eqref{eqn:cutting_stock_pattern_ip} is thus diagonal.
     \item repeat until all reduced costs are non-negative
         \enum{
             \item Solve RLPM and let $\hat{\pi}$ be the dual variables
@@ -195,12 +199,184 @@ which means that the rounded-up solution is also a feasible solution for Prob.~\
 \section{Branch and Price}
 \label{sec:branch_and_price}
 
-\subsection{Airline Crew Scheduling}
-\label{ssec:crew_scheduling}
+\subsection{Branch and bound}
+\label{ssec:branch_and_bound}
 
-\section{Maintenance routing and crew scheduling together}
-\label{sec:integrated}
+Let us construct a simple procedure to solve general MIPs. We first construct the relaxation and solve it iteratively by branching off non-integral solutions to successive relaxations. The idea is that the solution of a relaxed LP, by definition, is a lower bound on the optimal cost of the MIP. Say $\hat{x}$ be the current cost. If the solution is integral, we are done. If not, we pick any non-integral variable in the solution, say $\hat{x}_i = 4.2$ and create two branches $\hat{x}_i \leq 4$ and $\hat{x}_i \geq 5$. The tree, as shown in Fig.~\ref{fig:bnb} is explored in a breadth-first manner until we get a fully integral solution. We can also prune certain branches by noting that if the solution of the relaxed LP at some node is less than the current minimum solution, we do not need to explore that branch downwards.
+\begin{figure}
+\centering
+\includegraphics[width=0.8 \columnwidth]{bnb}
+\caption{Branch and bound search tree}
+\label{fig:bnb}
+\end{figure}
 
+After creating a flight schedule, an airline must decide the capacity/ aircraft type for each flight, i.e., fleet assignment. It then allocates sequences of flights to a particular aircraft so as to maximize revenues and avoid aircrafys flying back to the hub every time; this problem is known as fleet assignment. The next step in this process is to ensure that every tail number, i.e., physical aircraft regularly visits a maintenance base station, this problem is called as maintenance routing. The last step in the aircraft scheduling process is to allocate crew to each flight, after incorporating various constraints, viz., flight hours, home bases etc., this problem is known as crew pairing.
+
+In this section, we focus on the last two problems. We first discuss each problem along with its mathematical formulation. Potentially, integrating some parts of the aircraft scheduling process can provide large benefits in terms of optimality and cost. Towards this end, we look at integrating maintenance routing and crew pairing together. We first describe a naive integration which couples all the constraints together and use this to motivate a more efficient solution which leverages a concept known as ``short connects''.
+
+\subsection{Crew pairing}
+\label{ssec:crew_pairing}
+
+The crew pairing problem is a classical set partitioning problem, we would like to minimize the cost of all crew pairings subjects to the constraint that every flight has a crew. Let
+\clist{
+    \item $P$ be the set of feasible pairings;
+    \item $F$ is the set of flights;
+    \item $c_p$ is the cost of pairing $p \in P$;
+    \item $\d_{fp} = \ind(\trm{flight}\ f \in\ \trm{pairing}\ p)$ is an indicator variable which is 1 if flight $f$ is included in pairing $p$;
+    \item $y_p$ is a binary variable which is 1 if pairing $p$ is included in the solution.
+}
+The crew pairing problem can now be written as
+\aeq{
+    (CP) \qquad
+    \min\ &\sum_{p \in P}\ c_p y_p \label{eqn:cp_cost}\\
+    \trm{s.t.}\ & \sum_{p \in P}\ \d_{fp} y_p = 1 \quad \forall\ f \in F \label{eqn:cp_cover}\\
+    & y_p \in \cbrac{0, 1} \quad \forall\ p \in P.
+     \label{eqn:cp}
+}
+
+Note that \eqref{eqn:cp_cost} minimizes the cost of pairings, while constraints in \eqref{eqn:cp_cover}, also known as cover constraints ensure that each flight gets a crew. This formulation implicitly accounts for ``infeasibility rules'', i.e., the set $P$ is the set of all feasible pairings.
+The crew pairing problem is relatively easy to
+model mathematically and interpret as an optimization problem. Still, the task of solving the model efﬁciently and producing a practical crew schedule can be very challenging. However, note that this problem has $\abs{P}$ variables, which is typically very large, it is all feasible pairings in a flight network and can be of the order of hundreds of millions. Billions of legal pairings can be generated for as few as 1000 flight legs. This is exacerbated even further by hub-n-spoke network topology of most big airlines. Refer to~\cite{} for state-of-the-art approaches to this problem.
+
+\subsection{Column generation for crew pairing}
+\label{ssec:col_gen_cp}
+write material from~\cite{gopalakrishnan2005airline}
+multi-label shortest path
+
+
+\subsection{Maintenance routing}
+\label{ssec:maintenance_routing}
+
+Similar to crew pairing, we use a ``string-based'' approach to formulating maintenance routing problems. Let us define a few additional variables,
+\ilist{
+    \item $R$ is the set of feasible route strings;
+    \item $c_r$ is the cost of each route string $r$;
+    \item $\a_{fr} = \ind \rbrac{\trm{route}\ r\ \trm{contains flight}\ f}$ is an indicator variable that is 1 if route $r$ contains flight $f$;
+    \item $d_r$ is 1 if route $r$ is contained in the solution;
+    \item $N$ is the set of nodes in a airline network, i.e., the set of origins and destinations of all flights in the network (indexed by time);
+    \item $g_n^-, g_n^+$ are called ground arc variables, if $n = (s,t)$ is a node at a physical location $s$ and time instant $t$, they represent the number of aircraft at $s$ immediately prior to and immediately after time $t$;
+    \item $R^T$ is the number of routes that span an arbitrary time $T$, also known as the countline;
+    \item $N^T$ is the number of nodes with corresponding ground arcs $g_n^+$ that span the countline;
+    \item $K$ is the total number of aircrafts available.
+}
+
+We are now ready to formulate the maintenance routing problem as follows:
+\aeq{
+    (MR) \qquad
+    \min\ &\sum_{r \in R} c_r d_r \label{eqn:mr_cost}\\
+    \trm{s.t.} \qquad \qquad&\\
+    \sum_{r} \a_{fr} d_r &= 1 \quad \forall\ f \in F \label{eqn:mr_coverage}\\
+    \sum_{r\ \trm{ends in}\ n} d_r + g_n^- &= \sum_{r\ \trm{starts at}\ n} d_r + g_n^+ \quad \forall n \in N \label{eqn:mr_flow}\\
+    \sum_{r \in R^T}\ d_r + \sum_{n \in N^T}\ g_N^+ &\leq K \label{eqn:mr_total_aircrafts}\\
+    d_r &\in \cbrac{0,1} \quad r \in R\\
+    g_n^-,\ g_n^+ &\geq 0 \quad n \in N.
+    \label{eqn:mr}
+}
+
+The cost function in ~\eqref{eqn:mr_cost} minimizes the cost of all routes in the solution while coverage constraints in \eqref{eqn:mr_coverage} ensure that
+all flights are covered. \eqref{eqn:mr_flow} are flow constraints to ensure that the number of aircrafts that are available at a node $n$, i.e., the sum of all aircrafts on the ground and the ones that just landed is equal to the
+number of aircrafts that remain on the ground and the ones that depart. Similarly, \eqref{eqn:mr_total_aircrafts} is a constraint that upper bounds
+the total number of aircraft to $K$. Note that the airline network is acyclic and the flow forms a circulation, i.e., we only need ensure \eqref{eqn:mr_total_aircrafts} at some point within the planning horizon, say point $T$. Again, the number of variables in this problem is exponentially large, because the number of routes is the set of all subsequences in the airline network.
+
+\section{Integrated model}
+\label{sec:integrated_model}
+Problems formulated in Sec.~\ref{ssec:crew_pairing} and Sec.~\ref{ssec:maintenance_routing}, if solved independently clearly lead to a sub-optimal solution, i.e., solving for crew pairing after solving the maintenance routing problem is sub-optimal because we are only considering a restricted set of route strings. Let us integrate the two problems, our objective to incorporate as many feasible pairings as possible using short-connects in the network, i.e., \pc{solutions when the crew and the aircraft stay together.}{}
+
+Define a few extra variables in this context:
+\ilist{
+    \item $C$ is the set of short connects;
+    \item $\n_{cr}$ is 1 if route $r$ contains a short connect $c$ and zero otherwise;
+    \item $\eta_{cp}$ is 1 if pairing $p$ contains a short connect $c$ and zero otherwise.
+}
+The basic integrated probem (BIM) is written as
+\aeq{
+    \min\ \sum_{p \in P}\ c_p y_p,& \\
+    \trm{s.t.} \qquad \qquad & \\
+    \sum_{p \in P}\ \d_{fp} y_p &= 1 \quad \forall\ f \in F, \\
+    \sum_{r} \a_{fr} d_r &= 1 \quad \forall\ f \in F, \\
+    \sum_{r\ \trm{ends in}\ n} d_r + g_n^- &= \sum_{r\ \trm{starts at}\ n} d_r + g_n^+ \quad \forall n \in N,\\
+    \sum_{r \in R^T}\ d_r + \sum_{n \in N^T}\ g_N^+ &\leq K,\\
+    \sum_{r \in R}\ \nu_{cr} d_r &\geq \sum_{p \in P}\ \eta_{cp} y_p \quad \forall\ c \in C, \label{eqn:naive_short_connect}\\
+    d_r &\in \cbrac{0,1} \quad r \in R,\\
+    g_n^-,\ g_n^+ &\geq 0 \quad n \in N,\\
+    y_p &\in \cbrac{0, 1} \quad \forall\ p \in P.
+}
+
+The only differece between BIM as compared to CP and MR is constraint ~\eqref{eqn:naive_short_connect} which says that we cannot pick a pairing containing a short connect if we do not pick a maintenance routing solution with that same short connect. A few things about this model are easy to see, (i) it has a large number of variables, the number of variables is $R + N+P$, which grows exponentially in the size of the network, (ii) \pc{the LP relaxation of this problem is a very poor lower bound.}{explain}
+
+However, we can draw a key observation from this formulation, if we can remove the maintenance routing constraints and only consider complete solutions to the MR problem, we can potentially include CP constraints for this \emph{particular} solution as follows:
+\aeq{
+    \min\ \sum_{p \in P}\ c_p y_p, & \\
+    \trm{s.t.} \qquad \qquad & \\
+    \sum_{p \in P}\ \d_{fp} y_p &= 1 \quad \forall\ f \in F, \label{eqn:ecp_convexity}\\
+    \sum_{s \in S}\ \b_{cs} x_s &\geq \sum_{p \in P}\ \eta_{cp} y_p \quad \forall\ c \in C, \label{eqn:ecp_short_connect}\\
+    \sum_{s \in S}\ x_s &= 1, \\
+    x_s &\in \cbrac{0, 1} \quad s \in S,\\
+    y_p &\in \cbrac{0, 1} \quad \forall\ p \in P.
+}
+The above model, which is known as the extended crew pairing model uses the set of feasible maintenance routing solutions and connects them to crew pairing constraints using short connects. In the above problem,
+\ilist{
+    \item $S$ is the set of feasible maintenence routing solutions;
+    \item $\b_{cs}$ is 1 if short connect $c$ is included in $s$ and zero otherwise;
+    \item $x_s$ is 1 if $s$ is a part of the solution and 0 otherwise.
+}
+However, the number of fesible maintenance routing solutions is huge, and hence we have only just re-written the BIM problem in a different form.
+
+\subsection{Unique Maximal short connects}
+\label{ssec:unique_maximal_sc}
+
+Column generation is a promising technique to solve ECP to optimality, however the number of maintenance feasible solutions is exponential in the number of flights and hence this approach is prohibitive. Also note that only key decisions in the MR problem affect the constraints in the CP problem, viz., we can look at maintenance routing, not as a string by itself, but as a short connect for which a corresponding maintenance routing solution can be found. This observation is crucial to significantly decrease the number of variables in the optimization. Roughly, instead of constructing the set $S$ with all feasible maintenance routing solutions, we will only consider \emph{maximal unique solutions} as shown below.
+
+\textbf{\emph{Uniqueness:}} Consider 6 flights, $a, b, \ldots, f$ and two maintenance routing (MR) solutions, viz., $a-b-c$ and $d-e-f$ or $a-b-f$ and $d-e-c$. If $a-b$ is the only short connect for these two solutions, we need to include only one of them in the set $S$, i.e., the constraints of the crew pairing problem depend only upon $a-b$ and not on the explicit routing string. This constraint is called uniqueness. Instead of a variable for every MR solution, we only need one column for every unique MR short connect. \cite{cohn2003improving} report that for an example airline's network, 8,700 distinct MR solutions could be collapsed into a single ECP column. Considering that the complexity of solving MIPs is exponentialy, this is a tremendous saving.
+
+\textbf{\emph{Maximal solutions:}} Similarly, if we have one MR solution with SCs as $a-b$, $c-d$ and $e-f$ and another one with SCs as $a-b$ and $c-d$, the first solution is a ``maximal'' with respect to the second. In other words, any CP solution that satisfies the second will also satisfy the first. Hence, we need only consider all the ``maximal'' SCs, i.e., remove the second MR column from our problem. Again,~\cite{cohn2003improving} report that in an example network, 25,000 distinct MR solutions collapsed to just 4 maximal SCs.
+
+We have therefore identified the kind of columns we would like to generate for ECP, they have to be unique, maximal feasible solutions of the MR problem. This is still not as useful, if we need to enumerate all the feasible MR solutions and prune the ones that do not satisfy this criteria. In the next section, we describe a procedure to efficiently construct new columns for ECP using some simple observations for the MR problem.
+
+\subsection{Column generation}
+\label{ssec:col_gen_ecp}
+
+We would like to generate a large number of MR solutions with a large number of SCs. In order to do so, we tweak the MR problem~\eqref{eqn:mr} with a new cost function
+$$
+\max \sum_{r \in R}\ -c_r d_r
+$$
+where $c_r$ now is the number of SCs in a route string $r$. A solution to this new problem results in unique, maximal set of SCs. It however generates only a few short connects, hence we solve this problem successively using constraint
+$$
+\sum_{c \in C\setminus C^1}\ \sum_{r \in R}\ \nu_{cr}\ d_r \geq 1
+$$
+where $C^1$ is the set of short connects returned after the first iteration above. This constraint says that we would like to find an MR solution with at least one new short connect than before. We can do this iteratively, until the problem becomes infeasible, or until we arrive at a large enough number of SCs for ECP. Note it can be solved efficiently, in fact, we can use the solution of the previous iteration to bootstrap the next iteration, because it is still feasible.
+
+\subsection{Solution procedure}
+\label{ssec:ecp_solution_procedure}
+
+It can be shown that in the ECP problem, boolean constraints on the MR variables can be relaxed~\cite{cohn2002composite}. Letting the CP variables be binary forces an integral solution for the MR variables.
+
+We use the branch and price mechanism to solve ECP. Due to the above fact, we do not need to branch on the MR variables. This procedure works as follows ---
+\enum{
+    \item Create initial crew pairings and maintenance solutions
+        \begin{enumerate}[(a)]
+            \item We can directly use ideas from Sec.~\ref{ssec:col_gen_ecp} to generate a set of MR solutions. In fact, if we solve the MR problem~\eqref{eqn:mr}, it genrates the solution --- without adding any more MR solutions to this, we would obtain the usual sequential solution to the MR - CP airline scheduling problem.
+            \item For generating initial solutions to the CP problem
+        \end{enumerate}
+    \item Solve current LP and compute dual variables
+    \item Generate a new CP solution using reduced costs
+        \begin{enumerate}[(a)]
+            \item We use ideas from Sec.~\ref{ssec:col_gen_cp} to do this. However, in the ECP model, we also have to incorporate the dual variables for the short connects, i.e., the reduced cost of a pairing becomes
+            $$
+            c_p - \sum_{f \in F}\ \d_{fp}\ \pi_f + \sum_{c \in C}\ \eta_{cp}\ \g_c
+            $$
+            where $\pi_f$ is the dual variable for flight $f$ for the cover constraint~\eqref{eqn:cp_cover} and $\g_c$ is the dual variable for short connect $c$ in constraint~\eqref{eqn:ecp_short_connect}.
+        \end{enumerate}
+    \item Generate a new maintenance routing solution
+        \begin{enumerate}[(a)]
+            \item We again leverage column generation techniques here, note that the reduced cost of a maintenance column is
+            $$
+            0 - \sum_{c \in C} \b_{sc}\ \g_c - \s
+            $$
+            if $\s$ is the dual variable of the convexity constraint~\eqref{eqn:ecp_convexity} --- the contribution of MR columns to the cost function is zero.
+        \end{enumerate}
+}
+%Note that the LP relaxation of this problem is much better than BIM.
 
 \section{Examples}
 \label{sec:examples}
