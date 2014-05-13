@@ -1,19 +1,23 @@
 \documentclass[letterpaper, 10pt, twocolumn, reqno]{amsart}
 %\documentclass[letterpaper, 11pt, reqno]{amsart}
 
+\usepackage[margin=1in]{geometry}
 \usepackage{mathpazo}
 \include{./macros}
-\usepackage[margin=1in]{geometry}
+
+\usepackage[marginal]{showlabels}
+\renewcommand{\showlabelfont}{\footnotesize\slshape\color{brown}}
+
 \linespread{1.05}
 
-\newcommand{\algsize}{\footnotesize}
-\setlength{\floatsep}{0.0in}
-\setlength{\textfloatsep}{0.0in}
-\setlength{\intextsep}{0.0in}
-\setlength{\belowcaptionskip}{0.05in}
-\setlength{\abovecaptionskip}{0.1in}
-\setlength{\abovedisplayskip}{0.05in}
-\setlength{\belowdisplayskip}{0.05in}
+% \newcommand{\algsize}{\footnotesize}
+% \setlength{\floatsep}{0.0in}
+% \setlength{\textfloatsep}{0.0in}
+% \setlength{\intextsep}{0.0in}
+% \setlength{\belowcaptionskip}{0.05in}
+% \setlength{\abovecaptionskip}{0.1in}
+% \setlength{\abovedisplayskip}{0.05in}
+% \setlength{\belowdisplayskip}{0.05in}
 
 \graphicspath{{../fig/}}
 
@@ -32,6 +36,12 @@ This project
 \section{Introduction}
 \label{sec:intro}
 
+Typically in air transportation problems such as crew scheduling and fleet assignment, there are constraints on sequences of flights using a resource, e.g., an aircraft or a crew member. Although the number of constraints is huge, the problem can be made tractable by enumerating all possible sequences and assigning decision variables to each one of them. Column generation~\cite{desrosiers2005primer} then is a formalization of the simple idea that constraints on these sequences can be eliminated by only considering sequences that satisfy these constraints.
+
+More formally, if the entire set of variables (columns) is unnecessary for the solution, the basis variables (cf.\@ simplex algorithm) can be generated as needed. This is akin to solving a \emph{restricted master problem} in conjunction with smaller sub-problems, also known as \emph{pricing problems}. This sub-problem, roughly speaking, finds the new basis variable by minimizing the reduced cost of each new variable using the dual variables in the restricted problem. We iterate to construct a new master problem by adding this new variable to the optimization. The efficacy of column generation (also known as \emph{branch-and-price}~\cite{barnhart1998branch} for integer programs) hinges on an efficient solution to the pricing problem. For example, in fleet assignment, maintenance routing and crew scheduling, the master problem is a \emph{set-cover problem} while the pricing problem is form of \emph{shortest path problem} which can be easily solved using dynamic programming. Various similar problems like constrained or multi-label shortest path problems are viable candidates for sub-problems in branch-and-price methods. After giving a brief overview of the algorithm, we will demonstrate an implementation of column generation techniques on canonical problems such as \emph{resource-constrained shortest path} and \emph{cutting-stock problem}. The key idea here is to express, e.g., the shortest path problem, not as a combination of individual arcs, but instead as a decision variable for whether a particular sub-path is included in the shortest path or not.
+
+Now consider the problem of \emph{aircraft scheduling}, which we define to be the combination of four sub-problems, viz., \emph{schedule design, fleet assignment, maintenance routing} and \emph{crew scheduling}. The sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling, even for a small airline. Practically, there are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we will focus on integrating aircraft maintenance and crew scheduling. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous different routings, which is crucial for a quick solution to the problem. We will present results of computational experiments using column generation on formulations that integrate the two problems. These formulations typically involve solving an integer linear program using branch-and-bound techniques, while the LP relaxation is solved using column generation; the pricing problem in this case will be a multi-label shortest path problem.
+
 \section{Column Generation}
 \label{sec:column_generation}
 
@@ -42,9 +52,9 @@ This section introduces column generation for solving large linear programs usin
 
 The material here is presented from~\cite{bertsimas1997introduction}. We will assume that the linear program is given to us in the standard form as follows:
 \aeq{
-    \trm{minimize}\ &c' x \notag \\
-    \trm{subject to}\ & Ax = b \notag \\
-    & x \geq 0
+    \trm{minimize}\ &c' x, \notag \\
+    \trm{subject to}\ & Ax = b, \notag \\
+    & x \geq 0.
     \label{eqn:lp_standard_form}
 }
 where $c \in \reals^n$ is the cost-vector, $A = [a_{ij}] \in \reals^{m \times n}$ is the constraint matrix with $m$ constraints and $b \in \reals^m$. The columns of $A$, which we denote by $A_1, \ldots, A_n$ are also known as the resource vectors while $b$ is the target vector; motivated from
@@ -98,7 +108,7 @@ The above algorithm can be made much more efficient by passing information about
 
 We can write the Prob.~\eqref{eqn:lp_standard_form} as
 \aeqs{
-    \trm{minimize}\ & c'x + p'(b - Ax) \\
+    \trm{minimize}\ & c'x + p'(b - Ax), \\
     \trm{subject to}\ & x \geq 0.
 }
 where $p \in \reals^m$ is the Lagrange multiplier. This new problem has fewer constraints and hence by definition,
@@ -108,7 +118,7 @@ g(p) = \min_{x \geq 0} \sqbrac{c'x + p'(b-Ax)} &\leq c'x^* + p'(b-Ax^*) \\
 }
 Here $x^*$ is the optimal solution of Prob.~\eqref{eqn:lp_standard_form} (also known as the ``primal'') and the last equality is true because $p$ at optimality is such that all constraints are satisfied. The new problem,
 \aeqs{
-    \trm{maximize}\ &g(p) \\
+    \trm{maximize}\ &g(p), \\
     \trm{subject to}\ &\trm{no constraints}
 }
 thus searches for the best lower bound of the primal. Note that
@@ -120,7 +130,7 @@ p' b \quad & \trm{if}\ c' \geq p'A\\
 }
 Thus, the ``dual'' problem of Prob.~\eqref{eqn:lp_standard_form} is
 \aeq{
-    \trm{maximize}\ \quad& p' b \notag\\
+    \trm{maximize}\ \quad& p' b, \notag\\
     \trm{subject to}\ \quad& p'A \leq c'.
 }
 Dual problems are important for many reasons, viz., (i) the dual of a dual is the primal, (ii) dual solution is a lower bound for the primal's cost and finally, (iii) if the primal has a solution, so does the dual, and moreover, their costs are the same.
@@ -132,9 +142,9 @@ Consider a paper mill with a number of rolls of paper of fixed width available t
 
 Let the width of each roll be $W$ and $m$ customers want $n_i$ rolls each of width $w_i$. If $K$ is the number of rolls available, let $y_k = 1$ if a roll $k \in [K]$ is cut and zero otherwise. Let $x_i^k$ be the number of times item $i$ is cut on roll $k$. We then have the following formulation.
 \aeq{
-    (P_1) \quad \min &\sum_{k \in [K]} y_k \notag \\
-    \trm{s.t.}\ & \sum_{k \in [K]} x_i^k \geq n_i \quad \forall\ i \in [m] \qquad \trm{(demand)}\notag\\
-    & \sum_{i=1}^n w_i x_i^k \leq W y_k \quad \forall k \in [K]\quad \trm{(width of roll)} \notag\\
+    (P_1) \quad \min &\sum_{k \in [K]} y_k, \notag \\
+    \trm{s.t.}\ & \sum_{k \in [K]} x_i^k \geq n_i \quad \forall\ i \in [m], \qquad \trm{(demand)}\notag\\
+    & \sum_{i=1}^n w_i x_i^k \leq W y_k \quad \forall k \in [K],\quad \trm{(width of roll)} \notag\\
     &x_i^k \in \integers_+, y_k \in \cbrac{0,1}.
     \label{eqn:cutting_stock_ip}
 }
@@ -146,8 +156,8 @@ which is a naive bound and says that the number of rolls needed is simply the su
 
 We call the set of distinct cuts of a roll as a pattern, i.e., if $W=100$, and we make 4 cuts of $w_1 = 25$ each, we generate a patterm $\{ w_1, w_1, w_1, w_1 \}$. If on the other hand, we make one cut of $w_1 =25$ and two of $w_2 = 35$, we generate a pattern $\{ w_1, w_2, w_2 \}$. Let $x_j$ be the number of times a pattern $j$ is used. Let $a_{ij}$ be the number of times item $i$ is cut in pattern $j$. Consider then, the new problem --
 \aeq{
-    (P_2) \quad \min &\sum_{j=1}^n x_j \notag \\
-    \trm{s.t.}\ & \sum_{j=1}^n a_{ij} x_j \geq n_i \quad \forall\ i \in [m] \qquad \trm{(demand)}\notag\\
+    (P_2) \quad \min &\sum_{j=1}^n x_j, \notag \\
+    \trm{s.t.}\ & \sum_{j=1}^n a_{ij} x_j \geq n_i \quad \forall\ i \in [m], \qquad \trm{(demand)} \notag\\
     &x_j \in \integers_+, j \in [n].
     \label{eqn:cutting_stock_pattern_ip}
 }
@@ -159,8 +169,8 @@ We call the new problem, the ``Linear Programming Master (LPM)''; the solution t
 
 The main idea of column-generation is that most of variables are zero, i.e., they do not form the basis (since the basis has only as many variables as constraints). Hence, we only need a small subset of all the variables to form the solution. How do we leverage this observation? Let us start with a subset $\cP \subset [n]$ of columns of LPM and call it the ``Restricted Linear Programming Master (RLPM)''and now look at its dual problem.
 \aeq{
-    \trm{maximize}\ &\sum_{i=1}^m n_i \pi_i \notag \\
-    \trm{subject to}\ & \sum_{i=1}^m \a_{ij} \pi_i \leq 1, \quad j \in \cP \notag\\
+    \trm{maximize}\ &\sum_{i=1}^m n_i \pi_i, \notag \\
+    \trm{subject to}\ & \sum_{i=1}^m \a_{ij} \pi_i \leq 1, \quad j \in \cP, \notag\\
     &\pi \geq 0, \quad i \in [m].
     \label{eqn:cutting_stock_dual_rlpm}
 }
@@ -174,8 +184,8 @@ $$
 $$
 which is still expensive to do since we need to enumerate all the possible patterns. However, it is another optimization problem, and a very famous at that. This problem, which we will call as the ``sub-problem'' (or the ``pricing problem'') is a Knapsack problem, i.e.,
 \aeq{
-    \max \quad &\sum_{i=1}^m \hat{\pi}_i y_i \notag \\
-    \trm{s.t.}\ \quad & \sum_{i=1}^m w_i y_i \leq W, \notag\\
+    \max \quad &\sum_{i=1}^m \hat{\pi}_i y_i, \notag \\
+    \trm{s.t.}\ \quad & \sum_{i=1}^m w_i\ y_i \leq W, \notag\\
     & y_i \in \integers_+, i \in [m].
     \label{eqn:cutting_stock_sub_problem}
 }
@@ -202,13 +212,47 @@ which means that the rounded-up solution is also a feasible solution for Prob.~\
 \subsection{Branch and bound}
 \label{ssec:branch_and_bound}
 
-Let us construct a simple procedure to solve general MIPs. We first construct the relaxation and solve it iteratively by branching off non-integral solutions to successive relaxations. The idea is that the solution of a relaxed LP, by definition, is a lower bound on the optimal cost of the MIP. Say $\hat{x}$ be the current cost. If the solution is integral, we are done. If not, we pick any non-integral variable in the solution, say $\hat{x}_i = 4.2$ and create two branches $\hat{x}_i \leq 4$ and $\hat{x}_i \geq 5$. The tree, as shown in Fig.~\ref{fig:bnb} is explored in a breadth-first manner until we get a fully integral solution. We can also prune certain branches by noting that if the solution of the relaxed LP at some node is less than the current minimum solution, we do not need to explore that branch downwards.
-\begin{figure}
-\centering
-\includegraphics[width=0.8 \columnwidth]{bnb}
-\caption{Branch and bound search tree}
-\label{fig:bnb}
-\end{figure}
+Let us construct a simple procedure to solve general MIPs. We first construct
+the relaxation and solve it iteratively by branching off non-integral solutions to successive relaxations. The idea is that the solution of a
+relaxed LP, by definition, is a lower bound on the optimal cost of the MIP. Say $\hat{x}$ be the current cost. If the solution is integral, we are done. If not, we pick any non-integral variable in the solution, say $\hat{x}_i = 4.2$ and create two branches $\hat{x}_i \leq 4$ and $\hat{x}_i \geq 5$. The tree
+is explored in a breadth-first manner until we get a fully integral solution. We can also prune certain branches by noting that if the solution of the
+relaxed LP at some node is less than the current minimum solution, we do not need to explore that branch downwards. We use a priority queue to sort the nodes of the branch-and-bound algorithm by their LP relaxation lower bounds and pop from this queue at every iteration. Typically, one might also construct an upper bound to guide the search. The final search procedure is as shown in Alg.~\ref{alg:bnb}.
+
+\IncMargin{0.04in}
+\begin{algorithm}[!h]
+\footnotesize
+$J_l$: LP relaxation of original problem\;
+$J_u$: upper bound with integer solution (possibly heuristic)\;
+$J^* \la J_u$: incumbent best solution\;
+\vspace{0.05in}
+\While{nodes in tree}
+{
+    \enum{
+    \item solve current LP, compute duals
+    \item update lower bound $J_l$
+    \item If solution $J_c$ is fractional,
+        \begin{enumerate}[(a)]
+        \item if $J_c \geq J_u$, discard node
+        \item if $J_c < J_l$, create two new nodes (branch)
+        \end{enumerate}
+    \item If integral solution,
+        \begin{enumerate}[(a)]
+        \item if $J_c < J_u$, update upper bound
+        \item discard node
+        \end{enumerate}
+    }
+}
+\caption{Branch and bound}
+\label{alg:bnb}
+\end{algorithm}
+\DecMargin{0.04in}
+
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.8 \columnwidth]{bnb}
+% \caption{Branch and bound search tree}
+% \label{fig:bnb}
+% \end{figure}
 
 After creating a flight schedule, an airline must decide the capacity/ aircraft type for each flight, i.e., fleet assignment. It then allocates sequences of flights to a particular aircraft so as to maximize revenues and avoid aircrafys flying back to the hub every time; this problem is known as fleet assignment. The next step in this process is to ensure that every tail number, i.e., physical aircraft regularly visits a maintenance base station, this problem is called as maintenance routing. The last step in the aircraft scheduling process is to allocate crew to each flight, after incorporating various constraints, viz., flight hours, home bases etc., this problem is known as crew pairing.
 
@@ -228,8 +272,8 @@ The crew pairing problem is a classical set partitioning problem, we would like 
 The crew pairing problem can now be written as
 \aeq{
     (CP) \qquad
-    \min\ &\sum_{p \in P}\ c_p y_p \label{eqn:cp_cost}\\
-    \trm{s.t.}\ & \sum_{p \in P}\ \d_{fp} y_p = 1 \quad \forall\ f \in F \label{eqn:cp_cover}\\
+    \min\ &\sum_{p \in P}\ c_p\ y_p, \label{eqn:cp_cost}\\
+    \trm{s.t.}\ & \sum_{p \in P}\ \d_{fp} y_p = 1 \quad \forall\ f \in F, \label{eqn:cp_cover}\\
     & y_p \in \cbrac{0, 1} \quad \forall\ p \in P.
      \label{eqn:cp}
 }
@@ -263,12 +307,12 @@ Similar to crew pairing, we use a ``string-based'' approach to formulating maint
 We are now ready to formulate the maintenance routing problem as follows:
 \aeq{
     (MR) \qquad
-    \min\ &\sum_{r \in R} c_r d_r \label{eqn:mr_cost}\\
+    \min\ &\sum_{r \in R} c_r\ d_r, \label{eqn:mr_cost}\\
     \trm{s.t.} \qquad \qquad&\\
-    \sum_{r} \a_{fr} d_r &= 1 \quad \forall\ f \in F \label{eqn:mr_coverage}\\
-    \sum_{r\ \trm{ends in}\ n} d_r + g_n^- &= \sum_{r\ \trm{starts at}\ n} d_r + g_n^+ \quad \forall n \in N \label{eqn:mr_flow}\\
-    \sum_{r \in R^T}\ d_r + \sum_{n \in N^T}\ g_N^+ &\leq K \label{eqn:mr_total_aircrafts}\\
-    d_r &\in \cbrac{0,1} \quad r \in R\\
+    \sum_{r} \a_{fr} d_r &= 1 \quad \forall\ f \in F, \label{eqn:mr_coverage}\\
+    \sum_{r\ \trm{ends in}\ n} d_r + g_n^- &= \sum_{r\ \trm{starts at}\ n} d_r + g_n^+ \quad \forall n \in N, \label{eqn:mr_flow}\\
+    \sum_{r \in R^T}\ d_r + \sum_{n \in N^T}\ g_N^+ &\leq K, \label{eqn:mr_total_aircrafts}\\
+    d_r &\in \cbrac{0,1} \quad r \in R,\\
     g_n^-,\ g_n^+ &\geq 0 \quad n \in N.
     \label{eqn:mr}
 }
@@ -322,7 +366,7 @@ The above model, which is known as the extended crew pairing model uses the set 
 }
 However, the number of fesible maintenance routing solutions is huge, and hence we have only just re-written the BIM problem in a different form.
 
-\subsection{Unique Maximal short connects}
+\subsection{Unique maximal short connects}
 \label{ssec:unique_maximal_sc}
 
 Column generation is a promising technique to solve ECP to optimality, however the number of maintenance feasible solutions is exponential in the number of flights and hence this approach is prohibitive. Also note that only key decisions in the MR problem affect the constraints in the CP problem, viz., we can look at maintenance routing, not as a string by itself, but as a short connect for which a corresponding maintenance routing solution can be found. This observation is crucial to significantly decrease the number of variables in the optimization. Roughly, instead of constructing the set $S$ with all feasible maintenance routing solutions, we will only consider \emph{maximal unique solutions} as shown below.
@@ -373,8 +417,21 @@ We use the branch and price mechanism to solve ECP. Due to the above fact, we do
             $$
             0 - \sum_{c \in C} \b_{sc}\ \g_c - \s
             $$
-            if $\s$ is the dual variable of the convexity constraint~\eqref{eqn:ecp_convexity} --- the contribution of MR columns to the cost function is zero.
+            if $\s$ is the dual variable of the convexity constraint~\eqref{eqn:ecp_convexity} --- the contribution of MR columns to the cost function is zero. The corresponding pricing problem (cf. Sec.~\ref{eqn:cutting_stock_sub_problem}) is then
+            $$
+            \max \sum_{c \in C} \b_{sc}\ \g_c; \quad s \in S.
+            $$
+            If this solution is less than $\s$, we have a new column that we can add to the optmization. How do we solve this new problem? Note that
+            $$
+            -\sum_{c \in C} \b_{sc}\ \g_c = \sum_{r \in R(s)} \rbrac{-\sum_{c \in C}\ \nu_{cr}\ \g_c}
+            $$
+            looks very similar to the cost function~\eqref{eqn:mr_cost} with the coefficient $c_r = -\sum_{c \in C}\ \nu_{cr}\ \g_c$!
+
+            We can also use a neat trick here, if the SCs in some MR solution $s$ are a subset of the SCs in some other solution $s'$, we would like to include $s'$ instead of $s$ as the new column. This can be accomplished by adding a small constant $\D$ to all $\g_c$.
         \end{enumerate}
+
+    \item Solve using the branch and bound algorithm in Sec.~\ref{ssec:branch_and_bound}.
+
 }
 %Note that the LP relaxation of this problem is much better than BIM.
 
@@ -398,9 +455,3 @@ We use the branch and price mechanism to solve ECP. Due to the above fact, we do
 \bibliographystyle{alpha}
 }
 \end{document}
-
-Typically in air transportation problems such as crew scheduling and fleet assignment, there are constraints on sequences of flights using a resource, e.g., an aircraft or a crew member. Although the number of constraints is huge, the problem can be made tractable by enumerating all possible sequences and assigning decision variables to each one of them. Column generation~\cite{desrosiers2005primer} then is a formalization of the simple idea that constraints on these sequences can be eliminated by only considering sequences that satisfy these constraints.
-
-More formally, if the entire set of variables (columns) is unnecessary for the solution, the basis variables (cf.\@ simplex algorithm) can be generated as needed. This is akin to solving a \emph{restricted master problem} in conjunction with smaller sub-problems, also known as \emph{pricing problems}. This sub-problem, roughly speaking, finds the new basis variable by minimizing the reduced cost of each new variable using the dual variables in the restricted problem. We iterate to construct a new master problem by adding this new variable to the optimization. The efficacy of column generation (also known as \emph{branch-and-price}~\cite{barnhart1998branch} for integer programs) hinges on an efficient solution to the pricing problem. For example, in fleet assignment, maintenance routing and crew scheduling, the master problem is a \emph{set-cover problem} while the pricing problem is form of \emph{shortest path problem} which can be easily solved using dynamic programming. Various similar problems like constrained or multi-label shortest path problems are viable candidates for sub-problems in branch-and-price methods. After giving a brief overview of the algorithm, we will demonstrate an implementation of column generation techniques on canonical problems such as \emph{resource-constrained shortest path} and \emph{cutting-stock problem}. The key idea here is to express, e.g., the shortest path problem, not as a combination of individual arcs, but instead as a decision variable for whether a particular sub-path is included in the shortest path or not.
-
-Now consider the problem of \emph{aircraft scheduling}, which we define to be the combination of four sub-problems, viz., \emph{schedule design, fleet assignment, maintenance routing} and \emph{crew scheduling}. The sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling, even for a small airline. Practically, there are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we will focus on integrating aircraft maintenance and crew scheduling. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous different routings, which is crucial for a quick solution to the problem. We will present results of computational experiments using column generation on formulations that integrate the two problems. These formulations typically involve solving an integer linear program using branch-and-bound techniques, while the LP relaxation is solved using column generation; the pricing problem in this case will be a multi-label shortest path problem.

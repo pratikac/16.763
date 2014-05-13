@@ -1,4 +1,11 @@
 \usepackage{amssymb, mathtools, bm, enumerate, url, setspace}
+\usepackage[boxruled, vlined, linesnumbered]{algorithm2e}
+\SetAlFnt{\small}
+\SetAlCapFnt{\small}
+\SetAlCapNameFnt{\small}
+\usepackage{algorithmic}
+\algsetup{linenosize=\tiny}
+
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage[pdftex, xetex]{graphicx}
 \usepackage[font={small}]{caption}
@@ -15,6 +22,7 @@ colorlinks=true, linkcolor=blue, citecolor=ForestGreen, filecolor=magenta, urlco
 \usepackage{url}
 \usepackage[sort]{natbib}
 
+\setlength{\marginparwidth}{0.5in}
 \newcommand{\pc}[2]{{\color{blue} #1}\marginpar{\tiny\noindent{\raggedright{\color{ForestGreen}[PC]}\color{brown}{ #2} \par}}}
 \newcommand{\todo}[1]{{\color{gray}#1}\marginpar{\tiny\noindent{\raggedright{\color{ForestGreen}[MILD TODO]}}}}
 
