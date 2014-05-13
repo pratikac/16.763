@@ -21,8 +21,9 @@ knapsack sub-problem.
 from gurobipy import *
 import numpy as np
 import pdb
+import timer
 
-LOG = True
+LOG = False
 EPS = 1.e-6
 
 
@@ -66,7 +67,6 @@ def solve_column_generation(s,B):
 
     master.update()
     master.Params.OutputFlag = 0
-    pdb.set_trace()
 
     while 1:
         iter += 1
@@ -157,7 +157,8 @@ def solve_MIP(s,B):
     n = len(s)
     U = len(get_bound(s,B))
     model = Model('cutstock')
-    setParam('TimeLimit', 10)
+    setParam('TimeLimit', 25)
+    model.Params.OutputFlag = 0
     
     # 1. add vars
     #   x[i,j] = 1 if i^th demand falls into j^th bin
@@ -187,8 +188,8 @@ def solve_MIP(s,B):
             model.addConstr(x[i,j], '<', y[j], name='c3[%d,%d]'%(i,j))
 
     model.optimize()
-
     bins = [[] for i in range(U)]
+    '''
     for (i,j) in x:
         if x[i,j].X > EPS:
             bins[j].append(s[i])
@@ -197,6 +198,7 @@ def solve_MIP(s,B):
     for b in bins:
         b.sort()
     bins.sort()
+    '''
     return bins
 
 def create_example(eg=1, random=False, n=100):
@@ -232,9 +234,23 @@ def average_speedup_expt():
     '''
     run on instances of large and larger n, take average of runtimes
     '''
-    N = xrange
+    N = range(1,10)
+    t_colgen = []
+    t_mip = []
+    
+    t_solve_colgen = timer.timeit(solve_column_generation)
+    t_solve_mip = timer.timeit(solve_MIP)
+    for n in N:
+        s, B = create_example(random=True, n=10*n)
+        t_colgen.append(t_solve_colgen(s,B))
+        t_mip.append(t_solve_mip(s,B))
+        print n
+
+    print t_colgen, t_mip
 
 if __name__ == "__main__":
+    
+    '''
     s,B = create_example(random=True, n=200)
     #s,B = create_example(eg=1)
 
@@ -249,3 +265,6 @@ if __name__ == "__main__":
         bins = solve_MIP(s,B)
         print len(bins), "bins:"
         print bins
+    '''
+
+    average_speedup_expt()
