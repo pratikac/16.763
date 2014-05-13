@@ -1,10 +1,11 @@
 from gurobipy import *
 import numpy as np
+import pdb
 
 eps = 1e-5
 
 def branch(prob):
-    intvars = [iv for iv in prob.getVars() if iv.vType() != GRB.CONTINUOUS]
+    intvars = [iv for iv in prob.getVars() if iv.vType != GRB.CONTINUOUS]
     fractional = []
     for v in intvars:
         sol= v.x
@@ -20,21 +21,24 @@ def branch(prob):
     
 def bound(prob):
     p1 = prob.relax()
-    lower_bound = p1.optimize()
-    if p1.status != GRB.status.OPTIMAL:
+    p1.optimize()
+    lower_bound = p1.objVal
+    if not p1.status == GRB.status.OPTIMAL:
         lower_bound = float('inf')
 
     p2 = prob.relax()
-    intvars = [iv for iv in p2.getVars() if iv.vType() != GRB.CONTINUOUS]
+    intvars = [iv for iv in p2.getVars() if iv.vType != GRB.CONTINUOUS]
     for v in intvars:
         sol= v.x
         t1= int(sol+0.5)
         v.lb = t1
         v.ub = t1
-    upper_bound = p2.optimize()
-    if p2.status != GRB.status.OPTIMAL:
+    p2.optimize()
+    upper_bound = p2.objVal
+    if not p2.status == GRB.status.OPTIMAL:
         upper_bound = float('inf')
-    
+   
+    #pdb.set_trace()
     return {'gap': upper_bound - lower_bound,
             'ub': upper_bound,
             'lb': lower_bound,

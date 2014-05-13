@@ -2,6 +2,7 @@ from gurobipy import *
 import numpy as np
 from cutstock import *
 import pdb
+import branch_and_bound as bnb
 
 s,B = create_example(random=False, eg=2)
 
@@ -38,4 +39,5 @@ for i in xrange(n):
         model.addConstr(x[i,j], '<', y[j], name='c3[%d,%d]'%(i,j))
 
 model.update()
-pdb.set_trace()
+
+print bnb.branch_and_bound(model)
