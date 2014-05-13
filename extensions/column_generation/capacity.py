@@ -2,7 +2,7 @@ import networkx as nx
 from gurobipy import *
 import numpy as np
 import random, itertools
-
+import pylab as plt
 
 def create_road_network(N=10, mu=1.):
     g = nx.erdos_renyi_graph(N, 0.3)
@@ -19,3 +19,7 @@ def create_road_network(N=10, mu=1.):
         roadnet.add_edge(u,v,label,length=length,capacity=capacity)
 
     return roadnet
+
+roadnet = create_road_network()
+nx.draw(roadnet)
+plt.draw()
