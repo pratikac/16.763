@@ -228,6 +228,12 @@ def create_example(eg=1, random=False, n=100):
             s[i] = np.random.randint(1,99)
         return s,B
 
+def average_speedup_expt():
+    '''
+    run on instances of large and larger n, take average of runtimes
+    '''
+    N = xrange
+
 if __name__ == "__main__":
     s,B = create_example(random=True, n=200)
     #s,B = create_example(eg=1)

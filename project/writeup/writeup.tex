@@ -41,7 +41,11 @@ This project discusses column generation techniques for problems in airline sche
 \label{sec:intro}
 
 
-Modern day problems in operations research such as multi-commodity flow problems, crew pairing and fleet assignment in airline operations, graph partiting for VLSI circuits, maximum satisfiability problems, etc. are enormously large. Most of them are in fact mixed integer programs (MIPs) with millions of variables and contraints that often require good linear programming (LP) relaxations. In such situations, we cannot even solve the LP relaxations in reasonable time, e.g., a naive formulation of resource constrained shortest path on a network of less than 100 nodes can easily take a few weeks of CPU time.
+Modern day problems in operations research such as multi-commodity flow problems~\cite{barnhart2000using}, crew pairing~\cite{anbil1998column} and fleet assignment in
+airline operations~\cite{barnhart1998flight}, even optimization problems from other fields such as graph partiting for VLSI circuits \cite{vanderbeck1994thesis}, maximum satisfiability problems~\cite{hansen1998mixed}, graph coloring~\cite{mehrotra1996column} etc. are enormously large.
+Most of them are in fact mixed integer programs (MIPs) with millions of variables and contraints that often require good linear programming (LP)
+relaxations. In such situations, we cannot even solve the LP relaxations in reasonable time, e.g., a naive formulation of resource constrained shortest
+path on a network of less than 100 nodes can easily take a few weeks of CPU time.
 
 A defining characteristic of most of the examples is however that only few variables take part in the optimal solution. In such cases, approaches that incrementally add new variables (columns) to the solution without considering them all at once stand a chance to perform efficiently. A number of different approaches such as branch and cut, branch and price etc. exist to tackle these issues. We will focus here on a technique known as column generation.
 
@@ -217,6 +221,53 @@ $$
 $$
 which means that the rounded-up solution is also a feasible solution for Prob.~\eqref{eqn:cutting_stock_pattern_ip}. But of course, this rounded-up solution is not optimal, to obtain the optimal solution to the original IP, we have to take recourse to ``branch and bound'', which is a technique for solving general integer linear programs. In the next section, we discuss this procedure and motivate the ``branch and price'' framework which uses column generation in addition to branch and bound.
 
+\subsection{Resource constrained shortest path (RCSP)}
+\label{ssec:rcsp}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7 \columnwidth]{rcsp}
+\caption{Time constrained shortest path problem}
+\label{fig:rcsp}
+\end{figure}
+
+Let us briefly discuss another classic application of column generation. Consider the network shown in Fig.~\ref{fig:rcsp}, let $c_{ij}$ be the cost of going from node $i$ to node $j$ in $t_{ij}$ time units. In the RCSP problem, we would like to find the shortest path from say 1 to 6, with total duration of, say less than 14. It can be written as the following optimization problem.
+\aeq{
+    \min\ \sum_{(i,j) \in E}\ &c_{ij}\ x_{ij},\\
+    \trm{s.t.}\ \sum_{(1,j) \in E} x_{1j} &= 1, \\
+    \sum_{j:(i,j) \in E} x_{ij} &= \sum_{j:(j,i) \in E}\ x_{ji} \quad \forall i, \\
+    \sum_{i:(i,6) \in E}\ x_{i6} &= 1,\\
+    \sum_{(i,j) \in E}\ t_{ij}\ x_{ij} &\leq 14, \label{eqn:rcsp_resource}\\
+    x_{ij} &\in \cbrac{0,1} \quad \forall\ (i,j) \in E.
+    \label{eqn:rcsp}
+}
+This problem looks very much like a shortest path problem (which are easy to solve using dynamic programming), except the constraint~\eqref{eqn:rcsp_resource}. In fact, no polynomial time solution to the above problem is likely, it is NP-hard. We can however employ column generation here by leveraging a key result in network flow theory.
+
+Define variables $x_{pij}$ to be 1 if $(i,j) \in E$ exists on a path $p \in P$ of the network. We can express the original variables as
+\aeqs{
+x_{ij} &= \sum_{p \in P}\ x_{pij}\ \l_p \quad (i,j) \in E,\\
+\sum_{p \in P}\ \l_p &= 1,\\
+\l_p &\geq 0 \quad \forall p \in P.
+}
+The Restricted Master Problem can now be written as follows
+\aeq{
+    \min\ \sum_{p \in P}\ &\sqbrac{\sum_{(i,j) \in E}\ c_{ij}\ x_{pij}}\ \l_p\\
+    \trm{s.t.}\ \sum_{p \in P}\ &\sqbrac{\sum_{(i,j) \in E}\ t_{ij}\ x_{pij}}\ \l_p \leq 14, \label{eqn:rcsp_rlpm_resource}\\
+    \sum_{p \in P}\ \l_p &= 1,\\
+    \sum_{p \in P}\ x_{pij}\ \l_p &= x_{ij} \quad (i,j) \in E, \label{eqn:rcsp_rlpm_flow}\\
+    \l_p &\geq 0 \quad \forall p \in P,\\
+    x_{ij} &\in \cbrac{0,1} \quad \forall\ (i,j) \in E.
+    \label{eqn:rcsp_rlpm}
+}
+where $P$ is a subset of the set of all paths that start at 1 and end at 6.
+Roughly, $\l_p$ is the cost of path $p$ and its coefficient in \eqref{eqn:rcsp_rlpm_resource} is its time duration. As always, we start with the LP
+relaxation of the above RLPM. If we remove the intergality constraints on $x_{ij}$, we can also get rid off constraints in \eqref{eqn:rcsp_rlpm_flow}. Let $\hat{\pi}$ be the duals of this problem. To find a new path $p' \notin P$, we formulate the pricing problem that minimizes the reduced cost as follows
+\aeq{
+    \min \sum_{(i,j) \in E}\ c_{ij}\ x_{pij} - \hat{\pi}_1 \rbrac{\sum_{(i,j)\in E} t_{ij}\ x_{pij}} - \hat{\pi}_0 \\
+    \min \sum_{(i,j)\in E} \rbrac{c_{ij} - \hat{\pi}_1\ t_{ij}}\ x_{ij} - \pi_0
+}
+for a path that again joins 1-6 in the network. This is simply the usual shortest path problem that can be solved in $\bigo(n \log n)$ time! This is however an example where we can ``round up'' the solution, we have to embed a branch and bound strategy in the algorithm in addition to column generation. In Sec.~\ref{sec:examples} we provide results of computational experiments on both the cutting stock problem and the resource constrained shortest path problem.
+
 \section{Branch and Price}
 \label{sec:branch_and_price}
 
@@ -227,36 +278,37 @@ Let us construct a simple procedure to solve general MIPs. We first construct
 the relaxation and solve it iteratively by branching off non-integral solutions to successive relaxations. The idea is that the solution of a
 relaxed LP, by definition, is a lower bound on the optimal cost of the MIP. Say $\hat{x}$ be the current cost. If the solution is integral, we are done. If not, we pick any non-integral variable in the solution, say $\hat{x}_i = 4.2$ and create two branches $\hat{x}_i \leq 4$ and $\hat{x}_i \geq 5$. The tree
 is explored in a breadth-first manner until we get a fully integral solution. We can also prune certain branches by noting that if the solution of the
-relaxed LP at some node is less than the current minimum solution, we do not need to explore that branch downwards. We use a priority queue to sort the nodes of the branch-and-bound algorithm by their LP relaxation lower bounds and pop from this queue at every iteration. Typically, one might also construct an upper bound to guide the search. The final search procedure is as shown in Alg.~\ref{alg:bnb}.
+relaxed LP at some node is less than the current minimum solution, we do not need to explore that branch downwards. We use a priority queue to sort the nodes of the branch-and-bound algorithm by their LP relaxation lower bounds and pop from this queue at every iteration. Typically, one might also construct an upper bound to guide the search.
 
-\IncMargin{0.04in}
-\begin{algorithm}[!h]
-\footnotesize
-$J_l$: LP relaxation of original problem\;
-$J_u$: upper bound with integer solution (possibly heuristic)\;
-$J^* \la J_u$: incumbent best solution\;
-\vspace{0.05in}
-\While{nodes in tree}
-{
-    \enum{
-    \item solve current LP, compute duals
-    \item update lower bound $J_l$
-    \item If solution $J_c$ is fractional,
-        \begin{enumerate}[(a)]
-        \item if $J_c \geq J_u$, discard node
-        \item if $J_c < J_l$, create two new nodes (branch)
-        \end{enumerate}
-    \item If integral solution,
-        \begin{enumerate}[(a)]
-        \item if $J_c < J_u$, update upper bound
-        \item discard node
-        \end{enumerate}
-    }
-}
-\caption{Branch and bound}
-\label{alg:bnb}
-\end{algorithm}
-\DecMargin{0.04in}
+% The final search procedure is as shown in Alg.~\ref{alg:bnb}.
+% \IncMargin{0.04in}
+% \begin{algorithm}[!h]
+% \footnotesize
+% $J_l$: LP relaxation of original problem\;
+% $J_u$: upper bound with integer solution (possibly heuristic)\;
+% $J^* \la J_u$: incumbent best solution\;
+% \vspace{0.05in}
+% \While{nodes in tree}
+% {
+%     \enum{
+%     \item solve current LP, compute duals
+%     \item update lower bound $J_l$
+%     \item If solution $J_c$ is fractional,
+%         \begin{enumerate}[(a)]
+%         \item if $J_c \geq J_u$, discard node
+%         \item if $J_c < J_l$, create two new nodes (branch)
+%         \end{enumerate}
+%     \item If integral solution,
+%         \begin{enumerate}[(a)]
+%         \item if $J_c < J_u$, update upper bound
+%         \item discard node
+%         \end{enumerate}
+%     }
+% }
+% \caption{Branch and bound}
+% \label{alg:bnb}
+% \end{algorithm}
+% \DecMargin{0.04in}
 
 % \begin{figure}
 % \centering
@@ -452,6 +504,8 @@ We use the branch and price mechanism to solve ECP. Due to the above fact, we do
 \subsection{Cutting-stock problem}
 \label{ssec:eg_cutting_stock}
 
+
+
 \subsection{Resource-constrained shortest path}
 \label{ssec:eg_shortest_path}
 
@@ -461,7 +515,7 @@ We use the branch and price mechanism to solve ECP. Due to the above fact, we do
 
 
 {
-\small
+\footnotesize
 \bibliography{../writeup}
 \bibliographystyle{alpha}
 }
