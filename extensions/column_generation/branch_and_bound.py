@@ -50,18 +50,17 @@ def solve(prob, i, depth):
         return None
 
     branch_var = branch(prob)
+    branch_var_name = branch_var.varName
     t1 = branch_var.x
 
     prob_left = prob.copy()
-    branch_var = branch(prob_left)
-    branch_var.ub = int(t1)
-    prob_left.update()
+    bvar_left = filter(lambda x: x.varName == branch_var_name, prob_left.getVars())
+    bvar_left.ub = int(t1)
     left_branch = bound(prob_left)
     
     prob_right = prob.copy()
-    branch_var = branch(prob_right)
-    branch_var.lb = int(t1) + 1 
-    prob_right.update()
+    bvar_right = filter(lambda x: x.varName == branch_var_name, prob_left.getVars())
+    bvar_right.lb = int(t1) + 1 
     right_branch = bound(prob_right)
   
     picked_left = 0
