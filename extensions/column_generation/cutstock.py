@@ -20,6 +20,7 @@ knapsack sub-problem.
 
 from gurobipy import *
 import numpy as np
+import pdb
 
 LOG = True
 EPS = 1.e-6
@@ -65,6 +66,7 @@ def solve_column_generation(s,B):
 
     master.update()
     master.Params.OutputFlag = 0
+    pdb.set_trace()
 
     while 1:
         iter += 1
