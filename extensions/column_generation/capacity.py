@@ -81,7 +81,7 @@ def find_heuristic_P(G, start, end, T):
 
 def solve_colgen(G, start, end, T):
     P = find_heuristic_P(G, start, end, T)
-    pdb.set_trace()
+    #pdb.set_trace()
 
     def print_P(P):
         pi = 0
@@ -220,6 +220,6 @@ G = create_eg_roadnet()
 #find_heuristic_P(G, 0, len(G)-1, 14)
 #print find_all_paths(G,0,len(G)-1)
 
-print solve_mip(G, 0, 5, 14)
+#print solve_mip(G, 0, 5, 14)
 solve_colgen(G, 0, 5, 13)
 test_roadnet(G)

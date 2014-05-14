@@ -158,7 +158,7 @@ def solve_MIP(s,B):
     n = len(s)
     U = len(get_bound(s,B))
     model = Model('cutstock')
-    setParam('TimeLimit', 25)
+    setParam('TimeLimit', 10)
     model.Params.OutputFlag = 0
     
     # 1. add vars
@@ -252,11 +252,11 @@ def average_speedup_expt():
 if __name__ == "__main__":
     
     
-    s,B = create_example(random=True, n=100)
-    #s,B = create_example(eg=1)
+    #s,B = create_example(random=True, n=100)
+    s,B = create_example(eg=1)
 
-    
-    if 0:
+    ''' 
+    if 1:
         print "\n\n\nColumn generation:"
         cost, rolls = solve_column_generation(s,B)
         print cost
@@ -268,5 +268,10 @@ if __name__ == "__main__":
         print cost
         #print len(bins), "bins:"
         #print bins
+    '''
 
     #average_speedup_expt()
+    c_colgen, rolls = solve_column_generation(s,B)
+    #c_mip, rolls = solve_MIP(s,B)
+    #print c_colgen, c_mip
+    print c_colgen, rolls
