@@ -66,7 +66,7 @@ def get_hashable_elist(elist):
 def find_heuristic_P(G, start, end, T, always_select_edges=[], dont_select_edges=[]):
     all_paths = list(nx.all_simple_paths(G, source=start, target=end))
     #print all_paths
-    max_paths_to_add = 5
+    max_paths_to_add = 3
     set_dont_select_edges = set(dont_select_edges)
     set_always_select_edges = set(always_select_edges)
     pruned_paths = []
@@ -324,7 +324,7 @@ def solve_bnb(G, start, end, T, depth=10):
     master,lamda,x = create_master(G, P, T)
     res = bound(master, G, start, end, T)
     if res['gap'] < eps:
-        return res['obj'], res['solution']
+        return res['obj'], res['sol']
     return solve_colgen_bnb(master, G, P, start, end, T, 0, depth)
 
 def solve_mip(G, start, end, T):
@@ -377,8 +377,8 @@ G = create_eg_roadnet()
 
 #print solve_mip(G, 0, 5, 14)
 
-#P = find_heuristic_P(G, 0, 5, 14)
-#solve_colgen(G, P, 0, 5, 14)
+P = find_heuristic_P(G, 0, 5, 14)
+solve_colgen(G, P, 0, 5, 14)
 
-solve_bnb(G, 0, 5, 14)
+#solve_bnb(G, 0, 5, 14)
 #draw_roadnet(G)
