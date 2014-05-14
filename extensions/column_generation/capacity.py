@@ -1,10 +1,11 @@
 import networkx as nx
-#from gurobipy import *
+from gurobipy import *
 import numpy as np
 import random, itertools
 import pylab as plt
 import pdb
 
+eps = 1e-5
 
 def create_road_network(N=10, mu=20.):
     g = nx.erdos_renyi_graph(N, 0.51)
@@ -98,10 +99,11 @@ def solve_mip(G, start, end, T):
 
     # (b)
     for i in xrange(len(G)):
-        lhs = [x[u,j] for u,j in G.edges(data=False) if i ==u]
-        rhs = [x[j,u] for j,u in G.edges(data=False) if u ==i]
-        coeffs = [1 for e in lhs]+[-1 for e in rhs]
-        model.addConstr(LinExpr(coeffs, lhs+rhs), '=', 0, name='c2[%d]'%i)
+        if (not i == start) and (not i == end):
+            lhs = [x[u,j] for u,j in G.edges(data=False) if i ==u]
+            rhs = [x[j,u] for j,u in G.edges(data=False) if u ==i]
+            coeffs = [1 for e in lhs]+[-1 for e in rhs]
+            model.addConstr(LinExpr(coeffs, lhs+rhs), '=', 0, name='c2[%d]'%i)
 
     # (c)
     end_edges = [x[u,v] for u,v in G.edges(data=False) if v==end]
@@ -111,20 +113,22 @@ def solve_mip(G, start, end, T):
     # (d)
     terms = [d['length']*x[i,j] for i,j,d in G.edges(data=True)]
     model.addConstr(quicksum(terms), '<=', T, name='c4')
-
+    
+    model.update()
+    model.write('cap.lp')
     model.optimize()
 
     path = []
     for i,j in x:
-        if x[i,j].X > EPS:
+        if x[i,j].X > eps:
             path.append((i,j))
     return path
 
 G = create_eg_roadnet()
 #G = create_road_network()
-find_heuristic_P(G, 0, len(G)-1, 14)
-test_roadnet(G)
+#find_heuristic_P(G, 0, len(G)-1, 14)
 #print find_all_paths(G,0,len(G)-1)
 
-#solve_mip(G)
+print solve_mip(G, 0, 5, 14)
+test_roadnet(G)
 
