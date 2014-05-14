@@ -114,8 +114,8 @@ def solve_mip(G, start, end, T):
     terms = [d['length']*x[i,j] for i,j,d in G.edges(data=True)]
     model.addConstr(quicksum(terms), '<=', T, name='c4')
     
-    model.update()
-    model.write('cap.lp')
+    #model.update()
+    #model.write('cap.lp')
     model.optimize()
 
     path = []

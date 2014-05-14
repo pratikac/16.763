@@ -24,7 +24,7 @@ import pdb
 import timer
 
 LOG = False
-EPS = 1.e-6
+eps = 1.e-6
 
 
 def solve_column_generation(s,B):
@@ -88,7 +88,7 @@ def solve_column_generation(s,B):
         knapsack.optimize()
         if LOG:
             print "objective of knapsack problem:", knapsack.ObjVal
-        if knapsack.ObjVal < 1+EPS: # break if no more columns
+        if knapsack.ObjVal < 1+eps: # break if no more columns
             break
 
         pat = [int(y[i].X+0.5) for i in y]	# new pattern
@@ -118,18 +118,20 @@ def solve_column_generation(s,B):
         print "final solution (integer master problem):  objective =", master.ObjVal
         print "patterns:"
         for k in x:
-            if x[k].X > EPS:
+            if x[k].X > eps:
                 print "pattern", k,
                 print "\tsizes:", 
                 print [w[i] for i in range(m) if t[k][i]>0 for j in range(t[k][i]) ],
                 print "--> %d rolls" % int(x[k].X+.5)
-
+    '''
     rolls = []
     for k in x:
         for j in range(int(x[k].X + .5)):
             rolls.append(sorted([w[i] for i in range(m) if t[k][i]>0 for j in range(t[k][i])]))
     rolls.sort()
     return rolls
+    '''
+    return x
 
 
 def get_bound(s,B):
@@ -191,7 +193,7 @@ def solve_MIP(s,B):
     bins = [[] for i in range(U)]
     '''
     for (i,j) in x:
-        if x[i,j].X > EPS:
+        if x[i,j].X > eps:
             bins[j].append(s[i])
     for i in xrange(bins.count([])):
         bins.remove([])
