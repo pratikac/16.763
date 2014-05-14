@@ -123,15 +123,14 @@ def solve_column_generation(s,B):
                 print "\tsizes:", 
                 print [w[i] for i in range(m) if t[k][i]>0 for j in range(t[k][i]) ],
                 print "--> %d rolls" % int(x[k].X+.5)
-    '''
+    
     rolls = []
     for k in x:
         for j in range(int(x[k].X + .5)):
             rolls.append(sorted([w[i] for i in range(m) if t[k][i]>0 for j in range(t[k][i])]))
     rolls.sort()
-    return rolls
-    '''
-    return x
+    
+    return master.objVal, rolls
 
 
 def get_bound(s,B):
@@ -191,7 +190,7 @@ def solve_MIP(s,B):
 
     model.optimize()
     bins = [[] for i in range(U)]
-    '''
+    
     for (i,j) in x:
         if x[i,j].X > eps:
             bins[j].append(s[i])
@@ -200,8 +199,8 @@ def solve_MIP(s,B):
     for b in bins:
         b.sort()
     bins.sort()
-    '''
-    return bins
+    
+    return model.objVal, bins
 
 def create_example(eg=1, random=False, n=100):
     '''
@@ -225,7 +224,7 @@ def create_example(eg=1, random=False, n=100):
                 s.append(w[j])
         return s,B
     else:
-        np.random.seed(3)
+        #np.random.seed(3)
         B = 100
         s = [0]*n 
         for i in xrange(n):
@@ -252,21 +251,22 @@ def average_speedup_expt():
 
 if __name__ == "__main__":
     
-    '''
-    s,B = create_example(random=True, n=200)
+    
+    s,B = create_example(random=True, n=100)
     #s,B = create_example(eg=1)
 
     
-    if 1:
+    if 0:
         print "\n\n\nColumn generation:"
-        rolls = solve_column_generation(s,B)
-        print len(rolls), "rolls:"
-        print rolls
+        cost, rolls = solve_column_generation(s,B)
+        print cost
+        #print len(rolls), "rolls:"
+        #print rolls
     else:
         print "\n\n\nMIP:"
-        bins = solve_MIP(s,B)
-        print len(bins), "bins:"
-        print bins
-    '''
+        cost, bins = solve_MIP(s,B)
+        print cost
+        #print len(bins), "bins:"
+        #print bins
 
-    average_speedup_expt()
+    #average_speedup_expt()
