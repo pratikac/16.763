@@ -23,7 +23,7 @@ def create_road_network(N=10, mu=20.):
 
     return roadnet
 
-def test_roadnet(roadnet):
+def draw_roadnet(roadnet):
     pos = nx.spring_layout(roadnet)
 
     edge_labels = dict([ ((u,v,), (d['capacity'], d['length']))
@@ -63,11 +63,12 @@ def get_edge_list_from_path(G, p):
 def get_hashable_elist(elist):
     return [(u,v) for u,v,d in elist]
 
-def find_heuristic_P(G, start, end, T, dont_select_edges=[]):
+def find_heuristic_P(G, start, end, T, always_select_edges=[], dont_select_edges=[]):
     all_paths = list(nx.all_simple_paths(G, source=start, target=end))
-    max_paths_to_add = 4
-    set_dont_select_edges = set(get_hashable_elist(dont_select_edges))
     #print all_paths
+    max_paths_to_add = 5
+    set_dont_select_edges = set(get_hashable_elist(dont_select_edges))
+    set_always_select_edges = set(get_hashable_elist(always_select_edges))
     pruned_paths = []
     num_paths = 0
     for p in all_paths:
@@ -75,6 +76,8 @@ def find_heuristic_P(G, start, end, T, dont_select_edges=[]):
         hashable_elist = get_hashable_elist(elist)
         # do not select these edges
         if len(set(hashable_elist).intersection(set_dont_select_edges)) > 0:
+            continue
+        if not set_always_select_edges.issubset(set(hashable_elist)):
             continue
 
         #print elist
@@ -135,7 +138,7 @@ def create_master(G, P, T):
     
     x = {}
     for u,v,d in G.edges(data=True):
-        x[u,v] = master.addVar(obj=0, vtype='B', name='x[%d,%d]'%(u,v))
+        x[u,v] = master.addVar(obj=0, lb=0, ub=1, vtype='B', name='x[%d,%d]'%(u,v))
     master.update()
 
     for u,v,d in G.edges(data=True):
@@ -175,7 +178,7 @@ def solve_colgen(G, start, end, T):
     master, lamda, x = create_master(G, P, T)
     master.optimize()
     print master.objVal
-    print_P(P)
+    #print_P(P)
 
     edges = []
     for u,v,d in G.edges(data=True):
@@ -184,16 +187,106 @@ def solve_colgen(G, start, end, T):
     print edges
 
 
-def branch_colgen(master):
+def prune_set_P(P, xij, remove, keep):
+    assert remove != keep
+
+    # ugly hack to get variable from string representation
+    u = int(xij.split(',')[0].split('[')[-1])
+    v = int(xij.split(',')[1].split(']')[0])
+    edge = (u,v)
+
+    newP = []
+    for p in P:
+        helist = get_hashable_elist(p)
+        if remove:
+            if not edge in helist:
+                newP.append(p)
+        if keep:
+            if edge in helist:
+                newP.append(p)
+    return newP
+
+def branch(master):
     pass
 
-def bound_colgen(G, start, end, T):
-    pass
+def bound(model, G, P, T):
+   pass 
+    
+def _solve_colgen(model, G, P, T, i, depth):
+    '''
+    solves the node and calls solve on its children
+    '''
+    if i > depth:
+        return None
 
-def solve_colgen_bnb(G, start, end, T):
+    bvar = branch_colgen(model)
+    bvar_name = bvar.varName
+    t1 = bvar.x
+
+    model_left = model.copy()
+    bvar_left = filter(lambda z: z.varname == bvar_name, model_left.getVars())
+    bvar_left.ub = int(t1)
+    #P_left = prune_set_P(P, bvar_name, remove=1)
+    branch_left = bound(model_left, G, T)
+
+    model_right = model.copy()
+    bvar_right = filter(lambda z: z.varname == bvar_name, model_right.getVars())
+    bvar_right.lb = int(t1)+1
+    #P_right = prune_set_P(P, bvar_name, keep=1)
+    branch_right = bound(model_right, G, T)
+
+    # decide solution
+    picked_left = 0
+    if branch_left['obj'] < branch_right['obj']:
+        solution = branch_left
+    else:
+        solution = branch_right
+
+    # update bounds
+    solution['lb'] = min(branch_left['lb'], branch_right['lb'])
+    solution['ub'] = min(branch_left['ub'], branch_right['ub'])
+    solution['gap'] = solution['ub'] - solution['lb']
+
+    if solution['gap'] < eps:
+        return solution
+    
+    def take_branch(is_left = 1):
+        if is_left:
+            _solve_colgen(model_left, G, P, T, i+1, depth)
+        else:
+            _solve_colgen(model_right, G, P, T, i+1, depth)
+
+    # take branches
+    if branch_left['lb'] < branch_right['ub']:
+        subtree_left = take_branch(is_left=1)
+        subtree_right = take_branch(is_left = 0)
+    else:
+        subtree_right = take_branch(is_left = 0)
+        subtree_left = take_branch(is_left=1)
+
+    # propagate bounds
+    if subtree_left and subtree_right:
+        if subtree_left['obj'] < subtree_right['obj']:
+            return subtree_left
+        return subtree_right
+    if not subtree_left and subtree_right:
+        return subtree_right
+    if subtree_left and not subtree_right:
+        return subtree_left
+    
+    # if reach depth, return solution
+    return solution
+
+
+def solve_colgen_bnb(G, start, end, T, depth=10):
+    
     P = find_heuristic_P(G, start, end,T)
+    master,lamda,x = create_master(G, P, T)
+    res = bound(master, G, P, T)
+    if res['gap'] < eps:
+        return res['obj'], res['solution']
+    return _solve_colgen(master, G, P, T, 0, depth)
 
-    master, lamda, x = create_master(G, P, T)
     #while 1:
     #    relax_master,_ = create_master
 
@@ -250,4 +343,4 @@ G = create_eg_roadnet()
 
 #print solve_mip(G, 0, 5, 14)
 solve_colgen(G, 0, 5, 13)
-test_roadnet(G)
+#draw_roadnet(G)
