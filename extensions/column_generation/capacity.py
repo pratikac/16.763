@@ -79,11 +79,9 @@ def solve_colgen(G, start, end, T):
     pass
 
 def solve_mip(G, start, end, T):
-    '''
     model = Model('G_mip')
     setParam('TimeLimit', 50)
     model.Params.OutputFlag = 1
-    '''
 
     # 1. add vars
     x = {}
