@@ -25,7 +25,7 @@ def create_road_network(N=10, mu=20.):
 def test_roadnet(roadnet):
     pos = nx.spring_layout(roadnet)
 
-    edge_labels = dict([ ((u,v,), (d['length'], d['capacity']))
+    edge_labels = dict([ ((u,v,), (d['capacity'], d['length']))
                         for u,v,d in roadnet.edges(data=True)])
 
     plt.figure(1)
@@ -53,6 +53,7 @@ def create_eg_roadnet():
     return G
 
 def find_heuristic_P(G, start, end, T):
+    prob_pick = 0.3
     def get_edge_list_from_path(p):
         elist = []
         for vi in xrange(len(p)-1):
@@ -61,15 +62,16 @@ def find_heuristic_P(G, start, end, T):
         return elist
 
     all_paths = list(nx.all_simple_paths(G, source=start, target=end))
-    print all_paths
+    #print all_paths
     pruned_paths = []
     for p in all_paths:
         elist = get_edge_list_from_path(p)
-        print elist
+        #print elist
         total_length = sum([d['length'] for u,v,d in elist])
         if total_length <= T:
-            pruned_paths.append(p)
-    
+            if np.random.random_sample() < prob_pick:
+                pruned_paths.append(p)
+     
     print 'all_paths:', all_paths
     print 'pruned_paths:', pruned_paths
 
