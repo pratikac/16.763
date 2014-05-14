@@ -67,8 +67,8 @@ def find_heuristic_P(G, start, end, T, always_select_edges=[], dont_select_edges
     all_paths = list(nx.all_simple_paths(G, source=start, target=end))
     #print all_paths
     max_paths_to_add = 5
-    set_dont_select_edges = set(get_hashable_elist(dont_select_edges))
-    set_always_select_edges = set(get_hashable_elist(always_select_edges))
+    set_dont_select_edges = set(dont_select_edges)
+    set_always_select_edges = set(always_select_edges)
     pruned_paths = []
     num_paths = 0
     for p in all_paths:
@@ -150,9 +150,8 @@ def create_master(G, P, T):
     
     return master, lamda,x
 
-def solve_colgen(G, start, end, T):
-    P = find_heuristic_P(G, start, end, T)
-
+def solve_colgen(G, P, start, end, T):
+    relax_master,_ = create_relax_master(P, T)
     while 1:
         relax_master,_ = create_relax_master(P, T)
         relax_master.optimize()
@@ -173,27 +172,32 @@ def solve_colgen(G, start, end, T):
             P.append(new_path_elist)
             print 'added new path: ', new_path
 
+    
     #pdb.set_trace()
     # use the integrality constraints now
     master, lamda, x = create_master(G, P, T)
     master.optimize()
-    print master.objVal
     #print_P(P)
-
+    '''
     edges = []
     for u,v,d in G.edges(data=True):
         if x[u,v].x > eps:
             edges.append((u,v))
     print edges
+    '''
+    return relax_master.objVal, master.objVal, relax_master.getVars()
 
+
+def get_edge_tuple_from_name(xij):
+    # ugly hack to get variable from string representation
+    u = int(xij.split(',')[0].split('[')[-1])
+    v = int(xij.split(',')[1].split(']')[0])
+    return (u,v)
 
 def prune_set_P(P, xij, remove, keep):
     assert remove != keep
 
-    # ugly hack to get variable from string representation
-    u = int(xij.split(',')[0].split('[')[-1])
-    v = int(xij.split(',')[1].split(']')[0])
-    edge = (u,v)
+    edge = get_edge_tuple_from_name(xij)
 
     newP = []
     for p in P:
@@ -206,20 +210,56 @@ def prune_set_P(P, xij, remove, keep):
                 newP.append(p)
     return newP
 
-def branch(master):
-    pass
-
-def bound(model, G, P, T):
-   pass 
+def branch(model):
+    xvars = [v for v in model.getVars() if v.varName[0] == 'x']
+    fractional = []
+    for v in xvars:
+        sol= v.x
+        t1= abs(sol - int(sol+0.5))
+        if t1 > eps:
+            fractional.append((v,t1))
     
-def _solve_colgen(model, G, P, T, i, depth):
+    if len(fractional) == 0:
+        return None
+    
+    fractional.sort(key=lambda z: z[1])
+    return fractional[-1][0]
+ 
+
+def bound(model, G, start, end, T):
+    xvars = [v for v in model.getVars() if v.varName[0] == 'x']
+    dont_select_edges = []
+    always_select_edges = []
+    for xv in xvars:
+        if int(xv.lb) == int(xv.ub):
+            if int(xv.ub) == 0:
+                dont_select_edges.append(get_edge_tuple_from_name(xv.varName))
+            if int(xv.lb) == 1:
+                always_select_edges.append(get_edge_tuple_from_name(xv.varName))
+    
+    P = find_heuristic_P(G, start, end, T, 
+            always_select_edges=always_select_edges, dont_select_edges=dont_select_edges)
+    lower_bound, upper_bound, relax_soln = solve_colgen(G,P,start,end,T)
+    return {'gap': upper_bound - lower_bound,
+            'ub': upper_bound,
+            'lb': lower_bound,
+            'obj': upper_bound,
+            'sol': relax_soln}
+
+
+def solve_colgen_bnb(model, G, P, start, end, T, i, depth):
     '''
     solves the node and calls solve on its children
     '''
     if i > depth:
         return None
+    p1 = model.relax()
+    p1.optimize()
+    #pdb.set_trace()
 
-    bvar = branch_colgen(model)
+    bvar = branch(p1)
+    if bvar == None:
+        return None
     bvar_name = bvar.varName
     t1 = bvar.x
 
@@ -227,13 +267,13 @@ def _solve_colgen(model, G, P, T, i, depth):
     bvar_left = filter(lambda z: z.varname == bvar_name, model_left.getVars())
     bvar_left.ub = int(t1)
     #P_left = prune_set_P(P, bvar_name, remove=1)
-    branch_left = bound(model_left, G, T)
+    branch_left = bound(model_left, G, start, end, T)
 
     model_right = model.copy()
     bvar_right = filter(lambda z: z.varname == bvar_name, model_right.getVars())
     bvar_right.lb = int(t1)+1
     #P_right = prune_set_P(P, bvar_name, keep=1)
-    branch_right = bound(model_right, G, T)
+    branch_right = bound(model_right, G, start, end, T)
 
     # decide solution
     picked_left = 0
@@ -252,12 +292,12 @@ def _solve_colgen(model, G, P, T, i, depth):
     
     def take_branch(is_left = 1):
         if is_left:
-            _solve_colgen(model_left, G, P, T, i+1, depth)
+            solve_colgen_bnb(model_left, G, P, start, end, T, i+1, depth)
         else:
-            _solve_colgen(model_right, G, P, T, i+1, depth)
+            solve_colgen_bnb(model_right, G, P, start, end, T, i+1, depth)
 
     # take branches
-    if branch_left['lb'] < branch_right['ub']:
+    if branch_left['lb'] < branch_right['lb']:
         subtree_left = take_branch(is_left=1)
         subtree_right = take_branch(is_left = 0)
     else:
@@ -278,18 +318,14 @@ def _solve_colgen(model, G, P, T, i, depth):
     return solution
 
 
-def solve_colgen_bnb(G, start, end, T, depth=10):
+def solve_bnb(G, start, end, T, depth=10):
     
     P = find_heuristic_P(G, start, end,T)
     master,lamda,x = create_master(G, P, T)
-    res = bound(master, G, P, T)
+    res = bound(master, G, start, end, T)
     if res['gap'] < eps:
         return res['obj'], res['solution']
-    return _solve_colgen(master, G, P, T, 0, depth)
-
-    #while 1:
-    #    relax_master,_ = create_master
-
+    return solve_colgen_bnb(master, G, P, start, end, T, 0, depth)
 
 def solve_mip(G, start, end, T):
     model = Model('G_mip')
@@ -338,9 +374,11 @@ def solve_mip(G, start, end, T):
 
 G = create_eg_roadnet()
 #G = create_road_network()
-#find_heuristic_P(G, 0, len(G)-1, 14)
-#print find_all_paths(G,0,len(G)-1)
 
 #print solve_mip(G, 0, 5, 14)
-solve_colgen(G, 0, 5, 13)
+
+#P = find_heuristic_P(G, 0, 5, 14)
+#solve_colgen(G, P, 0, 5, 14)
+
+solve_bnb(G, 0, 5, 14)
 #draw_roadnet(G)
