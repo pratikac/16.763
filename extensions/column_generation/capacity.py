@@ -8,7 +8,7 @@ import pdb
 eps = 1e-5
 
 def create_road_network(N=10, mu=20.):
-    g = nx.erdos_renyi_graph(N, 0.51)
+    g = nx.erdos_renyi_graph(N, 0.41)
     g = nx.connected_component_subgraphs(g)[0]
 
     def roadmaker():
@@ -62,7 +62,8 @@ def get_edge_list_from_path(G, p):
 
 def find_heuristic_P(G, start, end, T):
     all_paths = list(nx.all_simple_paths(G, source=start, target=end))
-    max_paths_to_add = len(all_paths)/4
+    print 'all_paths: ', len(all_paths)
+    max_paths_to_add = 10
     #print all_paths
     pruned_paths = []
     num_paths = 0
@@ -94,6 +95,7 @@ def solve_colgen(G, start, end, T):
 
     def create_master(P):
         relax_master = Model('master')
+        relax_master.Params.OutputFlag = 0
         lamda={}
         pi = 0
         for p in P:
@@ -125,6 +127,7 @@ def solve_colgen(G, start, end, T):
         #relax_master.write('cap.lp')
         return relax_master, lamda
 
+    #print_P(P)
     while 1:
         relax_master,_ = create_master(P)
         relax_master.optimize()
@@ -162,18 +165,18 @@ def solve_colgen(G, start, end, T):
     
     master.optimize()
     print master.objVal
-    print_P(P)
-
+    #print_P(P)
+    '''
     edges = []
     for u,v,d in G.edges(data=True):
         if x[u,v].x > eps:
             edges.append((u,v))
     print edges
-
+    '''
 def solve_mip(G, start, end, T):
     model = Model('G_mip')
     setParam('TimeLimit', 50)
-    model.Params.OutputFlag = 1
+    model.Params.OutputFlag = 0
 
     # 1. add vars
     x = {}
@@ -208,13 +211,17 @@ def solve_mip(G, start, end, T):
     #model.update()
     #model.write('cap.lp')
     model.optimize()
-
+    
+    '''
     path = []
     for i,j in x:
         if x[i,j].X > eps:
             path.append((i,j))
     return path
+    '''
+    print model.objVal
 
+'''
 G = create_eg_roadnet()
 #G = create_road_network()
 #find_heuristic_P(G, 0, len(G)-1, 14)
@@ -223,3 +230,25 @@ G = create_eg_roadnet()
 #print solve_mip(G, 0, 5, 14)
 solve_colgen(G, 0, 5, 13)
 test_roadnet(G)
+'''
+
+def get_mode_time_duration(G, start, end):
+    all_paths = nx.all_simple_paths(G, source=start, target=end)
+    all_lengths = []
+    for p in all_paths:
+        elist = get_edge_list_from_path(G, p)
+        total_length = sum([d['length'] for u,v,d in elist])
+        all_lengths.append(total_length)
+    return np.median(all_lengths)
+
+def average_execution_time_expt(N=20):
+    G = create_road_network(N)
+    start,end = 0, len(G)-1
+    
+    T = get_mode_time_duration(G, start, end)
+    print 'T: ', T
+    #test_roadnet(G)
+    #solve_mip(G, start,end, T)
+    solve_colgen(G, start, end, T)
+
+#average_execution_time_expt(N=40)
