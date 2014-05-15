@@ -232,7 +232,7 @@ solve_colgen(G, 0, 5, 13)
 test_roadnet(G)
 '''
 
-def get_mode_time_duration(G, start, end):
+def get_median_time_duration(G, start, end):
     all_paths = nx.all_simple_paths(G, source=start, target=end)
     all_lengths = []
     for p in all_paths:
@@ -245,7 +245,7 @@ def average_execution_time_expt(N=20):
     G = create_road_network(N)
     start,end = 0, len(G)-1
     
-    T = get_mode_time_duration(G, start, end)
+    T = get_median_time_duration(G, start, end)
     print 'T: ', T
     #test_roadnet(G)
     #solve_mip(G, start,end, T)

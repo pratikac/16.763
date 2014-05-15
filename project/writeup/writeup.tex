@@ -2,11 +2,11 @@
 %\documentclass[letterpaper, 10pt, reqno]{amsart}
 
 \usepackage[margin=1in]{geometry}
-\usepackage{mathpazo}
+\usepackage{mathpazo, flushend}
 \include{./macros}
 
-\usepackage[marginal]{showlabels}
-\renewcommand{\showlabelfont}{\footnotesize\slshape\color{brown}}
+%\usepackage[marginal]{showlabels}
+%\renewcommand{\showlabelfont}{\footnotesize\slshape\color{brown}}
 
 \linespread{1.02}
 
@@ -44,14 +44,21 @@ This project discusses column generation techniques for problems in airline sche
 Modern day problems in operations research such as multi-commodity flow problems~\cite{barnhart2000using}, crew pairing~\cite{anbil1998column} and fleet assignment in
 airline operations~\cite{barnhart1998flight}, even optimization problems from other fields such as graph partiting for VLSI circuits \cite{vanderbeck1994thesis}, maximum satisfiability problems~\cite{hansen1998mixed}, graph coloring~\cite{mehrotra1996column} etc. are enormously large.
 Most of them are in fact mixed integer programs (MIPs) with millions of variables and contraints that often require good linear programming (LP)
-relaxations. In such situations, we cannot even solve the LP relaxations in reasonable time, e.g., a naive formulation of resource constrained shortest
-path on a network of less than 100 nodes can easily take a few weeks of CPU time.
+relaxations. In such situations, we cannot even solve the LP relaxations in reasonable time.
 
-A defining characteristic of most of the examples is however that only few variables take part in the optimal solution. In such cases, approaches that incrementally add new variables (columns) to the solution without considering them all at once stand a chance to perform efficiently. A number of different approaches such as branch and cut, branch and price etc. exist to tackle these issues. We will focus here on a technique known as column generation.
+A defining characteristic of most of the examples is however that only few variables take part in the optimal solution. In such cases, approaches that
+incrementally add new variables (columns) to the solution without considering them all at once stand a chance to perform efficiently. A number of different
+ideas such as branch and cut, branch and price etc. exist to tackle these issues. We will focus here on a technique known as column generation~\cite{desrosiers2005primer}.
 
-For example, consider the crew pairing or fleet assignment problems in airline scheduling. They are typically formulated as constraints on sequences of flights using a resource, e.g, crew or aircrafts. Although the number of constraints is huge, the problem can be made tracktable if we automagically generate all feasible sequences of flights. In this context, column generation~\cite{desrosiers2005primer} then is a formalization of the simple idea that constraints on these sequences can be eliminated by only considering sequences that satisfy these constraints. Let us note that the fundamental idea of generating columns as needed while solving a linear program was first proposed by~\cite{dantzig1960decomposition} almost five decades ago. The cutting stock problem, which we will explore in detail in this paper was one of the first problems where column generation was demonstrated~\cite{gilmore1961linear,gilmore1963linear}.
+Consider the crew pairing or fleet assignment problems in airline scheduling. They are typically formulated as constraints on sequences of flights using a resource, e.g, crew or aircrafts. Although the number of constraints is huge, the problem can be made tracktable if we automagically good, feasible sequences of flights. Column generation involves optimizing the original problem using constraints on these feasible paths. Let us note that the fundamental idea of generating columns as needed while solving a linear program is quite old, it was first proposed by~\cite{dantzig1960decomposition} almost five decades ago. The cutting stock problem, which we will explore in detail in this paper was in fact one of the first problems where column generation was demonstrated~\cite{gilmore1961linear,gilmore1963linear}.
 
-More formally, if the entire set of variables (columns) is unnecessary for the solution, the basis variables (cf.\@ simplex algorithm) can be generated as needed. This is akin to solving a \emph{restricted master problem} in conjunction with smaller sub-problems, also known as \emph{pricing problems}. This sub-problem, roughly speaking, finds the new basis variable by minimizing the reduced cost of each new variable using the dual variables in the restricted problem. We iterate to construct a new master problem by adding this new variable to the optimization. The efficacy of column generation (also known as \emph{branch-and-price}~\cite{barnhart1998branch} for integer programs) hinges on an efficient solution to the pricing problem. For example, in fleet assignment, maintenance routing and crew scheduling, the master problem is a \emph{set-cover problem} while the pricing problem is form of \emph{shortest path problem} which can be easily solved using dynamic programming. Various similar problems like constrained or multi-label shortest path problems are viable candidates for sub-problems in branch-and-price methods. After giving a brief overview of the algorithm, we will demonstrate an implementation of column generation techniques on canonical problems such as \emph{resource-constrained shortest path} and \emph{cutting-stock problem}. The key idea here is to express, e.g., the shortest path problem, not as a combination of individual arcs, but instead as a decision variable for whether a particular sub-path is included in the shortest path or not.
+More formally, if the entire set of variables (columns) is unnecessary for the solution, the basis variables (cf.\@ simplex algorithm) can be generated as
+needed. This is akin to solving a \emph{restricted master problem} in conjunction with smaller sub-problems, also known as \emph{pricing problems}.
+This sub-problem, roughly speaking, finds the new basis variable by minimizing the reduced cost of each new variable using the dual variables in the restricted problem. We iterate to construct a new master problem by adding
+this new variable to the optimization. The efficacy of column generation (also known as \emph{branch-and-price}~\cite{barnhart1998branch} for integer programs) hinges on an efficient solution to the pricing problem. For example, in
+fleet assignment, maintenance routing and crew scheduling, the master problem is a \emph{set-cover problem} while the pricing problem is form of \emph{shortest path problem} which can be easily solved using dynamic programming.
+Various similar problems like constrained or multi-label shortest path problems are viable candidates for sub-problems in branch-and-price methods.
+After giving a brief overview of the algorithm, we will demonstrate an implementation of column generation techniques on canonical problems such as \emph{resource-constrained shortest path} and \emph{cutting-stock problem}. The key idea here is to express, e.g., the shortest path problem, not as a combination of individual arcs, but instead as a decision variable for whether a particular sub-path is included in the shortest path or not.
 
 Now consider the problem of aircraft scheduling, which we define to be the combination of four sub-problems, viz., schedule design, fleet assignment, maintenance routing and crew pairing. The sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling, even for a small airline. Practically however, there are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we will focus on integrating aircraft maintenance and crew pairing. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous different routings, which is crucial for a quick solution to the problem. We will present the integrated formulation, formulate column generation procedures for the problem and motivate a branch and price based algorithm for solving both maintenance routing and crew pairing together.
 
@@ -120,37 +127,37 @@ which is known as the ``reduced cost'' of variable $x_j$. In other words, $\bar{
 %  }
 % The above algorithm can be made much more efficient by passing information about dual variables in consecutive steps.
 
-\subsection{Dual problem}
-\label{ssec:dual}
+% \subsection{Dual problem}
+% \label{ssec:dual}
 
-We can write the Prob.~\eqref{eqn:lp_standard_form} as
-\aeqs{
-    \trm{minimize}\ & c'x + p'(b - Ax), \\
-    \trm{subject to}\ & x \geq 0.
-}
-where $p \in \reals^m$ is the Lagrange multiplier. This new problem has fewer constraints and hence by definition,
-\aeqs{
-g(p) = \min_{x \geq 0} \sqbrac{c'x + p'(b-Ax)} &\leq c'x^* + p'(b-Ax^*) \\
-&=c' x^*.
-}
-Here $x^*$ is the optimal solution of Prob.~\eqref{eqn:lp_standard_form} (also known as the ``primal'') and the last equality is true because $p$ at optimality is such that all constraints are satisfied. The new problem,
-\aeqs{
-    \trm{maximize}\ &g(p), \\
-    \trm{subject to}\ &\trm{no constraints}
-}
-thus searches for the best lower bound of the primal. Note that
-\aeqs{
-g(p) = \begin{cases}
-p' b \quad & \trm{if}\ c' \geq p'A\\
--\infty, \quad & \trm{otherwise}.
-\end{cases}
-}
-Thus, the ``dual'' problem of Prob.~\eqref{eqn:lp_standard_form} is
-\aeq{
-    \trm{maximize}\ \quad& p' b, \notag\\
-    \trm{subject to}\ \quad& p'A \leq c'.
-}
-Dual problems are important for many reasons, viz., (i) the dual of a dual is the primal, (ii) dual solution is a lower bound for the primal's cost and finally, (iii) if the primal has a solution, so does the dual, and moreover, their costs are the same.
+% We can write the Prob.~\eqref{eqn:lp_standard_form} as
+% \aeqs{
+%     \trm{minimize}\ & c'x + p'(b - Ax), \\
+%     \trm{subject to}\ & x \geq 0.
+% }
+% where $p \in \reals^m$ is the Lagrange multiplier. This new problem has fewer constraints and hence by definition,
+% \aeqs{
+% g(p) = \min_{x \geq 0} \sqbrac{c'x + p'(b-Ax)} &\leq c'x^* + p'(b-Ax^*) \\
+% &=c' x^*.
+% }
+% Here $x^*$ is the optimal solution of Prob.~\eqref{eqn:lp_standard_form} (also known as the ``primal'') and the last equality is true because $p$ at optimality is such that all constraints are satisfied. The new problem,
+% \aeqs{
+%     \trm{maximize}\ &g(p), \\
+%     \trm{subject to}\ &\trm{no constraints}
+% }
+% thus searches for the best lower bound of the primal. Note that
+% \aeqs{
+% g(p) = \begin{cases}
+% p' b \quad & \trm{if}\ c' \geq p'A\\
+% -\infty, \quad & \trm{otherwise}.
+% \end{cases}
+% }
+% Thus, the ``dual'' problem of Prob.~\eqref{eqn:lp_standard_form} is
+% \aeq{
+%     \trm{maximize}\ \quad& p' b, \notag\\
+%     \trm{subject to}\ \quad& p'A \leq c'.
+% }
+% Dual problems are important for many reasons, viz., (i) the dual of a dual is the primal, (ii) dual solution is a lower bound for the primal's cost and finally, (iii) if the primal has a solution, so does the dual, and moreover, their costs are the same.
 
 \subsection{Cutting-stock problem}
 \label{ssec:col_gen_cutting_stock}
@@ -229,7 +236,7 @@ which means that the rounded-up solution is also a feasible solution for Prob.~\
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9 \columnwidth]{roadnet}
+\includegraphics[width=0.8 \columnwidth]{roadnet}
 \caption{Time constrained shortest path problem. The tuples on edges denote $(c_{ij}, t_{ij})$ where $c_{ij}$ is the cost for edge $(i,j)$ and $t_{ij}$ is the time duration of crossing that edge.}
 \label{fig:rcsp}
 \end{figure}
@@ -283,36 +290,36 @@ the relaxation and solve it iteratively by branching off non-integral solutions 
 relaxed LP, by definition, is a lower bound on the optimal cost of the MIP. Say $\hat{x}$ be the current cost. If the solution is integral, we are done. If not, we pick any non-integral variable in the solution, say $\hat{x}_i = 4.2$ and create two branches $\hat{x}_i \leq 4$ and $\hat{x}_i \geq 5$. The tree
 is explored in a breadth-first manner until we get a fully integral solution. We can also prune certain branches by noting that if the solution of the
 relaxed LP at some node is less than the current minimum solution, we do not need to explore that branch downwards. We use a priority queue to sort the nodes of the branch-and-bound algorithm by their LP relaxation lower bounds and pop from this queue at every iteration. Typically, one might also construct an upper bound to guide the search.
-
-% The final search procedure is as shown in Alg.~\ref{alg:bnb}.
-% \IncMargin{0.04in}
-% \begin{algorithm}[!h]
-% \footnotesize
-% $J_l$: LP relaxation of original problem\;
-% $J_u$: upper bound with integer solution (possibly heuristic)\;
-% $J^* \la J_u$: incumbent best solution\;
-% \vspace{0.05in}
-% \While{nodes in tree}
-% {
-%     \enum{
-%     \item solve current LP, compute duals
-%     \item update lower bound $J_l$
-%     \item If solution $J_c$ is fractional,
-%         \begin{enumerate}[(a)]
-%         \item if $J_c \geq J_u$, discard node
-%         \item if $J_c < J_l$, create two new nodes (branch)
-%         \end{enumerate}
-%     \item If integral solution,
-%         \begin{enumerate}[(a)]
-%         \item if $J_c < J_u$, update upper bound
-%         \item discard node
-%         \end{enumerate}
-%     }
-% }
-% \caption{Branch and bound}
-% \label{alg:bnb}
-% \end{algorithm}
-% \DecMargin{0.04in}
+%
+The final search procedure is as shown in Alg.~\ref{alg:bnb}.
+\IncMargin{0.04in}
+\begin{algorithm}[!h]
+\footnotesize
+$J_l$: LP relaxation of original problem\;
+$J_u$: upper bound with integer solution (possibly heuristic)\;
+$J^* \la J_u$: incumbent best solution\;
+\vspace{0.05in}
+\While{nodes in tree}
+{
+    \enum{
+    \item solve current LP, compute duals
+    \item update lower bound $J_l$
+    \item If solution $J_c$ is fractional,
+        \begin{enumerate}[(a)]
+        \item if $J_c \geq J_u$, discard node
+        \item if $J_c < J_l$, create two new nodes (branch)
+        \end{enumerate}
+    \item If integral solution,
+        \begin{enumerate}[(a)]
+        \item if $J_c < J_u$, update upper bound
+        \item discard node
+        \end{enumerate}
+    }
+}
+\caption{Branch and bound}
+\label{alg:bnb}
+\end{algorithm}
+\DecMargin{0.04in}
 
 % \begin{figure}
 % \centering
@@ -347,12 +354,12 @@ The crew pairing problem can now be written as
 
 Note that \eqref{eqn:cp_cost} minimizes the cost of pairings, while constraints in \eqref{eqn:cp_cover}, also known as cover constraints ensure that each flight gets a crew. This formulation implicitly accounts for ``infeasibility rules'', i.e., the set $P$ is the set of all feasible pairings.
 The crew pairing problem is relatively easy to
-model mathematically and interpret as an optimization problem. Still, the task of solving the model efﬁciently and producing a practical crew schedule can be very challenging. However, note that this problem has $\abs{P}$ variables, which is typically very large, it is all feasible pairings in a flight network and can be of the order of hundreds of millions. Billions of legal pairings can be generated for as few as 1000 flight legs. This is exacerbated even further by hub-n-spoke network topology of most big airlines. Refer to~\cite{} for state-of-the-art approaches to this problem.
+model mathematically and interpret as an optimization problem. Still, the task of solving the model efﬁciently and producing a practical crew schedule can be very challenging. However, note that this problem has $\abs{P}$ variables, which is typically very large, it is all feasible pairings in a flight network and can be of the order of hundreds of millions. Billions of legal pairings can be generated for as few as 1000 flight legs. This is exacerbated even further by hub-n-spoke network topology of most big airlines. Refer to~\cite{} for state-of-the-art approaches to this problem. Let us note that crew pairing can be solved as resource constrained multi-label shortest path problem as shown in~\cite{gopalakrishnan2005airline}.
 
-\subsection{Column generation for crew pairing}
-\label{ssec:col_gen_cp}
-write material from~\cite{gopalakrishnan2005airline}
-multi-label shortest path
+% \subsection{Column generation for crew pairing}
+% \label{ssec:col_gen_cp}
+% write material from~\cite{gopalakrishnan2005airline}
+% multi-label shortest path
 
 
 \subsection{Maintenance routing}
@@ -507,12 +514,13 @@ We use the branch and price mechanism to solve ECP. Due to the above fact, we do
 
 This section dwells into some implementation issues in column generation for two example problems, viz,. the cutting stock problem and resource constrained
 shortest path problem. We discuss results of computational experiments where I compared column generation against a commercial optimization software called
-Gurobi~\cite{gurobi}. The experiments in this section were performed on a 2.2 GHz single core computer running Linux while Gurobi, by default, uses all the 8 cores on the computer. Solving large MIPs as considered in this section is computationally expensive, even after using a state-of-the-art solver, I had to put a timeout of 25 secs. in most experiments.
+Gurobi~\cite{gurobi}. The experiments in this section were performed using Python on a 2.2 GHz single core computer running Linux while Gurobi, by default, uses all the 8 cores on the computer.
+Solving large MIPs as considered in this section is computationally expensive, and even after using a state-of-the-art solver, I had to put a timeout of 25 secs. in most experiments.
 
 \subsection{Cutting-stock problem (CSP)}
 \label{ssec:eg_cutting_stock}
 
-An instance of CSP is easy to generate. We pick the length of roll, $B$ and generate a vector of the number of demands $w_i$ and their quanties $n_i$. I hardcoded two instances of different size:
+An instance of CSP is easy to generate. We pick the length of roll, $B$ and generate a vector of the number of demands $w_i$ and their quanties $n_i$. I used the following instances for testing:
 \enum{
     \item $W = 110$ and
     \beq{w = \bmat{20,45,50,55,75} \quad  n = \bmat{48,35,24,10,8}
@@ -535,9 +543,9 @@ have $K$ bins, at least $K-1$ rolls are more than half full. If $w_i$ are demand
 \textbf{\emph{Results}:}
 \begin{figure}
 \centering
-\includegraphics[width=0.9 \columnwidth]{colgen_results}
+\includegraphics[width=0.8 \columnwidth]{colgen_results}
 \caption{Comparison of runtimes for IP formulation and column generation for cutting stock problem. Note that the cost of the solution, i.e., the number of
-rolls obtained in these runs was almost always the same. $N$ here is the total number of demands (generated randomly).}
+rolls obtained by both the formulations was almost always the same. $N$ here is the total number of demands (generated randomly).}
 \label{fig:csp_average_runtime}
 \end{figure}
 
@@ -553,15 +561,43 @@ along with a generic branch and bound solver at
 \subsection{Resource-constrained shortest path (RCSP)}
 \label{ssec:eg_shortest_path}
 
-The RCSP problem is more interesting. An instance of a hand-drawn network is shown in Fig.~\ref{fig:rcsp}. For randomized tests, I generated a random road network as an Erdos-Renyi graph with probability of connection more than $0.5$ (this gives a connected graph almost surely). I picked an exponential random variable with mean $20$ as cost of each edge, while the time duration was sampled uniformly between $[10,20]$.
+The RCSP problem is more interesting. An instance of a hand-drawn network is shown in Fig.~\ref{fig:rcsp}. For randomized tests, I generated a random road network as an Erdos-Renyi graph with probability of connection more than $0.5$ (this gives a connected graph almost surely). I picked an exponential random variable with mean $20$ as cost of each edge, while the time duration was sampled uniformly between $[10,20]$. An implementation of this problem is available at \href{https://github.com/pratikac/16.763/blob/master/extensions/column_generation/capacity.py}{capacity.py}, while the branch and price code is posted at \href{https://github.com/pratikac/16.763/blob/master/extensions/column_generation/capacity_bnb.py}{capacity\_bnb.py}.
 
 The IP formulation is the same as shown in Prob.~\eqref{eqn:rcsp}. The details of column generation (cf. Prob.~\ref{eqn:rcsp_rlpm} for this problem are as follows --
 \ilist{
     \item Generate the initial set of paths between the source and target node. I generated the set of all paths between these nodes, picked 4 paths randomly from among the ones which satisfy the constraints in \eqref{eqn:rcsp_resource} as the initial set of columns. Note that doing this in a large network is prohibitive, there are $\bigo(n!)$ paths in a network; one can use various depth-search heuristics to do this.
-    \item The master problem is constructed using this set of columns while the sub-problem is a shortest path problem (with modified costs as shown in Eqn.~\eqref{eqn:rcsp_sub_problem}. The solution of the sub-problem creates a new path that is added as a column in the master.
-    \item We can construct a
-
+    \item The master problem is constructed using this set of columns while the sub-problem is a shortest path problem (with modified costs as shown in Eqn.~\eqref{eqn:rcsp_sub_problem}) and is solved using Dijkstra's algorithm. The solution of the sub-problem creates a new path that is added as a column in the master.
+    \item I constructed an integral solution by adding the constraints from \eqref{eqn:rcsp_rlpm_flow} for binary $x_{ij}s$ into the relaxed master problem. This approach thus uses the columns obtained from column generation, but still solves the IP in Prob.~\ref{eqn:rcsp_rlpm}.
 }
+
+\textbf{\emph{Branch and price}:} Implementing branch and bound techniques for column generation is difficult, because often, one has to explicitly devise a good branching strategy. I implemented branch and price, i.e., branch and bound where each node is solved using column generation for RCSP using Alg.~\ref{alg:bnb} as follows.
+\enum{
+    \item We branch off on variables $x_{ij}$s in the IP formulation of the relaxed master. The crucial thing to note is that, since we fix particular values of $x_{ij}$, some paths in the set $P$ in Prob.~\ref{eqn:rcsp_rlpm} might become infeasible, in other words, there might be no way to satisfy constraint \eqref{eqn:rcsp_rlpm_flow} using the paths in $P$.
+    \item One thus has to prune $P$ after branching, i.e., we maintain the set of variables $x_{ij}$s that are fixed (at that node in the branch and bound true), call this set $X_{bnb}$. We modify the set $P$ to be
+    $$
+    P' = \cbrac{p \in P: \forall (i,j) \in p, \not \exists\ x_{ij} = 0, x_{ij} \in X_{bnb}}
+    $$
+    and similarly for the edges that are set to 1,
+    $$
+    P^{''} = \cbrac{p \in P': \exists\ (i,j) \in p, x_{ij} = 1, x_{ij} \in X_{bnb}}.
+    $$
+    The modified set $P^{''}$ is used for column generation. It has a path $p$ if some $x_{ij} \in X_{bnb}$ on that path is fixed to 1 and removes all paths who have at least one $x_{ij} = 0$ on them.
+}
+
+\textbf{\emph{Results}:} Consider the network shown in Fig.~\ref{fig:rcsp}. By inspection, the optimal solution to Prob.~\eqref{eqn:rcsp} is the path $0-2-1-3-5$ to go from node $0$ to node $5$, and indeed the IP formulation gives this answer. The set $P$ considered by column generation with branch and price starts evolves as follows:
+\aeqs{
+    P_{init} = [0-2-1&-3-4-5],\ [0-2-1-3-5] \\
+    P_1 &= P_{init} \cup [0-1-3-5]\\
+    P_2 &= P_1 \cup [0-1-3-5]\\
+    P_3 &= P_3 \cup [0-1-4-5]\\
+    P_4 &= P_4 \cup [0-2-1-4-5].
+}
+Finally, we reach the optimal solution after 4 iterations and the cost is time duration is 13 for the path $0-2-1-3-5$.
+
+We can also perform experiments on random networks. We first however need to pick a good value of the time constraint we shall use in \eqref{eqn:rcsp_resource}. I did this by computing all the paths in the network and using the median of time duration, i.e., about half of the $\bigo(n!)$ paths are candidate solutions for Prob.~\ref{eqn:rcsp_rlpm}.
+
+\emph{Randomized instances} Using about 40 nodes in an Erdos-Renyi random graph with connectivity probability of 0.4 results in on an average (5 instances) 100,000 candidate paths. Column generation approach took 6 secs to execute on average. On the other hand, for this problem, the IP formulation running in parallel on 4 threads takes 10.6 secs per example.
+
 
 \section{Summary}
 \label{sec:summary}
