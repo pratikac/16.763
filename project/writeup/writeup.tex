@@ -74,13 +74,15 @@ The material here is presented from~\cite{bertsimas1997introduction}. We will as
 }
 where $c \in \reals^n$ is the cost-vector, $A = [a_{ij}] \in \reals^{m \times n}$ is the constraint matrix with $m$ constraints and $b \in \reals^m$. The columns of $A$, which we denote by $A_1, \ldots, A_n$ are also known as the resource vectors while $b$ is the target vector; motivated from
 $$\sum_{i=1}^n A_i x_i =b.$$
-So in the standard form, we wish to synthesize $b$ using a non-negative amount, $x_i$, of each resource $A_i$. Note that a different form of linear program, e.g., with inequality constraints can be easily converted to the standard form as follows,
-\clist{
-    \item if $x_i$ is unrestricted, write it as $x_i = x_i^+ - x_i^-$ where both $x_i^+, x_i^- \geq 0$;
-    \item construct slack variables for inequality constraints, i.e., if $\sum_{j=1}^n a_{ij} x_j \leq b_i$, we use
-    $$\sum_{j=1}^n a_{ij} x_j + s_i = b_i, \quad s_i \geq 0;$$
-    \item finally, note that a maximization is just another minimization problem with a negative cost vector $c$.
-}
+%So in the standard form, we wish to synthesize $b$ using a non-negative amount, $x_i$, of each resource $A_i$.
+Note that a different form of linear program, e.g., with inequality constraints can be easily converted to the standard form.
+% as follows,
+% \clist{
+%     \item if $x_i$ is unrestricted, write it as $x_i = x_i^+ - x_i^-$ where both $x_i^+, x_i^- \geq 0$;
+%     \item construct slack variables for inequality constraints, i.e., if $\sum_{j=1}^n a_{ij} x_j \leq b_i$, we use
+%     $$\sum_{j=1}^n a_{ij} x_j + s_i = b_i, \quad s_i \geq 0;$$
+%     \item finally, note that a maximization is just another minimization problem with a negative cost vector $c$.
+% }
 Let $P = \cbrac{x \given Ax \geq b, -Ax \geq -b, x \geq 0}$ be a polyhedron, note that $P$ is the space of feasible candidates for Prob.~\eqref{eqn:lp_standard_form}.
 
 \subsection{Simplex algorithm}
@@ -164,9 +166,10 @@ Let the width of each roll be $W$ and $m$ customers want $n_i$ rolls each of wid
     \label{eqn:cutting_stock_ip}
 }
 Note that the above problem has $Kn + K$ variables and $(n+K)$ constraints and since it is an integer program, solving it for even small values of $K, n$ is expensive. The real reason for this is that the LP relaxation of this problem is bad. Note that
-$$
+\beq{
 \sum_k y_k \geq \f{1}{W} \sum_k \sum_i w_i\ x_i^k \geq \f{1}{W} \sum_i n_i\ w_i
-$$
+\label{eqn:csp_lp_relax_bound}
+}
 which is a naive bound and says that the number of rolls needed is simply the sum of all demands divided by $W$. Let use pose the problem in a different way as follows.
 
 We call the set of distinct cuts of a roll as a pattern, i.e., if $W=100$, and we make 4 cuts of $w_1 = 25$ each, we generate a patterm $\{ w_1, w_1, w_1, w_1 \}$. If on the other hand, we make one cut of $w_1 =25$ and two of $w_2 = 35$, we generate a pattern $\{ w_1, w_2, w_2 \}$. Let $x_j$ be the number of times a pattern $j$ is used. Let $a_{ij}$ be the number of times item $i$ is cut in pattern $j$. Consider then, the new problem --
@@ -224,12 +227,12 @@ which means that the rounded-up solution is also a feasible solution for Prob.~\
 \subsection{Resource constrained shortest path (RCSP)}
 \label{ssec:rcsp}
 
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.7 \columnwidth]{rcsp}
-% \caption{Time constrained shortest path problem}
-% \label{fig:rcsp}
-% \end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.9 \columnwidth]{roadnet}
+\caption{Time constrained shortest path problem. The tuples on edges denote $(c_{ij}, t_{ij})$ where $c_{ij}$ is the cost for edge $(i,j)$ and $t_{ij}$ is the time duration of crossing that edge.}
+\label{fig:rcsp}
+\end{figure}
 
 Let us briefly discuss another classic application of column generation. Consider the network shown in Fig.~\ref{fig:rcsp}, let $c_{ij}$ be the cost of going from node $i$ to node $j$ in $t_{ij}$ time units. In the RCSP problem, we would like to find the shortest path from say 1 to 6, with total duration of, say less than 14. It can be written as the following optimization problem.
 \aeq{
@@ -265,6 +268,7 @@ relaxation of the above RLPM. If we remove the intergality constraints on $x_{ij
 \aeq{
     \min \sum_{(i,j) \in E}\ c_{ij}\ x_{pij} - \hat{\pi}_1 \rbrac{\sum_{(i,j)\in E} t_{ij}\ x_{pij}} - \hat{\pi}_0 \\
     \min \sum_{(i,j)\in E} \rbrac{c_{ij} - \hat{\pi}_1\ t_{ij}}\ x_{ij} - \pi_0
+    \label{eqn:rcsp_sub_problem}
 }
 for a path that again joins 1-6 in the network. This is simply the usual shortest path problem that can be solved in $\bigo(n \log n)$ time! This is however an example where we can ``round up'' the solution, we have to embed a branch and bound strategy in the algorithm in addition to column generation. In Sec.~\ref{sec:examples} we provide results of computational experiments on both the cutting stock problem and the resource constrained shortest path problem.
 
@@ -501,15 +505,63 @@ We use the branch and price mechanism to solve ECP. Due to the above fact, we do
 \section{Examples}
 \label{sec:examples}
 
-\subsection{Cutting-stock problem}
+This section dwells into some implementation issues in column generation for two example problems, viz,. the cutting stock problem and resource constrained
+shortest path problem. We discuss results of computational experiments where I compared column generation against a commercial optimization software called
+Gurobi~\cite{gurobi}. The experiments in this section were performed on a 2.2 GHz single core computer running Linux while Gurobi, by default, uses all the 8 cores on the computer. Solving large MIPs as considered in this section is computationally expensive, even after using a state-of-the-art solver, I had to put a timeout of 25 secs. in most experiments.
+
+\subsection{Cutting-stock problem (CSP)}
 \label{ssec:eg_cutting_stock}
 
-I constructed a
+An instance of CSP is easy to generate. We pick the length of roll, $B$ and generate a vector of the number of demands $w_i$ and their quanties $n_i$. I hardcoded two instances of different size:
+\enum{
+    \item $W = 110$ and
+    \beq{w = \bmat{20,45,50,55,75} \quad  n = \bmat{48,35,24,10,8}
+    \label{eqn:eg_csp_big}}
+    \item $W = 9$ and
+    \beq{w = \bmat{2,3,4,5,6,7,8} \quad  n = \bmat{4,2,6,6,2,2,2},
+    \label{eqn:eg_csp_small}}
+    \item fix $W = 100$, and randomly sample a large string of demands of various lengths. Typically, for experiments, I used about $100$ different demands. This example lies between 1 and 2 in terms of complexity.
+}
 
+\textbf{\emph{MIP formulation}:} We encode the MIP formulation using \eqref{eqn:cutting_stock_ip}. This is solved internally inside Gurobi using a dual formulation. Note that we do not know $K$, i.e., the number of rolls that we
+consider in the optimization problem. I therefore used a heuristic to get an upper bound on $K$. It is computed using a greedy algorithm for the bin-packing problem as follows. This algorithm processes demands in an arbitrary
+order, if it cannot find a roll that can accomodate the demand, it starts
+cutting a new roll. It is easy to see that we are over-estimating $K$ by a factor of 2. To see this, observe that we cannot have two rolls that are half-
+cut at any time (which'd mean that we started a new roll for a demand less than $W/2$ when we still have $W/2$ left on the previous roll). Hence if we
+have $K$ bins, at least $K-1$ rolls are more than half full. If $w_i$ are demands, $\sum w_i > (K-1) W/2$ and since as shown in Eqn.~\eqref{eqn:csp_lp_relax_bound}, $\sum w_i/W$ is the lower bound, we are off by a factor of $2$.
 
-\subsection{Resource-constrained shortest path}
+\textbf{\emph{Column generation formulation}:} We need to generate the first few patterns. I did this by considering all patterns where each roll is cut into $\floor{W/w_i}$ pieces for demands $w_i$. The rest of the problem formulation is the same as Prob.~\ref{eqn:cutting_stock_pattern_ip}; I solved the Knapsack sub-problem as an IP, however it can also be solved using shortest path style algorithms efficiently. Finally, I rounded up the solution of the relaxed master problem to get an integral solution. Note that this is sub-optimal, one needs to implement branch and bound techniques, that are specialized for CSP, where we branch based on a pattern. I only implemented branch and price for the RCSP problem as shown in Sec.~\ref{ssec:eg_shortest_path}.
+
+\textbf{\emph{Results}:}
+\begin{figure}
+\centering
+\includegraphics[width=0.9 \columnwidth]{colgen_results}
+\caption{Comparison of runtimes for IP formulation and column generation for cutting stock problem. Note that the cost of the solution, i.e., the number of
+rolls obtained in these runs was almost always the same. $N$ here is the total number of demands (generated randomly).}
+\label{fig:csp_average_runtime}
+\end{figure}
+
+Let us show an example solution, for the problem setup in ~\eqref{eqn:eg_csp_small}, we get a solution which uses 13 rolls as
+$$
+[2,2,5],\ 2\times [2,7],\ 2 \times [3,6],\ [4,4],\ 5 \times [4,5],\ 2\times [8].
+$$
+This is indeed the optimal solution given by the IP formulation. The example in \eqref{eqn:eg_csp_big} has an optimal solution with 47 rolls. The code for
+this problem can be seen at \href{https://github.com/pratikac/16.763/blob/master/extensions/column_generation/cutstock.py}{cutstock.py}
+along with a generic branch and bound solver at
+\href{https://github.com/pratikac/16.763/blob/master/extensions/column_generation/branch\_and\_bound.py}{branch\_and\_bound.py}.
+
+\subsection{Resource-constrained shortest path (RCSP)}
 \label{ssec:eg_shortest_path}
 
+The RCSP problem is more interesting. An instance of a hand-drawn network is shown in Fig.~\ref{fig:rcsp}. For randomized tests, I generated a random road network as an Erdos-Renyi graph with probability of connection more than $0.5$ (this gives a connected graph almost surely). I picked an exponential random variable with mean $20$ as cost of each edge, while the time duration was sampled uniformly between $[10,20]$.
+
+The IP formulation is the same as shown in Prob.~\eqref{eqn:rcsp}. The details of column generation (cf. Prob.~\ref{eqn:rcsp_rlpm} for this problem are as follows --
+\ilist{
+    \item Generate the initial set of paths between the source and target node. I generated the set of all paths between these nodes, picked 4 paths randomly from among the ones which satisfy the constraints in \eqref{eqn:rcsp_resource} as the initial set of columns. Note that doing this in a large network is prohibitive, there are $\bigo(n!)$ paths in a network; one can use various depth-search heuristics to do this.
+    \item The master problem is constructed using this set of columns while the sub-problem is a shortest path problem (with modified costs as shown in Eqn.~\eqref{eqn:rcsp_sub_problem}. The solution of the sub-problem creates a new path that is added as a column in the master.
+    \item We can construct a
+
+}
 
 \section{Summary}
 \label{sec:summary}
