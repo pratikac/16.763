@@ -586,18 +586,18 @@ The IP formulation is the same as shown in Prob.~\eqref{eqn:rcsp}. The details o
     $$
     P' = \cbrac{p \in P: \forall (i,j) \in p, \not \exists\ x_{ij} = 0, x_{ij} \in X_{bnb}}
     $$
-    and similarly for the edges that are set to 1,
+    and similarly for the edges that are set to 1, we include at least one path that has that edge,
     $$
-    P^{''} = \cbrac{p \in P': \exists\ (i,j) \in p, x_{ij} = 1, x_{ij} \in X_{bnb}}.
+    P^{''} = \trm{Sample}\left(\cbrac{p \in \trm{all paths}: x_{pij} =1, x_{ij}=1} \right).
     $$
-    The modified set $P^{''}$ is used for column generation. It has a path $p$ if some $x_{ij} \in X_{bnb}$ on that path is fixed to 1 and removes all paths who have at least one $x_{ij} = 0$ on them.
+    The modified set $P' \cup P^{''}$ is used for column generation. It has a path $p$ if some $x_{ij} \in X_{bnb}$ on that path is fixed to 1 and removes all paths who have at least one $x_{ij} = 0$ on them.
 }
 
 \textbf{\emph{Results}:} Consider the network shown in Fig.~\ref{fig:rcsp}. By inspection, the optimal solution to Prob.~\eqref{eqn:rcsp} is the path $0-2-1-3-5$ to go from node $0$ to node $5$, and indeed the IP formulation gives this answer. The set $P$ considered by column generation with branch and price starts evolves as follows:
 \aeqs{
-    P_{init} = [0-2-1&-3-4-5],\ [0-2-1-3-5] \\
+    P_{init} = [0-2&-1-3-4-5],\ [0-1-3-5] \\
     P_1 &= P_{init} \cup [0-1-3-5]\\
-    P_2 &= P_1 \cup [0-1-3-5]\\
+    P_2 &= P_1 \cup [0-2-1-3-5]\\
     P_3 &= P_3 \cup [0-1-4-5]\\
     P_4 &= P_4 \cup [0-2-1-4-5].
 }
