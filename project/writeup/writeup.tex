@@ -33,7 +33,7 @@ Email: \href{pratik.ac@gmail.com}{pratik.ac@gmail.com}}
 {
 \small
 \textbf{\emph{Abstract:}}
-This project discusses column generation techniques for problems in airline scheduling. It presents a branch and price based algorithm that uses column generation for solving the integrated crew pairing and maintenance routing problems. Along the way, we also discuss column generation for canonical problems such as the cutting stock problem and resource constrainted shortest path. We also present results of an implementation on randomized instances of these problems.
+This project discusses column generation techniques for problems in airline scheduling. It presents a branch and price based algorithm that uses column generation for solving the integrated crew pairing and maintenance routing problems. Along the way, we also discuss column generation for canonical problems such as the cutting stock problem and resource constrained shortest path. We also present results of an implementation on randomized instances of these problems.
 }
 %\vspace*{-0.1in}
 
@@ -42,15 +42,15 @@ This project discusses column generation techniques for problems in airline sche
 
 
 Modern day problems in operations research such as multi-commodity flow problems~\cite{barnhart2000using}, crew pairing~\cite{anbil1998column} and fleet assignment in
-airline operations~\cite{barnhart1998flight}, even optimization problems from other fields such as graph partiting for VLSI circuits \cite{vanderbeck1994thesis}, maximum satisfiability problems~\cite{hansen1998mixed}, graph coloring~\cite{mehrotra1996column} etc. are enormously large.
-Most of them are in fact mixed integer programs (MIPs) with millions of variables and contraints that often require good linear programming (LP)
+airline operations~\cite{barnhart1998flight}, even optimization problems from other fields such as graph partitioning for VLSI circuits \cite{vanderbeck1994thesis}, maximum satisfiability problems~\cite{hansen1998mixed}, graph coloring~\cite{mehrotra1996column} etc. are enormously large.
+Most of them are in fact mixed integer programs (MIPs) with millions of variables and constraints that often require good linear programming (LP)
 relaxations. In such situations, we cannot even solve the LP relaxations in reasonable time.
 
 A defining characteristic of most of the examples is however that only few variables take part in the optimal solution. In such cases, approaches that
 incrementally add new variables (columns) to the solution without considering them all at once stand a chance to perform efficiently. A number of different
 ideas such as branch and cut, branch and price etc. exist to tackle these issues. We will focus here on a technique known as column generation~\cite{desrosiers2005primer}.
 
-Consider the crew pairing or fleet assignment problems in airline scheduling. They are typically formulated as constraints on sequences of flights using a resource, e.g, crew or aircrafts. Although the number of constraints is huge, the problem can be made tracktable if we automagically good, feasible sequences of flights. Column generation involves optimizing the original problem using constraints on these feasible paths. Let us note that the fundamental idea of generating columns as needed while solving a linear program is quite old, it was first proposed by~\cite{dantzig1960decomposition} almost five decades ago. The cutting stock problem, which we will explore in detail in this paper was in fact one of the first problems where column generation was demonstrated~\cite{gilmore1961linear,gilmore1963linear}.
+Consider the crew pairing or fleet assignment problems in airline scheduling. They are typically formulated as constraints on sequences of flights using a resource, e.g, crew or aircrafts. Although the number of constraints is huge, the problem can be made tractable if we automatically good, feasible sequences of flights. Column generation involves optimizing the original problem using constraints on these feasible paths. Let us note that the fundamental idea of generating columns as needed while solving a linear program is quite old, it was first proposed by~\cite{dantzig1960decomposition} almost five decades ago. The cutting stock problem, which we will explore in detail in this paper was in fact one of the first problems where column generation was demonstrated~\cite{gilmore1961linear,gilmore1963linear}.
 
 More formally, if the entire set of variables (columns) is unnecessary for the solution, the basis variables (cf.\@ simplex algorithm) can be generated as
 needed. This is akin to solving a \emph{restricted master problem} in conjunction with smaller sub-problems, also known as \emph{pricing problems}.
@@ -60,16 +60,25 @@ fleet assignment, maintenance routing and crew scheduling, the master problem is
 Various similar problems like constrained or multi-label shortest path problems are viable candidates for sub-problems in branch-and-price methods.
 After giving a brief overview of the algorithm, we will demonstrate an implementation of column generation techniques on canonical problems such as \emph{resource-constrained shortest path} and \emph{cutting-stock problem}. The key idea here is to express, e.g., the shortest path problem, not as a combination of individual arcs, but instead as a decision variable for whether a particular sub-path is included in the shortest path or not.
 
-Now consider the problem of aircraft scheduling, which we define to be the combination of four sub-problems, viz., schedule design, fleet assignment, maintenance routing and crew pairing. The sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling, even for a small airline. Practically however, there are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we will focus on integrating aircraft maintenance and crew pairing. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous different routings, which is crucial for a quick solution to the problem. We will present the integrated formulation, formulate column generation procedures for the problem and motivate a branch and price based algorithm for solving both maintenance routing and crew pairing together.
+Now consider the problem of aircraft scheduling, which we define to be the combination of four sub-problems, viz., schedule design, fleet assignment,
+maintenance routing and crew pairing. Even for a small airline, the sheer size of each of these individual problems makes it almost impossible to solve the combined problem of aircraft scheduling. However, there
+are huge advantages to be gained in terms of optimality or even robustness if we can solve the combined problem. Due to the large number of constraints, it is a promising domain for techniques like branch-and-price. In particular, we
+will focus on integrating aircraft maintenance and crew pairing. As suggested in~\cite{cohn2003improving}, elements of the two problems can be integrated to ensure that only the maintenance routings that relevant to the crew scheduling
+problem are considered. The key idea in this approach is the notion of \emph{short connect}, which are routings that can be realized only if the crew stays on the aircraft. Evidently, a set of short connects can represent numerous
+different routings, which is crucial for a quick solution to the problem. We will present the integrated formulation, formulate column generation procedures for the problem and motivate a branch and price based algorithm for solving both maintenance routing and crew pairing together.
 
-The organization of this paper is as follows --- In Sec.~\ref{sec:column_generation}, we introduce two canonical problems, the cutting stock problem and the resource constrained shortest path problem and formulate column generation procedures for these. Sec.~\ref{sec:branch_and_price} discusses the branch and price framework and introduces the crew pairing and maintenance routing problems along with their solution procedures. Sec.~\ref{sec:integrated_model} describes the integrated problem of crew pairing and maintenance routing. We discuss a branch and price based algorithm for solving the integrated problem. Sec.~\ref{sec:examples} shows results of example implementations of column generation on a few simple problems while we conclude in Sec.~\ref{sec:summary}.
+The organization of this paper is as follows --- In Sec.~\ref{sec:column_generation}, we introduce two canonical problems, the cutting stock problem and the
+resource constrained shortest path problem and formulate column generation procedures for these. Sec.~\ref{sec:branch_and_price} discusses the branch and
+price framework and introduces the crew pairing and maintenance routing problems along with their solution procedures. Sec.~\ref{sec:integrated_model}
+describes the integrated problem of crew pairing and maintenance routing. We discuss a branch and price based algorithm for solving the integrated problem.
+Sec.~\ref{sec:examples} shows results of example implementations of column generation on a few simple problems while we conclude in Sec.~\ref{sec:summary}.
 
 \section{Column Generation}
 \label{sec:column_generation}
 
-This section introduces column generation for solving large linear programs using the cutting-stock problem and resource-constrainted shortest path as examples. We also describe the simplex algorithm and the dual problem formulation, this will be help us to motivate as well as introduce notation for column generation.
+This section introduces column generation for solving large linear programs using the cutting-stock problem and resource-constrained shortest path as examples. We also describe the simplex algorithm, this will be help us to motivate as well as introduce notation for column generation.
 
-\subsection{Linear programs: Standard form}
+\subsection{Linear programs}
 \label{ssec:lp_standard}
 
 The material here is presented from~\cite{bertsimas1997introduction}. We will assume that the linear program is given to us in the standard form as follows:
@@ -103,7 +112,7 @@ Let us consider moving away from $x$ to a new vector $x + \th d$ by selecting so
 $$
 0 = A d = \sum_{i=1}^n A_i d_i = \sum_{i=1}^m A_{B_i} d_{B_i} + A_j = B d_B + A_j.
 $$
-Since $B$ is invertible, we get $d_B = -B^{-1} A_j$. Note that for a small $\th$, the feasiblity is still maintained as we move away from $x_B$ towards $x_B + \th d$. Also, the rate of cost change by this move is
+Since $B$ is invertible, we get $d_B = -B^{-1} A_j$. Note that for a small $\th$, the feasibility is still maintained as we move away from $x_B$ towards $x_B + \th d$. Also, the rate of cost change by this move is
 \beq{
 \bar{c}_j = c_j + c_B' d_B = c_j - c_B' B^{-1} A_j
 \label{eqn:reduced_cost}
@@ -179,7 +188,7 @@ Note that the above problem has $Kn + K$ variables and $(n+K)$ constraints and s
 }
 which is a naive bound and says that the number of rolls needed is simply the sum of all demands divided by $W$. Let use pose the problem in a different way as follows.
 
-We call the set of distinct cuts of a roll as a pattern, i.e., if $W=100$, and we make 4 cuts of $w_1 = 25$ each, we generate a patterm $\{ w_1, w_1, w_1, w_1 \}$. If on the other hand, we make one cut of $w_1 =25$ and two of $w_2 = 35$, we generate a pattern $\{ w_1, w_2, w_2 \}$. Let $x_j$ be the number of times a pattern $j$ is used. Let $a_{ij}$ be the number of times item $i$ is cut in pattern $j$. Consider then, the new problem --
+We call the set of distinct cuts of a roll as a pattern, i.e., if $W=100$, and we make 4 cuts of $w_1 = 25$ each, we generate a pattern $\{ w_1, w_1, w_1, w_1 \}$. If on the other hand, we make one cut of $w_1 =25$ and two of $w_2 = 35$, we generate a pattern $\{ w_1, w_2, w_2 \}$. Let $x_j$ be the number of times a pattern $j$ is used. Let $a_{ij}$ be the number of times item $i$ is cut in pattern $j$. Consider then, the new problem --
 \aeq{
     (P_2) \quad \min &\sum_{j=1}^n x_j, \notag \\
     \trm{s.t.}\ & \sum_{j=1}^n a_{ij} x_j \geq n_i \quad \forall\ i \in [m], \qquad \trm{(demand)} \notag\\
@@ -263,7 +272,7 @@ The Restricted Master Problem can now be written as follows
 \aeq{
     \min\ \sum_{p \in P}\ &\sqbrac{\sum_{(i,j) \in E}\ c_{ij}\ x_{pij}}\ \l_p\\
     \trm{s.t.}\ \sum_{p \in P}\ &\sqbrac{\sum_{(i,j) \in E}\ t_{ij}\ x_{pij}}\ \l_p \leq 14, \label{eqn:rcsp_rlpm_resource}\\
-    \sum_{p \in P}\ \l_p &= 1,\\
+    \sum_{p \in P}\ \l_p &= 1,\label{eqn:rcsp_rlpm_convexity}\\
     \sum_{p \in P}\ x_{pij}\ \l_p &= x_{ij} \quad (i,j) \in E, \label{eqn:rcsp_rlpm_flow}\\
     \l_p &\geq 0 \quad \forall p \in P,\\
     x_{ij} &\in \cbrac{0,1} \quad \forall\ (i,j) \in E.
@@ -271,13 +280,13 @@ The Restricted Master Problem can now be written as follows
 }
 where $P$ is a subset of the set of all paths that start at 1 and end at 6.
 Roughly, $\l_p$ is the cost of path $p$ and its coefficient in \eqref{eqn:rcsp_rlpm_resource} is its time duration. As always, we start with the LP
-relaxation of the above RLPM. If we remove the intergality constraints on $x_{ij}$, we can also get rid off constraints in \eqref{eqn:rcsp_rlpm_flow}. Let $\hat{\pi}$ be the duals of this problem. To find a new path $p' \notin P$, we formulate the pricing problem that minimizes the reduced cost as follows
+relaxation of the above RLPM. If we remove the intergality constraints on $x_{ij}$, we can also get rid off constraints in \eqref{eqn:rcsp_rlpm_flow}. To find a new path $p' \notin P$, we formulate the pricing problem that minimizes the reduced cost as follows
 \aeq{
-    \min \sum_{(i,j) \in E}\ c_{ij}\ x_{pij} - \hat{\pi}_1 \rbrac{\sum_{(i,j)\in E} t_{ij}\ x_{pij}} - \hat{\pi}_0 \\
-    \min \sum_{(i,j)\in E} \rbrac{c_{ij} - \hat{\pi}_1\ t_{ij}}\ x_{ij} - \pi_0
+    \min &\sum_{(i,j) \in E}\ c_{ij}\ x_{pij} - \hat{\pi}_1 \rbrac{\sum_{(i,j)\in E} t_{ij}\ x_{pij}} - \hat{\pi}_0 \\
+    \min &\sum_{(i,j)\in E} \rbrac{c_{ij} - \hat{\pi}_1\ t_{ij}}\ x_{ij} - \pi_0
     \label{eqn:rcsp_sub_problem}
 }
-for a path that again joins 1-6 in the network. This is simply the usual shortest path problem that can be solved in $\bigo(n \log n)$ time! This is however an example where we can ``round up'' the solution, we have to embed a branch and bound strategy in the algorithm in addition to column generation. In Sec.~\ref{sec:examples} we provide results of computational experiments on both the cutting stock problem and the resource constrained shortest path problem.
+for a path that again joins 1-6 in the network. Here $\hat{\pi}_1, \hat{\pi}_0$ are the duals of constraints \eqref{eqn:rcsp_rlpm_resource} and \eqref{eqn:rcsp_rlpm_convexity}, resp. This is simply the usual shortest path problem that can be solved in $\bigo(n \log n)$ time! This is not however, an example where we can ``round up'' the solution, we have to embed a branch and bound strategy in the algorithm in addition to column generation. In Sec.~\ref{sec:examples} we provide results of computational experiments on both the cutting stock problem and the resource constrained shortest path problem.
 
 \section{Branch and Price}
 \label{sec:branch_and_price}
@@ -328,7 +337,7 @@ $J^* \la J_u$: incumbent best solution\;
 % \label{fig:bnb}
 % \end{figure}
 
-After creating a flight schedule, an airline must decide the capacity/ aircraft type for each flight, i.e., fleet assignment. It then allocates sequences of flights to a particular aircraft so as to maximize revenues and avoid aircrafys flying back to the hub every time; this problem is known as fleet assignment. The next step in this process is to ensure that every tail number, i.e., physical aircraft regularly visits a maintenance base station, this problem is called as maintenance routing. The last step in the aircraft scheduling process is to allocate crew to each flight, after incorporating various constraints, viz., flight hours, home bases etc., this problem is known as crew pairing.
+After creating a flight schedule, an airline must decide the capacity/ aircraft type for each flight, i.e., fleet assignment. It then allocates sequences of flights to a particular aircraft so as to maximize revenues and avoid aircrafts flying back to the hub every time; this problem is known as fleet assignment. The next step in this process is to ensure that every tail number, i.e., physical aircraft regularly visits a maintenance base station, this problem is called as maintenance routing. The last step in the aircraft scheduling process is to allocate crew to each flight, after incorporating various constraints, viz., flight hours, home bases etc., this problem is known as crew pairing.
 
 In this section, we focus on the last two problems. We first discuss each problem along with its mathematical formulation. Potentially, integrating some parts of the aircraft scheduling process can provide large benefits in terms of optimality and cost. Towards this end, we look at integrating maintenance routing and crew pairing together. We first describe a naive integration which couples all the constraints together and use this to motivate a more efficient solution which leverages a concept known as ``short connects''.
 
@@ -354,7 +363,7 @@ The crew pairing problem can now be written as
 
 Note that \eqref{eqn:cp_cost} minimizes the cost of pairings, while constraints in \eqref{eqn:cp_cover}, also known as cover constraints ensure that each flight gets a crew. This formulation implicitly accounts for ``infeasibility rules'', i.e., the set $P$ is the set of all feasible pairings.
 The crew pairing problem is relatively easy to
-model mathematically and interpret as an optimization problem. Still, the task of solving the model efﬁciently and producing a practical crew schedule can be very challenging. However, note that this problem has $\abs{P}$ variables, which is typically very large, it is all feasible pairings in a flight network and can be of the order of hundreds of millions. Billions of legal pairings can be generated for as few as 1000 flight legs. This is exacerbated even further by hub-n-spoke network topology of most big airlines. Refer to~\cite{} for state-of-the-art approaches to this problem. Let us note that crew pairing can be solved as resource constrained multi-label shortest path problem as shown in~\cite{gopalakrishnan2005airline}.
+model mathematically and interpret as an optimization problem. Still, the task of solving the model efficiently and producing a practical crew schedule can be very challenging. However, note that this problem has $\abs{P}$ variables, which is typically very large, it is all feasible pairings in a flight network and can be of the order of hundreds of millions. Billions of legal pairings can be generated for as few as 1000 flight legs. This is exacerbated even further by hub-n-spoke network topology of most big airlines. Refer to~\cite{} for state-of-the-art approaches to this problem. Let us note that crew pairing can be solved as resource constrained multi-label shortest path problem as shown in~\cite{gopalakrishnan2005airline}.
 
 % \subsection{Column generation for crew pairing}
 % \label{ssec:col_gen_cp}
@@ -373,8 +382,8 @@ Similar to crew pairing, we use a ``string-based'' approach to formulating maint
     \item $d_r$ is 1 if route $r$ is contained in the solution;
     \item $N$ is the set of nodes in a airline network, i.e., the set of origins and destinations of all flights in the network (indexed by time);
     \item $g_n^-, g_n^+$ are called ground arc variables, if $n = (s,t)$ is a node at a physical location $s$ and time instant $t$, they represent the number of aircraft at $s$ immediately prior to and immediately after time $t$;
-    \item $R^T$ is the number of routes that span an arbitrary time $T$, also known as the countline;
-    \item $N^T$ is the number of nodes with corresponding ground arcs $g_n^+$ that span the countline;
+    \item $R^T$ is the number of routes that span an arbitrary time $T$, also known as the count-line;
+    \item $N^T$ is the number of nodes with corresponding ground arcs $g_n^+$ that span the count-line;
     \item $K$ is the total number of aircrafts available.
 }
 
@@ -406,7 +415,7 @@ Define a few extra variables in this context:
     \item $\n_{cr}$ is 1 if route $r$ contains a short connect $c$ and zero otherwise;
     \item $\eta_{cp}$ is 1 if pairing $p$ contains a short connect $c$ and zero otherwise.
 }
-The basic integrated probem (BIM) is written as
+The basic integrated problem (BIM) is written as
 \aeq{
     \min\ \sum_{p \in P}\ c_p y_p,& \\
     \trm{s.t.} \qquad \qquad & \\
@@ -420,7 +429,7 @@ The basic integrated probem (BIM) is written as
     y_p &\in \cbrac{0, 1} \quad \forall\ p \in P.
 }
 
-The only differece between BIM as compared to CP and MR is constraint ~\eqref{eqn:naive_short_connect} which says that we cannot pick a pairing containing a short connect if we do not pick a maintenance routing solution with that same short connect. A few things about this model are easy to see, (i) it has a large number of variables, the number of variables is $R + N+P$, which grows exponentially in the size of the network, (ii) \pc{the LP relaxation of this problem is a very poor lower bound.}{explain}
+The only difference between BIM as compared to CP and MR is constraint ~\eqref{eqn:naive_short_connect} which says that we cannot pick a pairing containing a short connect if we do not pick a maintenance routing solution with that same short connect. A few things about this model are easy to see, (i) it has a large number of variables, the number of variables is $R + N+P$, which grows exponentially in the size of the network, (ii) \pc{the LP relaxation of this problem is a very poor lower bound.}{explain}
 
 However, we can draw a key observation from this formulation, if we can remove the maintenance routing constraints and only consider complete solutions to the MR problem, we can potentially include CP constraints for this \emph{particular} solution as follows:
 \aeq{
@@ -434,18 +443,18 @@ However, we can draw a key observation from this formulation, if we can remove t
 }
 The above model, which is known as the extended crew pairing model uses the set of feasible maintenance routing solutions and connects them to crew pairing constraints using short connects. In the above problem,
 \ilist{
-    \item $S$ is the set of feasible maintenence routing solutions;
+    \item $S$ is the set of feasible maintenance routing solutions;
     \item $\b_{cs}$ is 1 if short connect $c$ is included in $s$ and zero otherwise;
     \item $x_s$ is 1 if $s$ is a part of the solution and 0 otherwise.
 }
-However, the number of fesible maintenance routing solutions is huge, and hence we have only just re-written the BIM problem in a different form.
+However, the number of feasible maintenance routing solutions is huge, and hence we have only just re-written the BIM problem in a different form.
 
 \subsection{Unique maximal short connects}
 \label{ssec:unique_maximal_sc}
 
 Column generation is a promising technique to solve ECP to optimality, however the number of maintenance feasible solutions is exponential in the number of flights and hence this approach is prohibitive. Also note that only key decisions in the MR problem affect the constraints in the CP problem, viz., we can look at maintenance routing, not as a string by itself, but as a short connect for which a corresponding maintenance routing solution can be found. This observation is crucial to significantly decrease the number of variables in the optimization. Roughly, instead of constructing the set $S$ with all feasible maintenance routing solutions, we will only consider \emph{maximal unique solutions} as shown below.
 
-\textbf{\emph{Uniqueness:}} Consider 6 flights, $a, b, \ldots, f$ and two maintenance routing (MR) solutions, viz., $a-b-c$ and $d-e-f$ or $a-b-f$ and $d-e-c$. If $a-b$ is the only short connect for these two solutions, we need to include only one of them in the set $S$, i.e., the constraints of the crew pairing problem depend only upon $a-b$ and not on the explicit routing string. This constraint is called uniqueness. Instead of a variable for every MR solution, we only need one column for every unique MR short connect. \cite{cohn2003improving} report that for an example airline's network, 8,700 distinct MR solutions could be collapsed into a single ECP column. Considering that the complexity of solving MIPs is exponentialy, this is a tremendous saving.
+\textbf{\emph{Uniqueness:}} Consider 6 flights, $a, b, \ldots, f$ and two maintenance routing (MR) solutions, viz., $a-b-c$ and $d-e-f$ or $a-b-f$ and $d-e-c$. If $a-b$ is the only short connect for these two solutions, we need to include only one of them in the set $S$, i.e., the constraints of the crew pairing problem depend only upon $a-b$ and not on the explicit routing string. This constraint is called uniqueness. Instead of a variable for every MR solution, we only need one column for every unique MR short connect. \cite{cohn2003improving} report that for an example airline's network, 8,700 distinct MR solutions could be collapsed into a single ECP column. Considering that the complexity of solving MIPs is exponential, this is a tremendous saving.
 
 \textbf{\emph{Maximal solutions:}} Similarly, if we have one MR solution with SCs as $a-b$, $c-d$ and $e-f$ and another one with SCs as $a-b$ and $c-d$, the first solution is a ``maximal'' with respect to the second. In other words, any CP solution that satisfies the second will also satisfy the first. Hence, we need only consider all the ``maximal'' SCs, i.e., remove the second MR column from our problem. Again,~\cite{cohn2003improving} report that in an example network, 25,000 distinct MR solutions collapsed to just 4 maximal SCs.
 
@@ -456,7 +465,7 @@ We have therefore identified the kind of columns we would like to generate for E
 
 We would like to generate a large number of MR solutions with a large number of SCs. In order to do so, we tweak the MR problem~\eqref{eqn:mr} with a new cost function
 $$
-\max \sum_{r \in R}\ -c_r d_r
+\max \sum_{r \in R}\ c_r\ d_r
 $$
 where $c_r$ now is the number of SCs in a route string $r$. A solution to this new problem results in unique, maximal set of SCs. It however generates only a few short connects, hence we solve this problem successively using constraint
 $$
@@ -473,13 +482,13 @@ We use the branch and price mechanism to solve ECP. Due to the above fact, we do
 \enum{
     \item Create initial crew pairings and maintenance solutions
         \begin{enumerate}[(a)]
-            \item We can directly use ideas from Sec.~\ref{ssec:col_gen_ecp} to generate a set of MR solutions. In fact, if we solve the MR problem~\eqref{eqn:mr}, it genrates the solution --- without adding any more MR solutions to this, we would obtain the usual sequential solution to the MR - CP airline scheduling problem.
+            \item We can directly use ideas from Sec.~\ref{ssec:col_gen_ecp} to generate a set of MR solutions. In fact, if we solve the MR problem~\eqref{eqn:mr}, it generates the solution --- without adding any more MR solutions to this, we would obtain the usual sequential solution to the MR - CP airline scheduling problem.
             \item For generating initial solutions to the CP problem
         \end{enumerate}
     \item Solve current LP and compute dual variables
     \item Generate a new CP solution using reduced costs
         \begin{enumerate}[(a)]
-            \item We use ideas from Sec.~\ref{ssec:col_gen_cp} to do this. However, in the ECP model, we also have to incorporate the dual variables for the short connects, i.e., the reduced cost of a pairing becomes
+            \item We use ideas from multi-label, resource constrained shortest path problems to do this (cf. Sec.~\ref{ssec:rcsp}). However, in the ECP model, we also have to incorporate the dual variables for the short connects, i.e., the reduced cost of a pairing becomes
             $$
             c_p - \sum_{f \in F}\ \d_{fp}\ \pi_f + \sum_{c \in C}\ \eta_{cp}\ \g_c
             $$
@@ -495,7 +504,7 @@ We use the branch and price mechanism to solve ECP. Due to the above fact, we do
             $$
             \max \sum_{c \in C} \b_{sc}\ \g_c; \quad s \in S.
             $$
-            If this solution is less than $\s$, we have a new column that we can add to the optmization. How do we solve this new problem? Note that
+            If this solution is less than $\s$, we have a new column that we can add to the optimization. How do we solve this new problem? Note that
             $$
             -\sum_{c \in C} \b_{sc}\ \g_c = \sum_{r \in R(s)} \rbrac{-\sum_{c \in C}\ \nu_{cr}\ \g_c}
             $$
@@ -520,7 +529,7 @@ Solving large MIPs as considered in this section is computationally expensive, a
 \subsection{Cutting-stock problem (CSP)}
 \label{ssec:eg_cutting_stock}
 
-An instance of CSP is easy to generate. We pick the length of roll, $B$ and generate a vector of the number of demands $w_i$ and their quanties $n_i$. I used the following instances for testing:
+An instance of CSP is easy to generate. We pick the length of roll, $B$ and generate a vector of the number of demands $w_i$ and their quantities $n_i$. I used the following instances for testing:
 \enum{
     \item $W = 110$ and
     \beq{w = \bmat{20,45,50,55,75} \quad  n = \bmat{48,35,24,10,8}
@@ -533,7 +542,7 @@ An instance of CSP is easy to generate. We pick the length of roll, $B$ and gene
 
 \textbf{\emph{MIP formulation}:} We encode the MIP formulation using \eqref{eqn:cutting_stock_ip}. This is solved internally inside Gurobi using a dual formulation. Note that we do not know $K$, i.e., the number of rolls that we
 consider in the optimization problem. I therefore used a heuristic to get an upper bound on $K$. It is computed using a greedy algorithm for the bin-packing problem as follows. This algorithm processes demands in an arbitrary
-order, if it cannot find a roll that can accomodate the demand, it starts
+order, if it cannot find a roll that can accommodate the demand, it starts
 cutting a new roll. It is easy to see that we are over-estimating $K$ by a factor of 2. To see this, observe that we cannot have two rolls that are half-
 cut at any time (which'd mean that we started a new roll for a demand less than $W/2$ when we still have $W/2$ left on the previous roll). Hence if we
 have $K$ bins, at least $K-1$ rolls are more than half full. If $w_i$ are demands, $\sum w_i > (K-1) W/2$ and since as shown in Eqn.~\eqref{eqn:csp_lp_relax_bound}, $\sum w_i/W$ is the lower bound, we are off by a factor of $2$.
@@ -544,7 +553,7 @@ have $K$ bins, at least $K-1$ rolls are more than half full. If $w_i$ are demand
 \begin{figure}
 \centering
 \includegraphics[width=0.8 \columnwidth]{colgen_results}
-\caption{Comparison of runtimes for IP formulation and column generation for cutting stock problem. Note that the cost of the solution, i.e., the number of
+\caption{Comparison of run-times for the IP formulation and column generation for cutting stock problem. Note that the cost of the solution, i.e., the number of
 rolls obtained by both the formulations was almost always the same. $N$ here is the total number of demands (generated randomly).}
 \label{fig:csp_average_runtime}
 \end{figure}
@@ -596,7 +605,7 @@ Finally, we reach the optimal solution after 4 iterations and the cost is time d
 
 We can also perform experiments on random networks. We first however need to pick a good value of the time constraint we shall use in \eqref{eqn:rcsp_resource}. I did this by computing all the paths in the network and using the median of time duration, i.e., about half of the $\bigo(n!)$ paths are candidate solutions for Prob.~\ref{eqn:rcsp_rlpm}.
 
-\emph{Randomized instances} Using about 40 nodes in an Erdos-Renyi random graph with connectivity probability of 0.4 results in on an average (5 instances) 100,000 candidate paths. Column generation approach took 6 secs to execute on average. On the other hand, for this problem, the IP formulation running in parallel on 4 threads takes 10.6 secs per example.
+\emph{Randomized instances} Using about 40 nodes in an Erdos-Renyi random graph results in on an average 100,000 candidate paths. Column generation approach took 6 secs to execute on average. On the other hand, for this problem, the IP formulation running in parallel on 4 threads takes 10.6 secs per example.
 
 
 \section{Summary}
